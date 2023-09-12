@@ -1,9 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import axios from "axios";
+import getApiUrl from "./utils/getApiUrl";
+
+axios.defaults.baseURL = getApiUrl();
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
