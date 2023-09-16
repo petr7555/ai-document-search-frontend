@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import axios from "axios";
-import getApiUrl from "./utils/getApiUrl";
+import axios from 'axios';
+import getApiUrl from './utils/getApiUrl';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
