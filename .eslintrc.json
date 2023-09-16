@@ -16,6 +16,11 @@
     "import",
     "@typescript-eslint"
   ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "overrides": [
     {
       "parser": "@typescript-eslint/parser",
