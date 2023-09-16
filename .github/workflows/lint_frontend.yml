@@ -1,7 +1,7 @@
 name: Lint Frontend
 
 on: push
-    
+
 jobs:
   lint-frontend:
     runs-on: ubuntu-latest
@@ -26,4 +26,3 @@ jobs:
 
       - name: Lint
         run: npm run lint
-        
