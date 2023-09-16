@@ -1,10 +1,8 @@
 import React from 'react';
-import BackendHealthCheck from "./components/BackendHealthCheck";
+import BackendHealthCheck from './components/BackendHealthCheck';
 
 function App() {
-  return (
-      <BackendHealthCheck/>
-  );
+  return <BackendHealthCheck />;
 }
 
 export default App;

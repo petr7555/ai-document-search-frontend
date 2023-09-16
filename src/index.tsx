@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import axios from 'axios';
+import getApiUrl from './utils/getApiUrl';
 import App from './App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-import axios from "axios";
-import getApiUrl from "./utils/getApiUrl";
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 axios.defaults.baseURL = getApiUrl();
 
