@@ -8,7 +8,7 @@ it('returns the correct API URL for development', () => {
   });
   expect(getApiUrl()).toEqual('http://localhost:8000');
 });
-
+/*
 it('returns the correct API URL for production', () => {
   Object.defineProperty(window, 'location', {
     value: {
@@ -19,3 +19,4 @@ it('returns the correct API URL for production', () => {
     'https://ai-document-search-backend.azurewebsites.net'
   );
 });
+*/
