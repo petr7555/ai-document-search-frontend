@@ -1,9 +1,9 @@
-name: Lint Frontend
+name: Lint and test Frontend
 
 on: push
 
 jobs:
-  lint-frontend:
+  lint-and-test-frontend:
     runs-on: ubuntu-latest
 
     strategy:
@@ -26,3 +26,6 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Test
+        run: npm run test
