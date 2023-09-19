@@ -1,26 +1,20 @@
-
-
-// take in a username and password, send a request to the server to authenticate the user
+import axios from 'axios';
 
 const API_URL_PROD = 'https://api.example.com';
 
 export const authenticateUser = async (
-    username: string,
-    password: string
-    ): Promise<string> => {
-    const response = await fetch(`${API_URL_PROD}/authenticate`, {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, password })
-    });
-    
-    const data = await response.json();
-    
-    if (data.error) {
-        return data.error;
-    }
-    
-    return data.token;
-    };
+  username: string,
+  password: string
+): Promise<string> => {
+  const response = await axios.post(`${API_URL_PROD}/token`, {
+    username,
+    password
+  });
+
+  //check if the response is valid
+  if (response.status !== 200) {
+    throw new Error('Invalid response from server!');
+  }
+
+  return response.data.token;
+};
