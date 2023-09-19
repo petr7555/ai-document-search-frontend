@@ -7,7 +7,7 @@ import { Container } from '@mui/material';
 import { Column } from '../components/Column';
 import { useState } from 'react';
 import { authenticateUser } from '../utils/authenticateUser';
-import { Alert, AlertTitle } from '@mui/material';
+import { Alert, AlertTitle, Box } from '@mui/material';
 
 const ColorButton = styled(Button)<ButtonProps>(() => ({
   backgroundColor: theme.palette.primary.main,
@@ -28,7 +28,10 @@ const StyledContainer = styled(Container)(() => ({
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-  height: '100vh'
+  height: '100vh',
+  width: '100vw',
+  flexGrow: 1,
+  backgroundColor: theme.palette.info.main
 }));
 
 export const LoginPage = () => {
@@ -50,7 +53,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <>
+    <Box sx={{flexGrow: 1}}>
       <StyledContainer>
         <StyledPaper elevation={3}>
           <Column>
@@ -86,6 +89,6 @@ export const LoginPage = () => {
           </Alert>
         )}
       </StyledContainer>
-    </>
+    </Box>
   );
 };
