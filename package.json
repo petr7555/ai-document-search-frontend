@@ -39,7 +39,7 @@
     "workbox-routing": "^6.6.0",
     "workbox-strategies": "^6.6.0",
     "workbox-streams": "^6.6.0",
-    "nt-ui-library": "file:@nordictrustee/nt-ui-library"
+    "@nordictrustee/nt-ui-library": "file:/@nordictrustee/nt-ui-library"
   },
   "eslintConfig": {
     "extends": [
