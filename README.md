@@ -15,7 +15,9 @@ The frontend will be running on http://localhost:3000/.
 ## Run tests
 - `npx cypress run`
 
+Make sure the frontend is running before testing.
+
 ## Manual testing (run Cypress application)
 - `npx cypress open`
 
-Make sure the fronted is running before testing.
+Make sure the frontend is running before testing.
