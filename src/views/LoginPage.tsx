@@ -1,13 +1,12 @@
-import TextField from '@mui/material/TextField';
+import { useState } from 'react';
+import styled from '@emotion/styled';
+import { Alert, AlertTitle, Box, Container } from '@mui/material';
 import Button, { ButtonProps } from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
-import styled from '@emotion/styled';
-import theme from '../themes/theme';
-import { Container } from '@mui/material';
+import TextField from '@mui/material/TextField';
 import { Column } from '../components/Column';
-import { useState } from 'react';
+import theme from '../themes/theme';
 import { authenticateUser } from '../utils/authenticateUser';
-import { Alert, AlertTitle, Box } from '@mui/material';
 
 const ColorButton = styled(Button)<ButtonProps>(() => ({
   backgroundColor: theme.palette.primary.main,
@@ -53,7 +52,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <Box sx={{flexGrow: 1}}>
+    <Box sx={{ flexGrow: 1 }}>
       <StyledContainer>
         <StyledPaper elevation={3}>
           <Column>

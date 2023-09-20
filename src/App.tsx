@@ -1,12 +1,12 @@
 import React from 'react';
 import BackendHealthCheck from './components/BackendHealthCheck';
-import { LoginPage } from './views/LoginPage';
 import { Navbar } from './components/Navbar';
+import { LoginPage } from './views/LoginPage';
 
 function App() {
   return (
     <>
-    <Navbar />
+      <Navbar />
       <LoginPage />
       <BackendHealthCheck />
     </>
