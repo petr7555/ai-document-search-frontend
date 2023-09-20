@@ -13,7 +13,7 @@ The deployment is automatic on push to the `master` branch.
 The frontend will be running on http://localhost:3000/.
 
 ## Run tests
-- `npm test`
+- `npx cypress run`
 
 Make sure the frontend is running before testing.
 
