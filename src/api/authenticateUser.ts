@@ -8,12 +8,10 @@ export const authenticateUser = async (
   form.append('username', username);
   form.append('password', password);
 
-  const response = await axios.post('/auth/token', form);
-
-  //check if the response is valid
-  if (response.status !== 200) {
-    throw new Error('Invalid response from server!');
+  try {
+    const response = await axios.post('/auth/token', form);
+    return response.data.token;
+  } catch (error) {
+    return JSON.stringify(error, null, 2);
   }
-
-  return response.data.token;
 };
