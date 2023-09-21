@@ -3,9 +3,9 @@ import styled from '@emotion/styled';
 import { Alert, AlertTitle, Stack } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
+import { authenticateUser } from '../api/authenticateUser';
 import { PrimaryButton } from '../components/Button/PrimaryButton';
 import { CenterPageContent } from '../components/CenterPageContent';
-import { authenticateUser } from '../utils/authenticateUser';
 
 const StyledPaper = styled(Paper)(() => ({
   width: '359px',
@@ -28,7 +28,6 @@ export const LoginPage = () => {
     try {
       const token = await authenticateUser(username, password);
       sessionStorage.setItem('token', token);
-      
     } catch (error) {
       setError(true);
     } finally {
@@ -64,9 +63,14 @@ export const LoginPage = () => {
           variant="outlined"
           severity="error"
           onClose={() => setError(false)}
-          sx={{ marginTop: '30px', width: '365px' }}
+          sx={{
+            marginTop: '30px',
+            width: '365px',
+            position: 'fixed',
+            bottom: 220
+          }}
         >
-          <AlertTitle>Error</AlertTitle>
+          <AlertTitle>Authentication failed</AlertTitle>
         </Alert>
       )}
     </CenterPageContent>
