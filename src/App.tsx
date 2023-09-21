@@ -1,15 +1,25 @@
 import React from 'react';
-import BackendHealthCheck from './components/BackendHealthCheck';
-import { Navbar } from './components/Navbar/Navbar';
+import { Route, Routes } from 'react-router-dom';
+import { AuthLayout } from './layouts/AuthLayout';
+import { HomePage } from './views/HomePage';
 import { LoginPage } from './views/LoginPage';
+import { ProtectedRoute } from './ProtectedRoute';
 
 function App() {
   return (
-    <>
-      <Navbar />
-      <LoginPage />
-      <BackendHealthCheck />
-    </>
+    <Routes>
+      <Route element={<AuthLayout />}>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/login" element={<LoginPage />} />
+      </Route>
+    </Routes>
   );
 }
 

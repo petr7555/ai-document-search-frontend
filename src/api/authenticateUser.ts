@@ -10,6 +10,7 @@ export const authenticateUser = async (
 
   try {
     const response = await axios.post('/auth/token', form);
+
     return response.data.token;
   } catch (error) {
     return JSON.stringify(error, null, 2);

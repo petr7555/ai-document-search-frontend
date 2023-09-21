@@ -3,9 +3,10 @@ import styled from '@emotion/styled';
 import { Alert, AlertTitle, Stack } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import { authenticateUser } from '../api/authenticateUser';
 import { PrimaryButton } from '../components/Button/PrimaryButton';
 import { CenterPageContent } from '../components/CenterPageContent';
+import { Navbar } from '../components/Navbar/Navbar';
+import { useAuth } from '../hooks/useAuth';
 
 const StyledPaper = styled(Paper)(() => ({
   width: '359px',
@@ -19,15 +20,17 @@ export const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
 
+  const auth = useAuth();
+
   const resetLoginForm = () => {
     setUsername('');
     setPassword('');
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     try {
-      const token = await authenticateUser(username, password);
-      sessionStorage.setItem('token', token);
+      auth?.login(username, password);
+      resetLoginForm();
     } catch (error) {
       setError(true);
     } finally {
@@ -36,47 +39,50 @@ export const LoginPage = () => {
   };
 
   return (
-    <CenterPageContent>
-      <StyledPaper elevation={3} sx={{ justifyContent: 'center' }}>
-        <Stack direction={'column'} spacing={8} sx={{ flexGrow: 1 }}>
-          <TextField
-            label="Username"
-            variant="standard"
-            value={username}
-            onChange={(event: ChangeEvent<HTMLInputElement>) => {
-              setUsername(event.target.value);
+    <>
+      <Navbar />
+      <CenterPageContent>
+        <StyledPaper elevation={3} sx={{ justifyContent: 'center' }}>
+          <Stack direction={'column'} spacing={8} sx={{ flexGrow: 1 }}>
+            <TextField
+              label="Username"
+              variant="standard"
+              value={username}
+              cy-data="username-text-field"
+              onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                setUsername(event.target.value);
+              }}
+            />
+            <TextField
+              label="Password"
+              value={password}
+              variant="standard"
+              cy-data="password-text-field"
+              onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                setPassword(event.target.value);
+              }}
+            />
+            <PrimaryButton onClick={handleSubmit} variant="contained">
+              Sign in
+            </PrimaryButton>
+          </Stack>
+        </StyledPaper>
+        {error && (
+          <Alert
+            variant="outlined"
+            severity="error"
+            onClose={() => setError(false)}
+            sx={{
+              marginTop: '30px',
+              width: '365px',
+              position: 'fixed',
+              bottom: 220
             }}
-            data-cy="username-text-field"
-          />
-          <TextField
-            label="Password"
-            value={password}
-            variant="standard"
-            onChange={(event: ChangeEvent<HTMLInputElement>) => {
-              setPassword(event.target.value);
-            }}
-            data-cy="password-text-field"
-          />
-          <PrimaryButton onClick={handleSubmit} variant="contained">
-            Sign in
-          </PrimaryButton>
-        </Stack>
-      </StyledPaper>
-      {error && (
-        <Alert
-          variant="outlined"
-          severity="error"
-          onClose={() => setError(false)}
-          sx={{
-            marginTop: '30px',
-            width: '365px',
-            position: 'fixed',
-            bottom: 220
-          }}
-        >
-          <AlertTitle>Authentication failed</AlertTitle>
-        </Alert>
-      )}
-    </CenterPageContent>
+          >
+            <AlertTitle>Authentication failed</AlertTitle>
+          </Alert>
+        )}
+      </CenterPageContent>
+    </>
   );
 };
