@@ -5,6 +5,7 @@ import getApiUrl from './utils/getApiUrl';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import './App.css';
 
 axios.defaults.baseURL = getApiUrl();
 
