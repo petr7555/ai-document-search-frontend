@@ -4,7 +4,6 @@ export const authenticateUser = async (
   username: string,
   password: string
 ): Promise<string> => {
-  
   const form = new FormData();
   form.append('username', username);
   form.append('password', password);
