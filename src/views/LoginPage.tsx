@@ -42,12 +42,14 @@ export const LoginPage = () => {
           <TextField
             label="Username"
             variant="standard"
+            value={username}
             onChange={(event: ChangeEvent<HTMLInputElement>) => {
               setUsername(event.target.value);
             }}
           />
           <TextField
             label="Password"
+            value={password}
             variant="standard"
             onChange={(event: ChangeEvent<HTMLInputElement>) => {
               setPassword(event.target.value);
