@@ -38,7 +38,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Cypress.io
         uses: cypress-io/github-action@v6.3.0
-        #with:
+        with:
+          start: npm start
         #  component: true
             
   
