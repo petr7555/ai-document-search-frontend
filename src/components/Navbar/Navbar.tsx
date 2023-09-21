@@ -1,8 +1,14 @@
 import styled from '@emotion/styled';
 import PersonIcon from '@mui/icons-material/Person';
-import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
-import theme from '../themes/theme';
-import { Row } from './Row';
+import {
+  AppBar,
+  Box,
+  IconButton,
+  Stack,
+  Toolbar,
+  Typography
+} from '@mui/material';
+import theme from '../../themes/theme';
 
 const StyledAppBar = styled(AppBar)(() => ({
   backgroundColor: theme.palette.secondary.main,
@@ -26,12 +32,12 @@ export const Navbar = () => {
           </IconButton>
         </Toolbar>
         <IconButton color="inherit">
-          <Row sx={{ gap: '10px' }}>
+          <Stack direction={'row'} spacing={1} sx={{ alignItems: 'end' }}>
             <PersonIcon sx={{ fontSize: '35px' }} />
             <Typography color={'white'} variant="h5">
               Account
             </Typography>
-          </Row>
+          </Stack>
         </IconButton>
       </StyledAppBar>
     </Box>

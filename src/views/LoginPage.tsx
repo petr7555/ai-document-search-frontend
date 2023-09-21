@@ -1,19 +1,11 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import styled from '@emotion/styled';
-import { Alert, AlertTitle, Box, Container } from '@mui/material';
-import Button, { ButtonProps } from '@mui/material/Button';
+import { Alert, AlertTitle, Stack } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import { Column } from '../components/Column';
-import theme from '../themes/theme';
+import { PrimaryButton } from '../components/Button/PrimaryButton';
+import { CenterPageContent } from '../components/CenterPageContent';
 import { authenticateUser } from '../utils/authenticateUser';
-
-const ColorButton = styled(Button)<ButtonProps>(() => ({
-  backgroundColor: theme.palette.primary.main,
-  '&:hover': {
-    backgroundColor: theme.palette.primary.dark
-  }
-}));
 
 const StyledPaper = styled(Paper)(() => ({
   width: '359px',
@@ -22,72 +14,61 @@ const StyledPaper = styled(Paper)(() => ({
   padding: '40px'
 }));
 
-const StyledContainer = styled(Container)(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '100vh',
-  width: '100vw',
-  flexGrow: 1,
-  backgroundColor: theme.palette.info.main
-}));
-
 export const LoginPage = () => {
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [error, setError] = useState<boolean>(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
+
+  const resetLoginForm = () => {
+    setUsername('');
+    setPassword('');
+  };
 
   const handleSubmit = async () => {
     try {
       const token = await authenticateUser(username, password);
       sessionStorage.setItem('token', token);
-      setUsername('');
-      setPassword('');
+      
     } catch (error) {
       setError(true);
-      setUsername('');
-      setPassword('');
+    } finally {
+      resetLoginForm();
     }
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <StyledContainer>
-        <StyledPaper elevation={3}>
-          <Column>
-            <TextField
-              id="standard-basic"
-              label="Username"
-              variant="standard"
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setUsername(event.target.value);
-              }}
-            />
-            <TextField
-              id="standard-basic"
-              label="Password"
-              variant="standard"
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setPassword(event.target.value);
-              }}
-            />
-            <ColorButton onClick={handleSubmit} variant="contained">
-              Sign in
-            </ColorButton>
-          </Column>
-        </StyledPaper>
-        {error && (
-          <Alert
-            variant="outlined"
-            severity="error"
-            onClose={() => setError(false)}
-            sx={{ marginTop: '30px', width: '365px' }}
-          >
-            <AlertTitle>Error</AlertTitle>
-          </Alert>
-        )}
-      </StyledContainer>
-    </Box>
+    <CenterPageContent>
+      <StyledPaper elevation={3} sx={{ justifyContent: 'center' }}>
+        <Stack direction={'column'} spacing={8} sx={{ flexGrow: 1 }}>
+          <TextField
+            label="Username"
+            variant="standard"
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              setUsername(event.target.value);
+            }}
+          />
+          <TextField
+            label="Password"
+            variant="standard"
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              setPassword(event.target.value);
+            }}
+          />
+          <PrimaryButton onClick={handleSubmit} variant="contained">
+            Sign in
+          </PrimaryButton>
+        </Stack>
+      </StyledPaper>
+      {error && (
+        <Alert
+          variant="outlined"
+          severity="error"
+          onClose={() => setError(false)}
+          sx={{ marginTop: '30px', width: '365px' }}
+        >
+          <AlertTitle>Error</AlertTitle>
+        </Alert>
+      )}
+    </CenterPageContent>
   );
 };
