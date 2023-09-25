@@ -4,7 +4,7 @@ import { useAuth } from './hooks/useAuth';
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const user = useAuth()?.user;
 
-  if (!user) {
+  if (user == null) {
     // user is not authenticated
     return <Navigate to="/login" />;
   }
