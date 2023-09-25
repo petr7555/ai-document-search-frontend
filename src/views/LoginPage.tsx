@@ -46,6 +46,7 @@ export const LoginPage = () => {
             onChange={(event: ChangeEvent<HTMLInputElement>) => {
               setUsername(event.target.value);
             }}
+            data-cy="username-text-field"
           />
           <TextField
             label="Password"
@@ -54,6 +55,7 @@ export const LoginPage = () => {
             onChange={(event: ChangeEvent<HTMLInputElement>) => {
               setPassword(event.target.value);
             }}
+            data-cy="password-text-field"
           />
           <PrimaryButton onClick={handleSubmit} variant="contained">
             Sign in

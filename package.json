@@ -6,8 +6,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "lint": "eslint src --ext .ts,.tsx && prettier --check src/**/*.{ts,tsx}",
-    "lint:fix": "npm run lint --fix && prettier --write src/**/*.{ts,tsx}",
+    "lint": "eslint src/ cypress/ --ext .ts,.tsx && prettier --check {src,cypress}/**/*.{ts,tsx}",
+    "lint:fix": "eslint src/ cypress/ --ext .ts,.tsx --fix && prettier --write {src,cypress}/**/*.{ts,tsx}",
     "eject": "react-scripts eject"
   },
   "dependencies": {
@@ -18,11 +18,10 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^17.0.45",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "axios": "^1.5.0",
+    "cypress": "^13.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
@@ -71,6 +70,8 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.22.15",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@types/jest": "^29.5.5",
+    "@types/node": "^20.6.3",
     "eslint": "7.22.0",
     "eslint-plugin-react": "7.32.2",
     "eslint-plugin-simple-import-sort": "7.0.0",

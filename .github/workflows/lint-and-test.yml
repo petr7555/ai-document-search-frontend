@@ -29,3 +29,26 @@ jobs:
 
       - name: Test
         run: npm run test
+
+  end-to-end-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cypress.io
+        uses: cypress-io/github-action@v6.3.0
+        with:
+          start: npm start
+  
+  component-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cypress.io
+        uses: cypress-io/github-action@v6.3.0
+        with:
+          component: true
+          start: npm start
