@@ -6,8 +6,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "lint": "eslint src --ext .ts,.tsx && prettier --check src/**/*.{ts,tsx}",
-    "lint:fix": "npm run lint --fix && prettier --write src/**/*.{ts,tsx}",
+    "lint": "eslint src/ cypress/ --ext .ts,.tsx && prettier --check {src,cypress}/**/*.{ts,tsx}",
+    "lint:fix": "eslint src/ cypress/ --ext .ts,.tsx --fix && prettier --write {src,cypress}/**/*.{ts,tsx}",
     "eject": "react-scripts eject"
   },
   "dependencies": {

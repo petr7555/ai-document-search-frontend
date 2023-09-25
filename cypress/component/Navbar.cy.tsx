@@ -1,11 +1,11 @@
-import { Navbar } from '../../src/components/Navbar/Navbar'
+import { Navbar } from '../../src/components/Navbar/Navbar';
 
 describe('Navbar component', () => {
-    it('Navbar component test', () => {
-      cy.mount(<Navbar />)
+  it('Navbar component test', () => {
+    cy.mount(<Navbar />);
 
-      cy.contains('Stamdata').click()
-      
-      cy.contains('Account').click()
-    })
-  })
+    cy.contains('Stamdata').click();
+
+    cy.contains('Account').click();
+  });
+});
