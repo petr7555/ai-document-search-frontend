@@ -18,21 +18,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // call this function when you want to authenticate the user
   const login = useCallback(
     (username: string, password: string) => {
-      const token = authenticateUser(username, password)
-      token.then(
-        function(value){
-          const response = JSON.parse(value)
-          if(response.status == 200){
-            setUser(token);
-            navigate('/', { replace: true });
-          }else{
-            alert("Login failed!")
-          }
-          
+      const token = authenticateUser(username, password);
+      token.then(function (value) {
+        const response = JSON.parse(value);
+        if (response.status == 200) {
+          setUser(token);
+          navigate('/', { replace: true });
+        } else {
+          alert('Login failed!');
         }
-      );
-      
-
+      });
     },
     [navigate, setUser]
   );

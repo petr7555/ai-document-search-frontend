@@ -7,6 +7,7 @@ The frontend is deployed at https://polite-meadow-040edd103.3.azurestaticapps.ne
 The deployment is automatic on push to the `master` branch.
 
 ## How to run locally
+
 - `npm install`
 - `npm start`
 
