@@ -27,10 +27,18 @@ export const LoginPage = () => {
     setPassword('');
   };
 
+  const validateForm = () => {
+    return username.length > 0 && password.length > 0;
+  };
+
   const handleSubmit = () => {
     try {
-      auth?.login(username, password);
-      resetLoginForm();
+      if (validateForm()) {
+        auth?.login(username, password);
+        resetLoginForm();
+      } else {
+        setError(true);
+      }
     } catch (error) {
       setError(true);
     } finally {
@@ -45,7 +53,9 @@ export const LoginPage = () => {
         <StyledPaper elevation={3} sx={{ justifyContent: 'center' }}>
           <Stack direction={'column'} spacing={8} sx={{ flexGrow: 1 }}>
             <TextField
+              error={error}
               label="Username"
+              color={error ? 'error' : 'primary'}
               variant="standard"
               value={username}
               cy-data="username-text-field"
@@ -54,7 +64,10 @@ export const LoginPage = () => {
               }}
             />
             <TextField
+              error={error}
               label="Password"
+              color={error ? 'error' : 'primary'}
+              type="password"
               value={password}
               variant="standard"
               cy-data="password-text-field"
@@ -79,7 +92,7 @@ export const LoginPage = () => {
               bottom: 220
             }}
           >
-            <AlertTitle>Authentication failed</AlertTitle>
+            <AlertTitle>Please write username and password</AlertTitle>
           </Alert>
         )}
       </CenterPageContent>
