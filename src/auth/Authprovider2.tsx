@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setUser(token);
           navigate('/', { replace: true });
         } else {
-          alert('Incorrect username or password!');
+          return null;
         }
       });
     },

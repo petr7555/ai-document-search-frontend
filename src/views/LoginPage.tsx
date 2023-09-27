@@ -19,6 +19,7 @@ export const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const auth = useAuth();
 
@@ -32,18 +33,17 @@ export const LoginPage = () => {
   };
 
   const handleSubmit = () => {
-    try {
-      if (validateForm()) {
-        auth?.login(username, password);
-        resetLoginForm();
-      } else {
+    if (validateForm()) {
+      const response = auth?.login(username, password);
+      if (!response) {
+        setErrorMessage('Wrong username or password');
         setError(true);
       }
-    } catch (error) {
+    } else {
+      setErrorMessage('Please write username and password');
       setError(true);
-    } finally {
-      resetLoginForm();
     }
+    resetLoginForm();
   };
 
   return (
@@ -58,7 +58,7 @@ export const LoginPage = () => {
               color={error ? 'error' : 'primary'}
               variant="standard"
               value={username}
-              cy-data="username-text-field"
+              data-cy="username-text-field"
               onChange={(event: ChangeEvent<HTMLInputElement>) => {
                 setUsername(event.target.value);
               }}
@@ -70,12 +70,16 @@ export const LoginPage = () => {
               type="password"
               value={password}
               variant="standard"
-              cy-data="password-text-field"
+              data-cy="password-text-field"
               onChange={(event: ChangeEvent<HTMLInputElement>) => {
                 setPassword(event.target.value);
               }}
             />
-            <PrimaryButton onClick={handleSubmit} variant="contained">
+            <PrimaryButton
+              onClick={handleSubmit}
+              data-cy="sign-in-button"
+              variant="contained"
+            >
               Sign in
             </PrimaryButton>
           </Stack>
@@ -92,7 +96,9 @@ export const LoginPage = () => {
               bottom: 220
             }}
           >
-            <AlertTitle>Please write username and password</AlertTitle>
+            <AlertTitle data-cy="error-alert-message">
+              {errorMessage}
+            </AlertTitle>
           </Alert>
         )}
       </CenterPageContent>

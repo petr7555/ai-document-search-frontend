@@ -54,7 +54,9 @@ export const Navbar = () => {
       onClose={handleMenuClose}
       sx={{ marginTop: '40px' }}
     >
-      <MenuItem onClick={auth?.logout}>Log out</MenuItem>
+      <MenuItem data-cy="log-out-button" onClick={auth?.logout}>
+        Log out
+      </MenuItem>
     </Menu>
   );
 
@@ -69,7 +71,11 @@ export const Navbar = () => {
           </IconButton>
         </Toolbar>
         {auth?.user && (
-          <IconButton onClick={handleProfileMenuOpen} color="inherit">
+          <IconButton
+            data-cy="account-button"
+            onClick={handleProfileMenuOpen}
+            color="inherit"
+          >
             <Stack direction={'row'} spacing={1} sx={{ alignItems: 'end' }}>
               <PersonIcon sx={{ fontSize: '35px' }} />
               <Typography color={'white'} variant="h5">
