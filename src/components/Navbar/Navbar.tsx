@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import styled from '@emotion/styled';
 import PersonIcon from '@mui/icons-material/Person';
 import {
@@ -30,7 +30,7 @@ export const Navbar = () => {
 
   const auth = useAuth();
 
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleProfileMenuOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -45,7 +45,6 @@ export const Navbar = () => {
         vertical: 'top',
         horizontal: 'right'
       }}
-      keepMounted
       transformOrigin={{
         vertical: 'top',
         horizontal: 'right'
@@ -54,7 +53,7 @@ export const Navbar = () => {
       onClose={handleMenuClose}
       sx={{ marginTop: '40px' }}
     >
-      <MenuItem data-cy="log-out-button" onClick={auth?.logout}>
+      <MenuItem data-cy="log-out-button" onClick={auth.logout}>
         Log out
       </MenuItem>
     </Menu>

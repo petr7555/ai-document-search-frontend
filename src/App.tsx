@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { AuthLayout } from './layouts/AuthLayout';
+import { AuthLayout } from './components/auth/AuthLayout';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { HomePage } from './views/HomePage';
 import { LoginPage } from './views/LoginPage';
-import { ProtectedRoute } from './ProtectedRoute';
 
 function App() {
   return (
