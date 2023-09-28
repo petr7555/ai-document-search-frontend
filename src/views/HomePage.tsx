@@ -1,13 +1,12 @@
-import { CenterPageContent } from '../components/CenterPageContent';
+import React from 'react';
 import { Navbar } from '../components/Navbar/Navbar';
+import { ChatbotPage } from './ChatbotPage';
 
 export const HomePage = () => {
   return (
     <>
       <Navbar />
-      <CenterPageContent>
-        <h1>Home Page</h1>
-      </CenterPageContent>
+      <ChatbotPage />
     </>
   );
 };

@@ -4,7 +4,7 @@ import { Paper, Stack } from '@mui/material';
 import { messageType } from './Chatbot/Chatbot';
 
 const MessageBubble = styled(Paper)(({ fromBot }: { fromBot: boolean }) => ({
-  maxWidth: '500px',
+  maxWidth: '50%',
   minHeight: '30px',
   borderRadius: '20px',
   textAlign: fromBot ? 'left' : 'right',
@@ -37,8 +37,8 @@ export const ConversationLayout = ({
     <Stack
       sx={{
         padding: '20px',
-        width: '800px',
-        height: '600px',
+        width: '60vw',
+        height: '60vh',
         gap: '10px',
         borderRadius: '10px',
         backgroundColor: 'white'
