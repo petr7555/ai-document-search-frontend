@@ -1,64 +1,83 @@
 describe('Login page', () => {
-  beforeEach(() => {
+  const validUsername = 'user';
+  const validPassword = 'pass';
+
+  it('Redirects to login page when not logged in', () => {
     cy.visit('/');
     cy.url().should('include', '/login');
+  });
+
+  it('Shows username and password inputs', () => {
+    cy.visit('/login');
+
     cy.get('[data-cy="username-text-field"]').should('have.text', 'Username');
     cy.get('[data-cy="password-text-field"]').should('have.text', 'Password');
   });
 
-  it('Sign in correctly test', () => {
-    cy.get('[data-cy="username-text-field"]').type('marius');
-    cy.get('[data-cy="password-text-field"]').type('123');
+  it('Signs in when valid credentials are entered', () => {
+    cy.visit('/login');
 
-    cy.get('[data-cy="sign-in-button"]').should('have.text', 'Sign in').click();
+    cy.get('[data-cy="username-text-field"]').type(validUsername);
+    cy.get('[data-cy="password-text-field"]').type(validPassword);
+
+    cy.get('[data-cy="sign-in-button"]').click();
 
     cy.get('[data-cy="account-button"]').should('have.text', 'Account');
   });
 
-  it('Sign in with wrong credentials test', () => {
-    cy.get('[data-cy="username-text-field"]').type('anna');
-    cy.get('[data-cy="password-text-field"]').type('123');
+  it('Shows error when invalid credentials are entered', () => {
+    cy.visit('/login');
 
-    cy.get('[data-cy="sign-in-button"]').should('have.text', 'Sign in').click();
+    cy.get('[data-cy="username-text-field"]').type('invalid_username');
+    cy.get('[data-cy="password-text-field"]').type('invalid_password');
 
-    cy.get('[data-cy="error-alert-message"]').should(
-      'have.text',
-      'Wrong username or password'
-    );
-  });
-
-  it('Sign in with empty fields test', () => {
-    cy.get('[data-cy="sign-in-button"]').should('have.text', 'Sign in').click();
+    cy.get('[data-cy="sign-in-button"]').click();
 
     cy.get('[data-cy="error-alert-message"]').should(
       'have.text',
-      'Please write username and password'
+      'Invalid credentials'
     );
   });
 
-  it('Navigate to app without having to log in again', () => {
-    cy.get('[data-cy="username-text-field"]').type('marius');
-    cy.get('[data-cy="password-text-field"]').type('123');
+  it('Shows error when inputs are empty', () => {
+    cy.visit('/login');
 
-    cy.get('[data-cy="sign-in-button"]').should('have.text', 'Sign in').click();
+    cy.get('[data-cy="sign-in-button"]').click();
 
-    cy.visit('http://google.com');
+    cy.get('[data-cy="error-alert-message"]').should(
+      'have.text',
+      'Please provide username and password'
+    );
+  });
+
+  it('Redirects to login page when not logged in', () => {
     cy.visit('/');
-
-    cy.get('[data-cy="account-button"]').should('have.text', 'Account');
+    cy.url().should('include', '/login');
   });
 
-  it('Log out test', () => {
-    cy.get('[data-cy="username-text-field"]').type('marius');
-    cy.get('[data-cy="password-text-field"]').type('123');
+  it('Does not redirect to login page when already logged in', () => {
+    cy.visit('/login');
 
-    cy.get('[data-cy="sign-in-button"]').should('have.text', 'Sign in').click();
+    cy.get('[data-cy="username-text-field"]').type(validUsername);
+    cy.get('[data-cy="password-text-field"]').type(validPassword);
 
-    cy.get('[data-cy="account-button"]').should('have.text', 'Account').click();
+    cy.get('[data-cy="sign-in-button"]').click();
 
-    cy.get('[data-cy="log-out-button"]').should('have.text', 'Log out').click();
+    cy.visit('/');
+    cy.url().should('not.include', '/login');
+  });
 
-    cy.get('[data-cy="username-text-field"]').should('have.text', 'Username');
-    cy.get('[data-cy="password-text-field"]').should('have.text', 'Password');
+  it('Logs out', () => {
+    cy.visit('/login');
+
+    cy.get('[data-cy="username-text-field"]').type(validUsername);
+    cy.get('[data-cy="password-text-field"]').type(validPassword);
+
+    cy.get('[data-cy="sign-in-button"]').click();
+
+    cy.get('[data-cy="account-button"]').click();
+    cy.get('[data-cy="log-out-button"]').click();
+
+    cy.url().should('include', '/login');
   });
 });

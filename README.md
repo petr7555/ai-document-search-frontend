@@ -13,18 +13,13 @@ The deployment is automatic on push to the `master` branch.
 
 The frontend will be running on http://localhost:3000/.
 
-## Run unit tests
+## Testing
+
+### Unit tests
 - `npm test`
 
-## Run Component tests in terminal
-- `npx cypress run --component`
-
-## Run E2E tests in terminal
-- `npx cypress run`
-
-Runs Cypress end-to-end tests in the terminal. Make sure the frontend is running before testing.
-
-## Manual testing (run Cypress application)
-- `npx cypress open`
-
-Opens the Cypress application for manual running of E2E tests and Component tests in the browser. Make sure the frontend is running before testing.
+### Cypress E2E and component tests
+- start the frontend locally (see above)
+- `npm run cypress:open`
+  - opens the Cypress application for manual running of E2E and component tests in the browser
+  - if you want to run the tests in the headless mode, use `npm run cypress:run` instead
