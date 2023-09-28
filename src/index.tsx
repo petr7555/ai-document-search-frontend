@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
 import getApiUrl from './utils/getApiUrl';
 import App from './App';
@@ -9,12 +10,21 @@ import './App.css';
 
 axios.defaults.baseURL = getApiUrl();
 
+// Comment these lines to use real server even in development mode
+if (process.env.NODE_ENV === 'development') {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { worker } = require('./mocks/browser');
+  worker.start();
+}
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>
 );
 

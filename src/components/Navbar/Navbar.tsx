@@ -1,13 +1,17 @@
+import { MouseEvent, useState } from 'react';
 import styled from '@emotion/styled';
 import PersonIcon from '@mui/icons-material/Person';
 import {
   AppBar,
   Box,
   IconButton,
+  Menu,
+  MenuItem,
   Stack,
   Toolbar,
   Typography
 } from '@mui/material';
+import { useAuth } from '../../hooks/useAuth';
 import theme from '../../themes/theme';
 
 const StyledAppBar = styled(AppBar)(() => ({
@@ -21,6 +25,40 @@ const StyledAppBar = styled(AppBar)(() => ({
 }));
 
 export const Navbar = () => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const isMenuOpen = Boolean(anchorEl);
+
+  const auth = useAuth();
+
+  const handleProfileMenuOpen = (event: MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const accountMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right'
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right'
+      }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+      sx={{ marginTop: '40px' }}
+    >
+      <MenuItem data-cy="log-out-button" onClick={auth.logout}>
+        Log out
+      </MenuItem>
+    </Menu>
+  );
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <StyledAppBar position="static">
@@ -31,15 +69,22 @@ export const Navbar = () => {
             </Typography>
           </IconButton>
         </Toolbar>
-        <IconButton color="inherit">
-          <Stack direction={'row'} spacing={1} sx={{ alignItems: 'end' }}>
-            <PersonIcon sx={{ fontSize: '35px' }} />
-            <Typography color={'white'} variant="h5">
-              Account
-            </Typography>
-          </Stack>
-        </IconButton>
+        {auth?.user && (
+          <IconButton
+            data-cy="account-button"
+            onClick={handleProfileMenuOpen}
+            color="inherit"
+          >
+            <Stack direction={'row'} spacing={1} sx={{ alignItems: 'end' }}>
+              <PersonIcon sx={{ fontSize: '35px' }} />
+              <Typography color={'white'} variant="h5">
+                Account
+              </Typography>
+            </Stack>
+          </IconButton>
+        )}
       </StyledAppBar>
+      {accountMenu}
     </Box>
   );
 };
