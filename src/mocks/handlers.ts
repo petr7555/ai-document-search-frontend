@@ -43,7 +43,6 @@ export const handlers = [
           error: 'Unknown error'
         })
       );
-    }
-  )
+    })
   ]
 ];
