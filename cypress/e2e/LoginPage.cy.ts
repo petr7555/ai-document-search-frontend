@@ -22,7 +22,7 @@ describe('Login page', () => {
 
     cy.get('[data-cy="sign-in-button"]').click();
 
-    cy.get('[data-cy="account-button"]').should('have.text', 'Account');
+    cy.url().should('not.include', '/login');
   });
 
   it('Shows error when invalid credentials are entered', () => {
@@ -75,7 +75,10 @@ describe('Login page', () => {
 
     cy.get('[data-cy="sign-in-button"]').click();
 
-    cy.get('[data-cy="account-button"]').click();
+    cy.url().should('not.include', '/login');
+
+    cy.get('[data-cy="account-button"]').should('have.text', 'Account').click();
+
     cy.get('[data-cy="log-out-button"]').click();
 
     cy.url().should('include', '/login');
