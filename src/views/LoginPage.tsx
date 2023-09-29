@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Alert, AlertTitle, Paper, Stack } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { PrimaryButton } from '../components/Button/PrimaryButton';
@@ -23,7 +23,8 @@ export const LoginPage = () => {
     return username.length > 0 && password.length > 0;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (isFormValid()) {
       const response = await auth.login(username, password);
       if (!response.ok) {
@@ -40,17 +41,8 @@ export const LoginPage = () => {
       <Navbar />
       <CenterPageContent>
         <Paper elevation={3} sx={{ padding: 8 }}>
-          <form>
-            <Stack
-              direction="column"
-              spacing={4}
-              sx={{
-                width: 400,
-                height: 275,
-                display: 'flex',
-                justifyContent: 'space-between'
-              }}
-            >
+          <form onSubmit={handleSubmit}>
+            <Stack direction="column" spacing={4} sx={{ width: 300 }}>
               <TextField
                 error={hasError}
                 label="Username"
@@ -78,7 +70,6 @@ export const LoginPage = () => {
                 }}
               />
               <PrimaryButton
-                onClick={handleSubmit}
                 data-cy="sign-in-button"
                 variant="contained"
                 type="button"
