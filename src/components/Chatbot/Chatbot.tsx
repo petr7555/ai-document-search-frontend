@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { Stack, Typography } from '@mui/material';
+import { messageChatbot } from '../../api/messageChatbot';
 import { PrimaryButton } from '../Button/PrimaryButton';
 import { CenterPageContent } from '../CenterPageContent';
 import { ConversationLayout } from '../ConversationLayout';
@@ -13,9 +14,22 @@ export type messageType = {
 
 export const Chatbot = () => {
   const [conversation, setConversation] = useState<messageType[]>([]);
+  const [error, setError] = useState(false);
 
-  const addMessageToConversation = (message: messageType) => {
+  const addMessageToConversation = async (message: messageType) => {
     setConversation([...conversation, message]);
+    try {
+      await messageChatbot(message.text).then((response) => {
+        if (response.ok) {
+          setConversation([
+            ...conversation,
+            { originBot: true, text: response.answer }
+          ]);
+        }
+      });
+    } catch (error) {
+      setError(true);
+    }
   };
 
   return (
@@ -48,6 +62,11 @@ export const Chatbot = () => {
       </Stack>
       <ConversationLayout conversation={conversation} />
       <Inputfield sendMessage={addMessageToConversation} />
+      {error && (
+        <Typography sx={{ color: 'red' }}>
+          Something went wrong, please try again
+        </Typography>
+      )}
     </CenterPageContent>
   );
 };
