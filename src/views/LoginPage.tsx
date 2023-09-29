@@ -81,7 +81,7 @@ export const LoginPage = () => {
                 onClick={handleSubmit}
                 data-cy="sign-in-button"
                 variant="contained"
-                type="button"
+                type="submit"
               >
                 Sign in
               </PrimaryButton>
