@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { Paper, Stack } from '@mui/material';
-import { messageType } from './Chatbot/Chatbot';
+import { messageType } from './Chatbot';
 
 const MessageBubble = styled(Paper)(({ fromBot }: { fromBot: boolean }) => ({
-  maxWidth: '50%',
+  maxWidth: '80%',
   minHeight: '30px',
   borderRadius: '20px',
   textAlign: fromBot ? 'left' : 'right',

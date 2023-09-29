@@ -37,9 +37,9 @@ export const Inputfield = ({
           width: '20vw',
           height: '4vh',
           top: '10vh',
-          paddingTop: "10px",
+          paddingTop: '10px',
           alignContent: 'center',
-          textAlign: 'center',
+          textAlign: 'center'
         }}
       >
         <AlertTitle>Please enter a message</AlertTitle>

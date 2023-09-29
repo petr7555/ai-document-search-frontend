@@ -4,7 +4,7 @@ import { Stack, Typography } from '@mui/material';
 import { messageChatbot } from '../../api/messageChatbot';
 import { PrimaryButton } from '../Button/PrimaryButton';
 import { CenterPageContent } from '../CenterPageContent';
-import { ConversationLayout } from '../ConversationLayout';
+import { ConversationLayout } from './ConversationLayout';
 import { Inputfield } from './InputField';
 
 export type messageType = {
@@ -23,6 +23,7 @@ export const Chatbot = () => {
         if (response.ok) {
           setConversation([
             ...conversation,
+            message,
             { originBot: true, text: response.answer }
           ]);
         }
@@ -41,9 +42,6 @@ export const Chatbot = () => {
         justifyContent={'flex-end'}
         sx={{ marginBottom: '20px', width: '60vw' }}
       >
-        <Typography sx={{ paddingRight: '275px' }} variant="h4">
-          Chatbot
-        </Typography>
         <PrimaryButton
           sx={{
             borderRadius: '20px',
