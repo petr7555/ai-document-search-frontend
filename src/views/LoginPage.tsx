@@ -42,7 +42,16 @@ export const LoginPage = () => {
       <CenterPageContent>
         <Paper elevation={3} sx={{ padding: 8 }}>
           <form onSubmit={handleSubmit}>
-            <Stack direction="column" spacing={4} sx={{ width: 300 }}>
+            <Stack
+              direction="column"
+              spacing={4}
+              sx={{
+                width: 400,
+                height: 275,
+                display: 'flex',
+                justifyContent: 'space-between'
+              }}
+            >
               <TextField
                 error={hasError}
                 label="Username"
