@@ -17,7 +17,9 @@ export const Inputfield = ({
   const [error, setError] = useState(false);
 
   const handleSendMessage = () => {
-    if (input.length === 0) {
+    const trimmedInput = input.trim();
+
+    if (trimmedInput.length === 0) {
       setError(true);
     } else {
       sendMessage({ originBot: false, text: input });
@@ -30,6 +32,7 @@ export const Inputfield = ({
       <Alert
         severity="info"
         color="info"
+        data-cy="chatbot-input-error"
         onClose={() => setError(false)}
         sx={{
           visibility: error ? 'visible' : 'hidden',
@@ -56,7 +59,7 @@ export const Inputfield = ({
           p: '2px 4px',
           display: 'flex',
           alignItems: 'center',
-          width: 600,
+          width: '40vw',
           marginTop: '20px'
         }}
       >
@@ -67,6 +70,7 @@ export const Inputfield = ({
         <InputBase
           sx={{ ml: 1, flex: 1 }}
           placeholder="Ask a question"
+          data-cy="chatbot-input-field"
           value={input}
           onChange={(event) => {
             setInput(event.target.value);
@@ -77,6 +81,7 @@ export const Inputfield = ({
           onClick={handleSendMessage}
           type="button"
           sx={{ p: '10px' }}
+          data-cy="chatbot-send-button"
           aria-label="send"
         >
           <SendIcon color={input.length > 0 ? 'primary' : 'inherit'} />

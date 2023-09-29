@@ -34,7 +34,7 @@ export const Chatbot = () => {
   };
 
   return (
-    <CenterPageContent>
+    <CenterPageContent data-cy="chatbot">
       <Stack
         spacing={2}
         direction="row"

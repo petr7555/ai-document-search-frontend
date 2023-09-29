@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { Paper, Stack } from '@mui/material';
 import { messageType } from './Chatbot';
 
 const MessageBubble = styled(Paper)(({ fromBot }: { fromBot: boolean }) => ({
   maxWidth: '80%',
-  minHeight: '30px',
+  minHeight: 'fit-content',
   borderRadius: '20px',
   textAlign: fromBot ? 'left' : 'right',
   alignItems: 'center',
@@ -28,11 +28,22 @@ export const ConversationLayout = ({
 }) => {
   const messages = conversation.map((message) => {
     return (
-      <MessageBubble fromBot={message.originBot}>
+      <MessageBubble
+        data-cy={
+          message.originBot ? 'chatbot-response-message' : 'user-input-message'
+        }
+        fromBot={message.originBot}
+      >
         <p>{message.text}</p>
       </MessageBubble>
     );
   });
+
+  useEffect(() => {
+    const bottom = document.getElementById('bottom');
+    bottom?.scrollIntoView({ behavior: 'smooth' });
+  }, [conversation]);
+
   return (
     <Stack
       sx={{
@@ -41,10 +52,13 @@ export const ConversationLayout = ({
         height: '60vh',
         gap: '10px',
         borderRadius: '10px',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        overflowY: 'scroll',
+        overflowX: 'hidden'
       }}
     >
       {messages}
+      <div id="bottom" />
     </Stack>
   );
 };
