@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { Container } from '@mui/material';
-import theme from '../themes/theme';
 
 export const CenterPageContent = styled(Container)(() => ({
   display: 'flex',
@@ -9,6 +8,5 @@ export const CenterPageContent = styled(Container)(() => ({
   alignItems: 'center',
   height: '100vh',
   width: '100vw',
-  flexGrow: 1,
-  backgroundColor: theme.palette.info.main
+  flexGrow: 1
 }));

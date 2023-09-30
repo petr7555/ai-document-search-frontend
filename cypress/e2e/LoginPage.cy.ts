@@ -76,8 +76,9 @@ describe('Login page', () => {
     cy.get('[data-cy="sign-in-button"]').click();
 
     cy.get('[data-cy="account-button"]').click();
+
     cy.get('[data-cy="log-out-button"]').click();
 
-    cy.url().should('include', '/login');
+    cy.get('[data-cy="account-button"]').should('not.exist');
   });
 });

@@ -1,4 +1,6 @@
+import React from 'react';
 import { CenterPageContent } from '../components/CenterPageContent';
+import { Chatbot } from '../components/Chatbot/Chatbot';
 import { Navbar } from '../components/Navbar/Navbar';
 
 export const HomePage = () => {
@@ -6,7 +8,7 @@ export const HomePage = () => {
     <>
       <Navbar />
       <CenterPageContent>
-        <h1>Home Page</h1>
+        <Chatbot />
       </CenterPageContent>
     </>
   );

@@ -42,7 +42,16 @@ export const LoginPage = () => {
       <CenterPageContent>
         <Paper elevation={3} sx={{ padding: 8 }}>
           <form onSubmit={handleSubmit}>
-            <Stack direction="column" spacing={4} sx={{ width: 300 }}>
+            <Stack
+              direction="column"
+              spacing={4}
+              sx={{
+                width: 400,
+                height: 275,
+                display: 'flex',
+                justifyContent: 'space-between'
+              }}
+            >
               <TextField
                 error={hasError}
                 label="Username"
@@ -76,20 +85,21 @@ export const LoginPage = () => {
               >
                 Sign in
               </PrimaryButton>
-              {hasError && (
-                <Alert
-                  variant="outlined"
-                  severity="error"
-                  onClose={() => setErrorMessage('')}
-                >
-                  <AlertTitle data-cy="error-alert-message">
-                    {errorMessage}
-                  </AlertTitle>
-                </Alert>
-              )}
             </Stack>
           </form>
         </Paper>
+        {hasError && (
+          <Alert
+            variant="outlined"
+            severity="error"
+            sx={{ width: '25vw', position: 'fixed', bottom: '18vh' }}
+            onClose={() => setErrorMessage('')}
+          >
+            <AlertTitle data-cy="error-alert-message">
+              {errorMessage}
+            </AlertTitle>
+          </Alert>
+        )}
       </CenterPageContent>
     </>
   );
