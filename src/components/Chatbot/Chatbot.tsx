@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import { Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Stack, Typography } from '@mui/material';
 import { messageChatbot } from '../../api/messageChatbot';
 import { PrimaryButton } from '../Button/PrimaryButton';
 import { CenterPageContent } from '../CenterPageContent';
 import { ConversationLayout } from './ConversationLayout';
 import { Inputfield } from './InputField';
 
-export type messageType = {
+export type Message = {
   originBot: boolean;
   text: string;
 };
 
 export const Chatbot = () => {
-  const [conversation, setConversation] = useState<messageType[]>([]);
+  const [conversation, setConversation] = useState<Message[]>([]);
   const [error, setError] = useState(false);
 
-  const addMessageToConversation = async (message: messageType) => {
+  const addMessageToConversation = async (message: Message) => {
     setConversation([...conversation, message]);
     try {
       await messageChatbot(message.text).then((response) => {
@@ -26,6 +26,8 @@ export const Chatbot = () => {
             message,
             { originBot: true, text: response.answer }
           ]);
+        } else {
+          setError(true);
         }
       });
     } catch (error) {
@@ -61,9 +63,24 @@ export const Chatbot = () => {
       <ConversationLayout conversation={conversation} />
       <Inputfield sendMessage={addMessageToConversation} />
       {error && (
-        <Typography sx={{ color: 'red' }}>
-          Something went wrong, please try again
-        </Typography>
+        <Alert
+          severity="error"
+          color="error"
+          data-cy="chatbot-response-error"
+          onClose={() => setError(false)}
+          sx={{
+            visibility: error ? 'visible' : 'hidden',
+            position: 'fixed',
+            width: '20vw',
+            height: '4vh',
+            top: '10vh',
+            paddingTop: '10px',
+            alignContent: 'center',
+            textAlign: 'center'
+          }}
+        >
+          <AlertTitle>Unknown error</AlertTitle>
+        </Alert>
       )}
     </CenterPageContent>
   );

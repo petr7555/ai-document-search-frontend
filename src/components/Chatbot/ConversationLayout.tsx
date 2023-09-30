@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { Paper, Stack } from '@mui/material';
-import { messageType } from './Chatbot';
+import { Message} from './Chatbot';
 
 const MessageBubble = styled(Paper)(({ fromBot }: { fromBot: boolean }) => ({
   maxWidth: '80%',
@@ -24,7 +24,7 @@ const MessageBubble = styled(Paper)(({ fromBot }: { fromBot: boolean }) => ({
 export const ConversationLayout = ({
   conversation
 }: {
-  conversation: messageType[];
+  conversation: Message[];
 }) => {
   const messages = conversation.map((message) => {
     return (

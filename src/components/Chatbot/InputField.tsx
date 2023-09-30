@@ -6,12 +6,12 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
 import Paper from '@mui/material/Paper';
-import { messageType } from './Chatbot';
+import { Message } from './Chatbot';
 
 export const Inputfield = ({
   sendMessage
 }: {
-  sendMessage: (message: messageType) => void;
+  sendMessage: (message: Message) => void;
 }) => {
   const [input, setInput] = useState('');
   const [error, setError] = useState(false);

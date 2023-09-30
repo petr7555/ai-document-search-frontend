@@ -17,9 +17,9 @@ export type ChatbotResponse =
 export const messageChatbot = async (
   message: string
 ): Promise<ChatbotResponse> => {
-  const params = { question: message };
+  const data = { question: message };
   try {
-    const response = await axios.post<AnswerFromChatbot>('/chatbot/', params);
+    const response = await axios.post<AnswerFromChatbot>('/chatbot/', data);
     return {
       ok: true,
       answer: response.data.answer.text
