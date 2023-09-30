@@ -85,20 +85,21 @@ export const LoginPage = () => {
               >
                 Sign in
               </PrimaryButton>
-              {hasError && (
-                <Alert
-                  variant="outlined"
-                  severity="error"
-                  onClose={() => setErrorMessage('')}
-                >
-                  <AlertTitle data-cy="error-alert-message">
-                    {errorMessage}
-                  </AlertTitle>
-                </Alert>
-              )}
             </Stack>
           </form>
         </Paper>
+        {hasError && (
+          <Alert
+            variant="outlined"
+            severity="error"
+            sx={{ width: '25vw', position: 'fixed', bottom: '18vh' }}
+            onClose={() => setErrorMessage('')}
+          >
+            <AlertTitle data-cy="error-alert-message">
+              {errorMessage}
+            </AlertTitle>
+          </Alert>
+        )}
       </CenterPageContent>
     </>
   );
