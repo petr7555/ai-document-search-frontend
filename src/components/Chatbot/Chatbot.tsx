@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styled from '@emotion/styled';
 import AddIcon from '@mui/icons-material/Add';
 import { Alert, AlertTitle, Stack, Typography } from '@mui/material';
 import { messageChatbot } from '../../api/messageChatbot';
@@ -11,6 +12,13 @@ export type Message = {
   originBot: boolean;
   text: string;
 };
+
+const NewConversationButton = styled(PrimaryButton)(() => ({
+  borderRadius: '20px',
+  color: 'white',
+  gap: '5px',
+  padding: '10px 10px 10px 15px'
+}));
 
 export const Chatbot = () => {
   const [conversation, setConversation] = useState<Message[]>([]);
@@ -44,13 +52,7 @@ export const Chatbot = () => {
         justifyContent={'flex-end'}
         sx={{ marginBottom: '20px', width: '60vw' }}
       >
-        <PrimaryButton
-          sx={{
-            borderRadius: '20px',
-            color: 'white',
-            gap: '5px',
-            padding: '10px 10px 10px 15px'
-          }}
+        <NewConversationButton
           onClick={() => setConversation([])}
           aria-label="new conversation"
         >
@@ -58,7 +60,7 @@ export const Chatbot = () => {
             New conversation
           </Typography>
           <AddIcon />
-        </PrimaryButton>
+        </NewConversationButton>
       </Stack>
       <ConversationLayout conversation={conversation} />
       <Inputfield sendMessage={addMessageToConversation} />

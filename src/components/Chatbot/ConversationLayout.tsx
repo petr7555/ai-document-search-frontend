@@ -6,7 +6,7 @@ import { Message } from './Chatbot';
 const MessageBubble = styled(Paper)(({ fromBot }: { fromBot: boolean }) => ({
   maxWidth: '80%',
   minHeight: 'fit-content',
-  borderRadius: '20px',
+  borderRadius: fromBot ? '10px 10px 10px 0px' : '10px 10px 0px 10px',
   textAlign: fromBot ? 'left' : 'right',
   alignItems: 'center',
   margin: '2px',
