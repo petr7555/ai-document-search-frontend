@@ -28,12 +28,12 @@ describe('Chatbot page', () => {
   it('Send message with wrong token and get error', () => {
     cy.visit('/', {
       onBeforeLoad: function (window) {
-          window.localStorage.setItem('token', "fake token");
+        window.localStorage.setItem('token', 'fake token');
       }
-  })
+    });
     cy.get('[data-cy="chatbot"]').should('exist');
     cy.get('[data-cy="chatbot-input-field"]').type('Hello');
     cy.get('[data-cy="chatbot-send-button"]').click();
-    cy.get("[data-cy=chatbot-response-error]").should('exist');
-  })
+    cy.get('[data-cy=chatbot-response-error]').should('exist');
+  });
 });
