@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { Paper, Stack } from '@mui/material';
+import { BouncingLoader } from '../BouncingDotsLoader';
 import { Message } from './Chatbot';
 
 const MessageBubble = styled(Paper)(({ fromBot }: { fromBot: boolean }) => ({
@@ -22,21 +23,41 @@ const MessageBubble = styled(Paper)(({ fromBot }: { fromBot: boolean }) => ({
 }));
 
 export const ConversationLayout = ({
-  conversation
+  conversation,
+  loading
 }: {
   conversation: Message[];
+  loading: boolean;
 }) => {
   const messages = conversation.map((message) => {
-    return (
-      <MessageBubble
-        data-cy={
-          message.originBot ? 'chatbot-response-message' : 'user-input-message'
-        }
-        fromBot={message.originBot}
-      >
-        <p>{message.text}</p>
-      </MessageBubble>
-    );
+    if (loading && message.originBot && message.text === '...') {
+      return (
+        <MessageBubble
+          data-cy="chatbot-response-message"
+          fromBot={message.originBot}
+          key={message.text}
+        >
+          <BouncingLoader>
+            <div />
+            <div />
+            <div />
+          </BouncingLoader>
+        </MessageBubble>
+      );
+    } else {
+      return (
+        <MessageBubble
+          data-cy={
+            message.originBot
+              ? 'chatbot-response-message'
+              : 'user-input-message'
+          }
+          fromBot={message.originBot}
+        >
+          <p>{message.text}</p>
+        </MessageBubble>
+      );
+    }
   });
 
   useEffect(() => {

@@ -15,10 +15,17 @@ export type Message = {
 export const Chatbot = () => {
   const [conversation, setConversation] = useState<Message[]>([]);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const addMessageToConversation = async (message: Message) => {
     setConversation([...conversation, message]);
     try {
+      setLoading(true);
+      setConversation([
+        ...conversation,
+        message,
+        { originBot: true, text: '...' }
+      ]);
       await messageChatbot(message.text).then((response) => {
         if (response.ok) {
           setConversation([
@@ -26,6 +33,8 @@ export const Chatbot = () => {
             message,
             { originBot: true, text: response.answer }
           ]);
+          
+          setLoading(false);
         } else {
           setError(true);
         }
@@ -60,7 +69,7 @@ export const Chatbot = () => {
           <AddIcon />
         </PrimaryButton>
       </Stack>
-      <ConversationLayout conversation={conversation} />
+      <ConversationLayout loading={loading} conversation={conversation} />
       <Inputfield sendMessage={addMessageToConversation} />
       {error && (
         <Alert
