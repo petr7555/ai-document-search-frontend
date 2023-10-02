@@ -27,7 +27,14 @@ export const handlers = [
 
   rest.post('*/chatbot/', (req, res, ctx) => {
     const { question } = req.body as { question: string };
-
+    if (req.headers.get('authorization') != 'Bearer 123') {
+      return res(
+        ctx.status(401),
+        ctx.json({
+          detail: 'Not authenticated'
+        })
+      );
+    }
     if (question === 'Hello') {
       return res(
         ctx.status(200),

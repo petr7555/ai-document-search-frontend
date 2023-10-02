@@ -16,9 +16,11 @@ The frontend will be running on http://localhost:3000/.
 ## Testing
 
 ### Unit tests
+
 - `npm test`
 
 ### Cypress E2E and component tests
+
 - start the frontend locally (see above)
 - `npm run cypress:open`
   - opens the Cypress application for manual running of E2E and component tests in the browser

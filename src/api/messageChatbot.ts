@@ -19,11 +19,23 @@ export const messageChatbot = async (
 ): Promise<ChatbotResponse> => {
   const data = { question: message };
   try {
-    const response = await axios.post<AnswerFromChatbot>('/chatbot/', data);
-    return {
-      ok: true,
-      answer: response.data.answer.text
-    };
+    const token = localStorage.getItem('token');
+    if (token) {
+      const response = await axios.post<AnswerFromChatbot>('/chatbot/', data, {
+        headers: {
+          Authorization: 'Bearer ' + JSON.parse(token)
+        }
+      });
+      return {
+        ok: true,
+        answer: response.data.answer.text
+      };
+    } else {
+      return {
+        ok: false,
+        detail: 'Unknown error'
+      };
+    }
   } catch (error) {
     return {
       ok: false,
