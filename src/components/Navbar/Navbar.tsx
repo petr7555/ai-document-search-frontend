@@ -21,7 +21,8 @@ const StyledAppBar = styled(AppBar)(() => ({
   justifyContent: 'space-between',
   paddingRight: '40px',
   position: 'fixed',
-  margin: '0px'
+  margin: '0px',
+  zIndex: 1000
 }));
 
 export const Navbar = () => {

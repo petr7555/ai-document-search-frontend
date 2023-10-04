@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { Paper, Stack } from '@mui/material';
-import { messageType } from './Chatbot/Chatbot';
+import { Message } from './Chatbot';
 
 const MessageBubble = styled(Paper)(({ fromBot }: { fromBot: boolean }) => ({
-  maxWidth: '50%',
-  minHeight: '30px',
-  borderRadius: '20px',
+  maxWidth: '80%',
+  minHeight: 'fit-content',
+  borderRadius: fromBot ? '10px 10px 10px 0px' : '10px 10px 0px 10px',
   textAlign: fromBot ? 'left' : 'right',
   alignItems: 'center',
   margin: '2px',
@@ -24,15 +24,26 @@ const MessageBubble = styled(Paper)(({ fromBot }: { fromBot: boolean }) => ({
 export const ConversationLayout = ({
   conversation
 }: {
-  conversation: messageType[];
+  conversation: Message[];
 }) => {
   const messages = conversation.map((message) => {
     return (
-      <MessageBubble fromBot={message.originBot}>
+      <MessageBubble
+        data-cy={
+          message.originBot ? 'chatbot-response-message' : 'user-input-message'
+        }
+        fromBot={message.originBot}
+      >
         <p>{message.text}</p>
       </MessageBubble>
     );
   });
+
+  useEffect(() => {
+    const bottom = document.getElementById('bottom');
+    bottom?.scrollIntoView({ behavior: 'smooth' });
+  }, [conversation]);
+
   return (
     <Stack
       sx={{
@@ -41,10 +52,13 @@ export const ConversationLayout = ({
         height: '60vh',
         gap: '10px',
         borderRadius: '10px',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        overflowY: 'scroll',
+        overflowX: 'hidden'
       }}
     >
       {messages}
+      <div id="bottom" />
     </Stack>
   );
 };

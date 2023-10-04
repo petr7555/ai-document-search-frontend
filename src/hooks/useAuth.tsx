@@ -27,6 +27,10 @@ export const AuthProvider: FC<Props> = ({ children }) => {
     'user',
     undefined
   );
+  const [token, setToken] = useLocalStorage<string | undefined>(
+    'token',
+    undefined
+  );
   const navigate = useNavigate();
 
   // call this function when you want to authenticate the user
@@ -35,26 +39,29 @@ export const AuthProvider: FC<Props> = ({ children }) => {
       const response = await authenticateUser(username, password);
       if (response.ok) {
         setUser(username);
+        setToken(response.access_token);
         navigate('/', { replace: true });
       }
       return response;
     },
-    [setUser, navigate]
+    [setUser, setToken, navigate]
   );
 
   // call this function to sign out logged-in user
   const logout = useCallback(() => {
     setUser(undefined);
+    setToken(undefined);
     navigate('/', { replace: true });
-  }, [setUser, navigate]);
+  }, [setUser, setToken, navigate]);
 
   const value = useMemo(
     () => ({
       user,
       login,
-      logout
+      logout,
+      token
     }),
-    [user, login, logout]
+    [user, login, logout, token]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

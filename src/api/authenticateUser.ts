@@ -26,7 +26,6 @@ export const authenticateUser = async (
 
   try {
     const response = await axios.post<AuthSuccess>('/auth/token', form);
-    axios.defaults.headers.common.Authorization = `Bearer ${response.data.access_token}`;
     return {
       ok: true,
       ...response.data
