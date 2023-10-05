@@ -6,6 +6,10 @@ import { Chatbot } from '../components/Chatbot/Chatbot';
 import { Stack, Grid, Box } from '@mui/material';
 import { flexbox } from '@mui/system';
 
+import ReactDOM from 'react-dom';
+import { PDFViewer } from '@react-pdf/renderer';
+
+
 export const PDFPage = () => {
   return (
     <>
@@ -13,6 +17,8 @@ export const PDFPage = () => {
     </>
   );
 };
+
+
 /*
 export const PDFPage = () => {
   return (
