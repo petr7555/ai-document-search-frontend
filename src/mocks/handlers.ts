@@ -39,7 +39,18 @@ export const handlers = [
       return res(
         ctx.status(200),
         ctx.json({
-          answer: { text: 'Hi' }
+          answer: { text: 'Hi, how are you?' }
+        })
+      );
+    }
+
+    if (question === 'Hi, can you tell me about bonds?') {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          answer: {
+            text: 'Bonds are debt securities issued by governments, corporations, or other entities to raise capital. Investors who buy bonds effectively lend money to the issuer in exchange for periodic interest payments and the return of the bonds face value at maturity.'
+          }
         })
       );
     }

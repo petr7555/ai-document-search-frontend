@@ -33,13 +33,13 @@ export const messageChatbot = async (
     } else {
       return {
         ok: false,
-        detail: 'Unknown error'
+        detail: 'Authentication error when connecting to chatbot'
       };
     }
   } catch (error) {
     return {
       ok: false,
-      detail: 'Unknown error'
+      detail: 'Unknown error when connecting to chatbot'
     };
   }
 };
