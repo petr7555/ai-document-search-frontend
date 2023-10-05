@@ -3,7 +3,9 @@ import {
   Alert,
   AlertTitle,
   CircularProgress,
+  Grow,
   Paper,
+  Snackbar,
   Stack
 } from '@mui/material';
 import TextField from '@mui/material/TextField';
@@ -18,8 +20,8 @@ export const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const hasError = errorMessage.length > 0;
 
   const resetLoginForm = () => {
     setUsername('');
@@ -37,10 +39,12 @@ export const LoginPage = () => {
       const response = await auth.login(username, password);
       if (!response.ok) {
         setErrorMessage(response.detail);
+        setError(true);
         setLoading(false);
       }
     } else {
       setErrorMessage('Please provide username and password');
+      setError(true);
     }
     resetLoginForm();
   };
@@ -66,11 +70,11 @@ export const LoginPage = () => {
                   }}
                 >
                   <TextField
-                    error={hasError}
+                    error={error}
                     label="Username"
                     type="text"
                     autoComplete="username"
-                    color={hasError ? 'error' : 'primary'}
+                    color={error ? 'error' : 'primary'}
                     variant="standard"
                     value={username}
                     data-cy="username-text-field"
@@ -79,11 +83,11 @@ export const LoginPage = () => {
                     }}
                   />
                   <TextField
-                    error={hasError}
+                    error={error}
                     label="Password"
                     type="password"
                     autoComplete="current-password"
-                    color={hasError ? 'error' : 'primary'}
+                    color={error ? 'error' : 'primary'}
                     value={password}
                     variant="standard"
                     data-cy="password-text-field"
@@ -101,18 +105,20 @@ export const LoginPage = () => {
                 </Stack>
               </form>
             </Paper>
-            {hasError && (
-              <Alert
-                variant="outlined"
-                severity="error"
-                sx={{ width: '25vw', position: 'fixed', bottom: '18vh' }}
-                onClose={() => setErrorMessage('')}
-              >
+            <Snackbar
+              open={error}
+              autoHideDuration={4000}
+              onClose={() => setError(false)}
+              anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+              transitionDuration={{ enter: 300, exit: 300 }}
+              TransitionComponent={Grow}
+            >
+              <Alert variant="filled" severity="error">
                 <AlertTitle data-cy="error-alert-message">
                   {errorMessage}
                 </AlertTitle>
               </Alert>
-            )}
+            </Snackbar>
           </>
         )}
       </CenterPageContent>
