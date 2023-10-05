@@ -1,5 +1,11 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
-import { Alert, AlertTitle, Paper, Stack } from '@mui/material';
+import {
+  Alert,
+  AlertTitle,
+  CircularProgress,
+  Paper,
+  Stack
+} from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { PrimaryButton } from '../components/Button/PrimaryButton';
 import { CenterPageContent } from '../components/CenterPageContent';
@@ -12,6 +18,7 @@ export const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const hasError = errorMessage.length > 0;
 
   const resetLoginForm = () => {
@@ -26,9 +33,11 @@ export const LoginPage = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isFormValid()) {
+      setLoading(true);
       const response = await auth.login(username, password);
       if (!response.ok) {
         setErrorMessage(response.detail);
+        setLoading(false);
       }
     } else {
       setErrorMessage('Please provide username and password');
@@ -40,65 +49,71 @@ export const LoginPage = () => {
     <>
       <Navbar />
       <CenterPageContent>
-        <Paper elevation={3} sx={{ padding: 8 }}>
-          <form onSubmit={handleSubmit}>
-            <Stack
-              direction="column"
-              spacing={4}
-              sx={{
-                width: 400,
-                height: 275,
-                display: 'flex',
-                justifyContent: 'space-between'
-              }}
-            >
-              <TextField
-                error={hasError}
-                label="Username"
-                type="text"
-                autoComplete="username"
-                color={hasError ? 'error' : 'primary'}
-                variant="standard"
-                value={username}
-                data-cy="username-text-field"
-                onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                  setUsername(event.target.value);
-                }}
-              />
-              <TextField
-                error={hasError}
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                color={hasError ? 'error' : 'primary'}
-                value={password}
-                variant="standard"
-                data-cy="password-text-field"
-                onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                  setPassword(event.target.value);
-                }}
-              />
-              <PrimaryButton
-                data-cy="sign-in-button"
-                variant="contained"
-                type="submit"
+        {loading ? (
+          <CircularProgress color="primary" />
+        ) : (
+          <>
+            <Paper elevation={3} sx={{ padding: 8 }}>
+              <form onSubmit={handleSubmit}>
+                <Stack
+                  direction="column"
+                  spacing={4}
+                  sx={{
+                    width: 400,
+                    height: 275,
+                    display: 'flex',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <TextField
+                    error={hasError}
+                    label="Username"
+                    type="text"
+                    autoComplete="username"
+                    color={hasError ? 'error' : 'primary'}
+                    variant="standard"
+                    value={username}
+                    data-cy="username-text-field"
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                      setUsername(event.target.value);
+                    }}
+                  />
+                  <TextField
+                    error={hasError}
+                    label="Password"
+                    type="password"
+                    autoComplete="current-password"
+                    color={hasError ? 'error' : 'primary'}
+                    value={password}
+                    variant="standard"
+                    data-cy="password-text-field"
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                      setPassword(event.target.value);
+                    }}
+                  />
+                  <PrimaryButton
+                    data-cy="sign-in-button"
+                    variant="contained"
+                    type="submit"
+                  >
+                    Sign in
+                  </PrimaryButton>
+                </Stack>
+              </form>
+            </Paper>
+            {hasError && (
+              <Alert
+                variant="outlined"
+                severity="error"
+                sx={{ width: '25vw', position: 'fixed', bottom: '18vh' }}
+                onClose={() => setErrorMessage('')}
               >
-                Sign in
-              </PrimaryButton>
-            </Stack>
-          </form>
-        </Paper>
-        {hasError && (
-          <Alert
-            variant="outlined"
-            severity="error"
-            sx={{ width: '25vw', position: 'fixed', bottom: '18vh' }}
-            onClose={() => setErrorMessage('')}
-          >
-            <AlertTitle data-cy="error-alert-message">
-              {errorMessage}
-            </AlertTitle>
-          </Alert>
+                <AlertTitle data-cy="error-alert-message">
+                  {errorMessage}
+                </AlertTitle>
+              </Alert>
+            )}
+          </>
         )}
       </CenterPageContent>
     </>

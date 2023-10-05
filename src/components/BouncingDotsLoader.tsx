@@ -5,8 +5,8 @@ export const BouncingLoader = styled.div`
   justify-content: center;
 
   > div {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     margin: 20px 4px 10px 4px;
     border-radius: 50%;
     background-color: #a3a1a1;

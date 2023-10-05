@@ -11,6 +11,7 @@ import { Inputfield } from './InputField';
 export type Message = {
   originBot: boolean;
   text: string;
+  error?: boolean;
 };
 
 const NewConversationButton = styled(PrimaryButton)(() => ({
@@ -41,14 +42,22 @@ export const Chatbot = () => {
             message,
             { originBot: true, text: response.answer }
           ]);
-          
-          setLoading(false);
         } else {
-          setError(true);
+          setConversation([
+            ...conversation,
+            message,
+            {
+              originBot: true,
+              text: response.detail,
+              error: true
+            }
+          ]);
         }
       });
     } catch (error) {
       setError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
