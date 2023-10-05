@@ -1,83 +1,97 @@
-import React, { useState, ChangeEvent, } from 'react';
-import { Document, Page} from 'react-pdf';
+import React, { useState, } from 'react';
+import { pdfjs, Document, Page, } from 'react-pdf';
 
-import { Box, TextField, Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
 
-import { pdfjs } from 'react-pdf';
-import { CenterPageContent } from '../CenterPageContent';
-import PageSelector from './PageSelector'
-
-import { PDFViewer } from '@react-pdf/renderer';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.js',
   import.meta.url,
 ).toString();
-
-//import pdfile from './reflection_report.pdf';
-
-/*
-export const PDFDisplay = () => {
-    //const [file, setFile] = useState('');
-    
-    //setFile('https://drive.google.com/file/d/1qshrlkCcjlc-2fcTpDT_d-MEQBqxPoot/view?usp=sharing')
-    
-    return (
-      <Document file={'http://localhost:3000/reflection_report.pdf'}>
-        <Page pageNumber={1} />
-      </Document>
-    );
-  }*/
-
-import RemoveIcon from '@mui/icons-material/Remove';
-import AddIcon from '@mui/icons-material/Add';
-import NumberInput from './NumberInput'
   
 
-  export function PDFDisplay() {
-    const [numPages, setNumPages] = useState(0);
-    const [pageNumber, setPageNumber] = useState(1);
-    const [zoomLevel, setZoomLevel] = useState(1.0);
-  
-    function onDocumentLoadSuccess({ numPages } : {numPages : number}) {
-      setNumPages(numPages);
-      setPageNumber(1);
-      setZoomLevel(1.0);
-    }
-  
-    function changePage(offset : number) {
-      setPageNumber(prevPageNumber => prevPageNumber + offset);
-    }
-  
-    function previousPage() {
-      changePage(-1);
-    }
-  
-    function nextPage() {
-      changePage(1);
-    }
+export function PDFDisplay() {
+  const [numPages, setNumPages] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [zoomLevel, setZoomLevel] = useState(1.0);
+  const [fileURL, setFileURL] = useState('http://localhost:3000/reflection_report.pdf');
 
-    function increaseZoom() {
-      setZoomLevel(zoomLevel * 2)
-    }
+  const ZOOMRATE = 1.5
 
-    function decreaseZoom() {
-      setZoomLevel(zoomLevel / 2)
-    }
-  
-    return (
-      <>
-      <Stack>
-        <Box sx={{
-            width: '60vw',
-            height: '10vh',
-            backgroundColor: 'gray',
+  function onDocumentLoadSuccess({ numPages } : {numPages : number}) {
+    setNumPages(numPages);
+    setPageNumber(1);
+    setZoomLevel(1.0);
+  }
+
+  function changePage(offset : number) {
+    setPageNumber(prevPageNumber => prevPageNumber + offset);
+  }
+
+  function previousPage() {
+    changePage(-1);
+  }
+
+  function nextPage() {
+    changePage(1);
+  }
+
+  function increaseZoom() {
+    setZoomLevel(zoomLevel * ZOOMRATE)
+  }
+
+  function decreaseZoom() {
+    setZoomLevel(zoomLevel / ZOOMRATE)
+  }
+
+  function loadFile(fileURL: string) {
+    setFileURL(fileURL)
+  }
+
+  return (
+    <>
+    <Stack>
+      <Stack 
+      direction="row"
+      spacing={4}
+      sx={{
+          width: '60vw',
+          height: '7vh',
+          backgroundColor: '#2e2e2e',
+          display: 'flex', justifyContent: 'center', alignItems: 'center',
+        }}>
+          <Stack
+          direction="row"
+          spacing={0.5}
+          sx={{
+            display: 'flex', justifyContent: 'center', alignItems: 'center',
           }}>
-            
-            <div>
-            <p>
+            <button
+              children={<RemoveIcon />}
+              type="button"
+              onClick={decreaseZoom}
+            />
+            <button
+              children={<AddIcon />}
+              type="button"
+              onClick={increaseZoom}
+            />
+          </Stack>
+          <Stack
+          direction="row"
+          spacing={0.5}
+          sx={{
+            display: 'flex', justifyContent: 'center', alignItems: 'center',
+          }}>
+            <Box sx={{
+              backgroundColor: '#e4e4e4',
+              padding: '6px',
+              border: 1,
+            }}>
               Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
-            </p>
+            </Box>
             <button
               type="button"
               disabled={pageNumber <= 1}
@@ -91,51 +105,38 @@ import NumberInput from './NumberInput'
               onClick={nextPage}
             >
               Next
-            </button>
-            
-            <button
-              children={<RemoveIcon />}
-              type="button"
-              onClick={decreaseZoom}
-            />
-            <button
-              children={<AddIcon />}
-              type="button"
-              onClick={increaseZoom}
-            />
-            
-          </div>
-        </Box>
-        <Box
-          sx={{
-            padding: '20px',
-            width: '60vw',
-            height: '80vh',
-            gap: '10px',
-            borderRadius: '10px',
-            backgroundColor: 'white',
-            overflowY: 'scroll',
-            overflowX: 'scroll'
-          }}
-        >
-          {<Document
-            file={'http://localhost:3000/reflection_report.pdf'}
-            onLoadSuccess={onDocumentLoadSuccess}
-          >
-            <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} scale={zoomLevel}/>
-          </Document>}
-      </Box>
+            </button>   
+          </Stack>  
       </Stack>
-      </>
-    );
-  }
+      <Box
+        sx={{
+          width: '60vw',
+          height: '80vh',
+          gap: '10px',
+          borderRadius: '10px',
+          backgroundColor: '#3d3d3d',
+          overflow: 'scroll',
+          display: 'flex', justifyContent: 'center', 
+        }}
+      >
+        {<Document
+          file={fileURL}
+          onLoadSuccess={onDocumentLoadSuccess}
+        >
+          <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} scale={zoomLevel}/>
+        </Document>}
+    </Box>
+    </Stack>
+    </>
+  );
+}
 
-  /*
-    return (
-      <div>
-        <PageSelector/>
-      </div>
-    )
-  }*/
+/*
+  return (
+    <div>
+      <PageSelector/>
+    </div>
+  )
+}*/
 
   

@@ -7,13 +7,19 @@ import { Stack, Grid, Box } from '@mui/material';
 import { flexbox } from '@mui/system';
 
 import ReactDOM from 'react-dom';
-import { PDFViewer } from '@react-pdf/renderer';
 
 
 export const PDFPage = () => {
   return (
     <>
-      <PDFDisplay />
+      <Stack spacing={2}
+        direction="row"
+        alignItems={'center'}
+        justifyContent={'flex-end'}
+        sx={{width: '100vw' }}>
+        <Chatbot/>
+        <PDFDisplay />
+      </Stack>
     </>
   );
 };
