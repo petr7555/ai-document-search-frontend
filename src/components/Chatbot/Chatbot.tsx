@@ -7,6 +7,7 @@ import { PrimaryButton } from '../Button/PrimaryButton';
 import { CenterPageContent } from '../CenterPageContent';
 import { ConversationLayout } from './ConversationLayout';
 import { Inputfield } from './InputField';
+import { Box } from '@mui/system';
 
 export type Message = {
   originBot: boolean;
@@ -44,7 +45,7 @@ export const Chatbot = () => {
   };
 
   return (
-    <CenterPageContent data-cy="chatbot">
+    <Box data-cy="chatbot" sx={{display: 'flex', flexDirection: 'column', alignItems: 'center',}}>
       <Stack
         spacing={2}
         direction="row"
@@ -84,6 +85,6 @@ export const Chatbot = () => {
           <AlertTitle>Unknown error</AlertTitle>
         </Alert>
       )}
-    </CenterPageContent>
+    </Box>
   );
 };

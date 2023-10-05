@@ -8,5 +8,5 @@ export const CenterPageContent = styled(Container)(() => ({
   alignItems: 'center',
   height: '100vh',
   width: '100vw',
-  flexGrow: 1
+  flex: 1
 }));

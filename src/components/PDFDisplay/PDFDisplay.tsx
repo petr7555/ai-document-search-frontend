@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { Document, Page } from 'react-pdf';
+import React, { useState, ChangeEvent, } from 'react';
+import { Document, Page} from 'react-pdf';
 
-import { Container } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 
 import { pdfjs } from 'react-pdf';
+import { CenterPageContent } from '../CenterPageContent';
+import PageSelector from './PageSelector'
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.js',
@@ -47,14 +49,14 @@ export const PDFDisplay = () => {
     }
   
     return (
-      <Container maxWidth="sm">
-        <Document
-          file={'http://localhost:3000/reflection_report.pdf'}
-          onLoadSuccess={onDocumentLoadSuccess}
-        >
-          <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} />
-        </Document>
-        <div>
+      <>
+          <Document
+            file={'http://localhost:3000/reflection_report.pdf'}
+            onLoadSuccess={onDocumentLoadSuccess}
+          >
+            <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} scale={1.0} height={500} />
+          </Document>
+      <div>
           <p>
             Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
           </p>
@@ -73,6 +75,16 @@ export const PDFDisplay = () => {
             Next
           </button>
         </div>
-      </Container>
+      </>
     );
   }
+
+  /*
+    return (
+      <div>
+        <PageSelector/>
+      </div>
+    )
+  }*/
+
+  

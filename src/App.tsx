@@ -21,9 +21,7 @@ function App() {
         <Route
           path="/pdf-view"
           element={
-            <ProtectedRoute>
               <PDFPage />
-            </ProtectedRoute>
           }
         />
         <Route path="/login" element={<LoginPage />} />
