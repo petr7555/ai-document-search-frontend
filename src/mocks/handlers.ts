@@ -49,7 +49,28 @@ export const handlers = [
         ctx.status(200),
         ctx.json({
           answer: {
-            text: 'Bonds are debt securities issued by governments, corporations, or other entities to raise capital. Investors who buy bonds effectively lend money to the issuer in exchange for periodic interest payments and the return of the bonds face value at maturity.'
+            text: 'Bonds are debt securities issued by governments, corporations, or other entities to raise capital. Investors who buy bonds effectively lend money to the issuer in exchange for periodic interest payments and the return of the bonds face value at maturity.',
+            sources: [
+              {
+                link: 'https://www.nber.org/system/files/working_papers/w6801/w6801.pdf'
+              }
+            ]
+          }
+        })
+      );
+    }
+
+    if (question === 'Hi, sup babygirl?') {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          answer: {
+            text: 'Babygirl is fine, thank you.',
+            sources: [
+              {
+                link: 'https://www.youtube.com/watch?v=xvFZjo5PgG0'
+              }
+            ]
           }
         })
       );

@@ -1,13 +1,23 @@
 import axios from 'axios';
 
+type Source = {
+  isin: string;
+  link: string;
+  page: number;
+};
+
 type AnswerFromChatbot = {
-  answer: { text: string };
+  answer: {
+    text: string;
+    sources: Source[];
+  };
 };
 
 export type ChatbotResponse =
   | {
       ok: true;
       answer: string;
+      link: string;
     }
   | {
       ok: false;
@@ -28,7 +38,8 @@ export const messageChatbot = async (
       });
       return {
         ok: true,
-        answer: response.data.answer.text
+        answer: response.data.answer.text,
+        link: response.data.answer.sources[0].link
       };
     } else {
       return {
