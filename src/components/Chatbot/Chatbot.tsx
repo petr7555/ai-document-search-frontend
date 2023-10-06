@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import AddIcon from '@mui/icons-material/Add';
 import { Alert, AlertTitle, Stack, Typography } from '@mui/material';
-import { messageChatbot } from '../../api/messageChatbot';
+import { messageChatbot, Source } from '../../api/messageChatbot';
 import { PrimaryButton } from '../Button/PrimaryButton';
 import { CenterPageContent } from '../CenterPageContent';
 import { ConversationLayout } from './ConversationLayout';
@@ -12,7 +12,7 @@ export type Message = {
   originBot: boolean;
   text: string;
   error?: boolean;
-  link?: string | undefined;
+  sources?: Source[];
 };
 
 const NewConversationButton = styled(PrimaryButton)(() => ({
@@ -41,7 +41,11 @@ export const Chatbot = () => {
           setConversation([
             ...conversation,
             message,
-            { originBot: true, text: response.answer, link: response.link }
+            {
+              originBot: true,
+              text: response.answer,
+              sources: response.sources
+            }
           ]);
         } else {
           setConversation([
