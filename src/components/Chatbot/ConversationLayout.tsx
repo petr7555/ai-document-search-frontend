@@ -5,22 +5,31 @@ import { BouncingLoader } from '../BouncingDotsLoader';
 import { Message } from './Chatbot';
 
 const MessageBubble = styled(Paper)(
-  ({ fromBot, error }: { fromBot: boolean; error: boolean }) => ({
+  ({
+    originBot,
+    error,
+    link
+  }: {
+    originBot: boolean;
+    error: boolean;
+    link: string | undefined;
+  }) => ({
     maxWidth: '80%',
     minHeight: 'fit-content',
-    borderRadius: fromBot ? '10px 10px 10px 0px' : '10px 10px 0px 10px',
-    textAlign: fromBot ? 'left' : 'right',
-    alignItems: 'center',
+    borderRadius: originBot ? '10px 10px 10px 0px' : '10px 10px 0px 10px',
+    textAlign: originBot ? 'left' : 'right',
+    alignItems: 'flex-start',
+    gap: '5px',
     margin: '2px',
-    padding: '0px 20px 0px 20px',
+    padding: link ? '0px 20px 10px 20px' : '0px 20px 0px 20px',
     display: 'flex',
     flexWrap: 'wrap',
-    flexDirection: 'row',
+    flexDirection: 'column',
     fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
     fontSize: '16px',
     fontWeight: 500,
-    backgroundColor: fromBot ? '#e0e0e0' : '#b3d4fc',
-    alignSelf: fromBot ? 'flex-start' : 'flex-end',
+    backgroundColor: originBot ? '#e0e0e0' : '#b3d4fc',
+    alignSelf: originBot ? 'flex-start' : 'flex-end',
     color: error ? 'red' : 'black',
     textDecoration: error ? 'underline' : 'none',
     textUnderlineOffset: '2px'
@@ -39,9 +48,10 @@ export const ConversationLayout = ({
       return (
         <MessageBubble
           data-cy="chatbot-response-message"
-          fromBot={message.originBot}
+          originBot={message.originBot}
           key={message.text}
           error={false}
+          link={undefined}
         >
           <BouncingLoader>
             <div />
@@ -58,10 +68,16 @@ export const ConversationLayout = ({
               ? 'chatbot-response-message'
               : 'user-input-message'
           }
-          fromBot={message.originBot}
+          originBot={message.originBot}
           error={message.error ?? false}
+          link={message.link}
         >
           <p>{message.text}</p>
+          {message.link ? (
+            <a href={message.link} target="_blank" rel="external">
+              Source: {message.link.split('/')[2]}
+            </a>
+          ) : null}
         </MessageBubble>
       );
     }

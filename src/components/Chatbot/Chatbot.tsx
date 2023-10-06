@@ -12,6 +12,7 @@ export type Message = {
   originBot: boolean;
   text: string;
   error?: boolean;
+  link?: string | undefined;
 };
 
 const NewConversationButton = styled(PrimaryButton)(() => ({
@@ -40,7 +41,7 @@ export const Chatbot = () => {
           setConversation([
             ...conversation,
             message,
-            { originBot: true, text: response.answer }
+            { originBot: true, text: response.answer, link: response.link }
           ]);
         } else {
           setConversation([
