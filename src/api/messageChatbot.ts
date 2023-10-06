@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-type Source = {
+export type Source = {
   isin: string;
   link: string;
   page: number;
@@ -17,7 +17,7 @@ export type ChatbotResponse =
   | {
       ok: true;
       answer: string;
-      link: string;
+      sources: Source[];
     }
   | {
       ok: false;
@@ -39,7 +39,7 @@ export const messageChatbot = async (
       return {
         ok: true,
         answer: response.data.answer.text,
-        link: response.data.answer.sources[0].link
+        sources: response.data.answer.sources
       };
     } else {
       return {

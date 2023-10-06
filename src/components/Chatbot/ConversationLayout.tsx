@@ -1,19 +1,22 @@
 import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
-import { Paper, Stack } from '@mui/material';
+import { Link, Paper, Stack } from '@mui/material';
+import theme from '../../themes/theme';
 import { BouncingLoader } from '../BouncingDotsLoader';
 import { Message } from './Chatbot';
 
+const StyledLink = styled(Link)(() => ({
+  color: `${theme.palette.primary.main}`,
+  textDecoration: 'underline',
+  textunderlineoffset: '2px',
+  marginBottom: '8px',
+  '&:hover': {
+    color: `${theme.palette.primary.dark}`
+  }
+}));
+
 const MessageBubble = styled(Paper)(
-  ({
-    originBot,
-    error,
-    link
-  }: {
-    originBot: boolean;
-    error: boolean;
-    link: string | undefined;
-  }) => ({
+  ({ originBot, error }: { originBot: boolean; error: boolean }) => ({
     maxWidth: '80%',
     minHeight: 'fit-content',
     borderRadius: originBot ? '10px 10px 10px 0px' : '10px 10px 0px 10px',
@@ -21,7 +24,7 @@ const MessageBubble = styled(Paper)(
     alignItems: 'flex-start',
     gap: '5px',
     margin: '2px',
-    padding: link ? '0px 20px 10px 20px' : '0px 20px 0px 20px',
+    padding: '0px 20px 0px 20px',
     display: 'flex',
     flexWrap: 'wrap',
     flexDirection: 'column',
@@ -51,7 +54,6 @@ export const ConversationLayout = ({
           originBot={message.originBot}
           key={message.text}
           error={false}
-          link={undefined}
         >
           <BouncingLoader>
             <div />
@@ -70,14 +72,32 @@ export const ConversationLayout = ({
           }
           originBot={message.originBot}
           error={message.error ?? false}
-          link={message.link}
         >
           <p>{message.text}</p>
-          {message.link ? (
-            <a href={message.link} target="_blank" rel="external">
-              Source: {message.link.split('/')[2]}
-            </a>
-          ) : null}
+          {message.sources && (
+            <Stack
+              direction={'row'}
+              spacing={'10px'}
+              sx={{ flexWrap: 'wrap', marginBottom: '10px' }}
+            >
+              <p>Sources: </p>
+              <Stack
+                direction={'column'}
+                spacing={'5px'}
+                sx={{
+                  flexWrap: 'wrap',
+                  justifyContent: 'flex-start',
+                  marginBottom: 'px'
+                }}
+              >
+                {message.sources.map((source) => (
+                  <StyledLink href={source.link} target="_blank" rel="external">
+                    {source.isin}
+                  </StyledLink>
+                ))}
+              </Stack>
+            </Stack>
+          )}
         </MessageBubble>
       );
     }
