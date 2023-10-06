@@ -41,7 +41,11 @@ export const Chatbot = () => {
           setConversation([
             ...conversation,
             message,
-            { originBot: true, text: response.answer, sources: response.sources }
+            {
+              originBot: true,
+              text: response.answer,
+              sources: response.sources
+            }
           ]);
         } else {
           setConversation([
