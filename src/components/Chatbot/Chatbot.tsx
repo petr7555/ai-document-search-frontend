@@ -45,13 +45,13 @@ export const Chatbot = () => {
   };
 
   return (
-    <Box data-cy="chatbot" sx={{display: 'flex', flexDirection: 'column', alignItems: 'center',}}>
+    <Box data-cy="chatbot" sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', height: '100%', paddingTop: '90px', paddingBottom: '40px'}}>
       <Stack
         spacing={2}
         direction="row"
         alignItems={'center'}
         justifyContent={'flex-end'}
-        sx={{ marginBottom: '20px', width: '60vw' }}
+        sx={{ marginBottom: '20px', width: '100%' }}
       >
         <NewConversationButton
           onClick={() => setConversation([])}

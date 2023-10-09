@@ -48,13 +48,14 @@ export const ConversationLayout = ({
     <Stack
       sx={{
         padding: '20px',
-        width: '60vw',
-        height: '60vh',
+        width: '90%',
+        maxHeight:'60vh',
         gap: '10px',
         borderRadius: '10px',
         backgroundColor: 'white',
         overflowY: 'scroll',
-        overflowX: 'hidden'
+        overflowX: 'hidden',
+        flexGrow: 1
       }}
     >
       {messages}

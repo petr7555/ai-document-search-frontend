@@ -59,7 +59,7 @@ export const Inputfield = ({
           p: '2px 4px',
           display: 'flex',
           alignItems: 'center',
-          width: '40vw',
+          width: '80%',
           marginTop: '20px'
         }}
       >

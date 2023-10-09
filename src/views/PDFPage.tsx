@@ -12,12 +12,16 @@ import ReactDOM from 'react-dom';
 export const PDFPage = () => {
   return (
     <>
+      <Navbar />
+      
       <Stack spacing={2}
         direction="row"
         alignItems={'center'}
-        justifyContent={'flex-end'}
-        sx={{width: '100vw' }}>
+        justifyContent={'center'}
+        sx={{width: '100vw', height:'100%'}}>
+          <CenterPageContent>
         <Chatbot/>
+        </CenterPageContent>
         <PDFDisplay />
       </Stack>
     </>
