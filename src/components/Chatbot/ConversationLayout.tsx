@@ -22,10 +22,15 @@ const MessageBubble = styled(Paper)(({ fromBot }: { fromBot: boolean }) => ({
 }));
 
 export const ConversationLayout = ({
-  conversation
+  conversation, showPDF
 }: {
   conversation: Message[];
+  showPDF: () => void
 }) => {
+function show() {
+  showPDF();
+}
+
   const messages = conversation.map((message) => {
     return (
       <MessageBubble
@@ -35,6 +40,7 @@ export const ConversationLayout = ({
         fromBot={message.originBot}
       >
         <p>{message.text}</p>
+        {message.originBot && <button onClick={show}>Show source</button>}
       </MessageBubble>
     );
   });

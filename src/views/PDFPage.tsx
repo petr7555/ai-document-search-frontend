@@ -20,9 +20,9 @@ export const PDFPage = () => {
         justifyContent={'center'}
         sx={{width: '100vw', height:'100%'}}>
           <CenterPageContent>
-        <Chatbot/>
+        {/* <Chatbot/> */}
         </CenterPageContent>
-        <PDFDisplay />
+        {/* <PDFDisplay /> */}
       </Stack>
     </>
   );

@@ -1,9 +1,10 @@
-import React, { useState, } from 'react';
+import React, { MouseEventHandler, useState, } from 'react';
 import { pdfjs, Document, Page, } from 'react-pdf';
 
-import { Box, Stack } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -12,11 +13,12 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
   
 
-export function PDFDisplay() {
+export function PDFDisplay(props: {close: () => void}) {
   const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [zoomLevel, setZoomLevel] = useState(1.0);
   const [fileURL, setFileURL] = useState('http://localhost:3000/reflection_report.pdf');
+
 
   const ZOOMRATE = 1.5
 
@@ -50,6 +52,11 @@ export function PDFDisplay() {
     setFileURL(fileURL)
   }
 
+  function hidePDF() {
+    props.close()
+  }
+
+
   return (
     <>
     <Stack>
@@ -78,12 +85,13 @@ export function PDFDisplay() {
               type="button"
               onClick={increaseZoom}
             />
+            
           </Stack>
           <Stack
           direction="row"
           spacing={0.5}
           sx={{
-            display: 'flex', justifyContent: 'center', alignItems: 'center',
+            display: 'flex', justifyContent: 'center', alignItems: 'center', 
           }}>
             <Box sx={{
               backgroundColor: '#e4e4e4',
@@ -105,7 +113,17 @@ export function PDFDisplay() {
               onClick={nextPage}
             >
               Next
-            </button>   
+            </button>
+            <Button
+              children={<CloseIcon/>}
+              type="button"
+              onClick={hidePDF}
+              sx={{
+                backgroundColor: 'red',
+                color: 'white',
+                marginLeft: 'auto'
+              }}
+            />   
           </Stack>  
       </Stack>
       <Box

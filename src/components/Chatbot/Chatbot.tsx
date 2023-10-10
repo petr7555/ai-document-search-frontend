@@ -21,7 +21,7 @@ const NewConversationButton = styled(PrimaryButton)(() => ({
   padding: '10px 10px 10px 15px'
 }));
 
-export const Chatbot = () => {
+export const Chatbot = (props: {showPDF: () => void}) => {
   const [conversation, setConversation] = useState<Message[]>([]);
   const [error, setError] = useState(false);
 
@@ -63,7 +63,7 @@ export const Chatbot = () => {
           <AddIcon />
         </NewConversationButton>
       </Stack>
-      <ConversationLayout conversation={conversation} />
+      <ConversationLayout conversation={conversation} showPDF={props.showPDF}/>
       <Inputfield sendMessage={addMessageToConversation} />
       {error && (
         <Alert
