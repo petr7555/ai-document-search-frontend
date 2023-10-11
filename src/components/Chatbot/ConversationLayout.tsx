@@ -34,7 +34,6 @@ const MessageBubble = styled(Paper)(
     backgroundColor: originBot ? '#e0e0e0' : '#b3d4fc',
     alignSelf: originBot ? 'flex-start' : 'flex-end',
     color: error ? 'red' : 'black',
-    textDecoration: error ? 'underline' : 'none',
     textUnderlineOffset: '2px'
   })
 );
