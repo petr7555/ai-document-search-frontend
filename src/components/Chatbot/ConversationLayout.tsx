@@ -34,7 +34,6 @@ const MessageBubble = styled(Paper)(
     backgroundColor: originBot ? '#e0e0e0' : '#b3d4fc',
     alignSelf: originBot ? 'flex-start' : 'flex-end',
     color: error ? 'red' : 'black',
-    textDecoration: error ? 'underline' : 'none',
     textUnderlineOffset: '2px'
   })
 );
@@ -91,8 +90,13 @@ export const ConversationLayout = ({
                 }}
               >
                 {message.sources.map((source) => (
-                  <StyledLink href={source.link} target="_blank" rel="external">
-                    {source.isin}
+                  <StyledLink
+                    data-cy="source-link"
+                    href={source.link}
+                    target="_blank"
+                    rel="external"
+                  >
+                    {source.isin} {source.shortname}
                   </StyledLink>
                 ))}
               </Stack>
