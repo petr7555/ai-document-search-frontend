@@ -91,8 +91,13 @@ export const ConversationLayout = ({
                 }}
               >
                 {message.sources.map((source) => (
-                  <StyledLink href={source.link} target="_blank" rel="external">
-                    {source.isin}
+                  <StyledLink
+                    data-cy="source-link"
+                    href={source.link}
+                    target="_blank"
+                    rel="external"
+                  >
+                    {source.shortname}
                   </StyledLink>
                 ))}
               </Stack>

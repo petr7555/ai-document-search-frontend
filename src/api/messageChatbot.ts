@@ -2,6 +2,7 @@ import axios from 'axios';
 
 export type Source = {
   isin: string;
+  shortname: string;
   link: string;
   page: number;
 };
