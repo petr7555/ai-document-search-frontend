@@ -96,7 +96,7 @@ export const ConversationLayout = ({
                     target="_blank"
                     rel="external"
                   >
-                    {source.shortname}
+                    {source.isin} {source.shortname}
                   </StyledLink>
                 ))}
               </Stack>
