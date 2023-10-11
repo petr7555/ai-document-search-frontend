@@ -62,23 +62,21 @@ describe('Chatbot page', () => {
       'include.text',
       'There are several types of financial covenants, and the specific ones used can vary depending on the type of loan and the lender.'
     );
-    cy.get('[data-cy="source-link"]').should(
-      'include.text',
-      'Financial Covenants - Investopedia'
-    );
-    cy.get('[data-cy="source-link"]').should(
-      'include.text',
-      'Covenants - FinancialEdge'
-    );
-    cy.get('[data-cy="source-link"]').should(
-      'have.attr',
-      'href',
-      'https://www.investopedia.com/terms/c/covenant.asp'
-    );
-    cy.get('[data-cy="source-link"]').should(
-      'have.attr',
-      'href',
-      'https://www.fe.training/free-resources/financial-markets/covenants/'
-    );
+
+    cy.contains('NO2222222222 What is a covenant? - Investopedia')
+      .should('exist')
+      .should(
+        'have.attr',
+        'href',
+        'https://www.investopedia.com/terms/c/covenant.asp'
+      );
+
+    cy.contains('NO3333333333 Covenants - FinancialEdge')
+      .should('exist')
+      .should(
+        'have.attr',
+        'href',
+        'https://www.fe.training/free-resources/financial-markets/covenants/'
+      );
   });
 });
