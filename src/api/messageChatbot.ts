@@ -1,23 +1,10 @@
 import axios from 'axios';
+import { AnswerFromChatbot, Source } from '../types/conversationTypes';
 
-export type Source = {
-  isin: string;
-  shortname: string;
-  link: string;
-  page: number;
-};
-
-type AnswerFromChatbot = {
-  answer: {
-    text: string;
-    sources: Source[];
-  };
-};
-
-export type ChatbotResponse =
+type ChatbotResponse =
   | {
       ok: true;
-      answer: string;
+      text: string;
       sources: Source[];
     }
   | {
@@ -39,8 +26,8 @@ export const messageChatbot = async (
       });
       return {
         ok: true,
-        answer: response.data.answer.text,
-        sources: response.data.answer.sources
+        text: response.data.text,
+        sources: response.data.sources
       };
     } else {
       return {

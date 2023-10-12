@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { Link, Paper, Stack } from '@mui/material';
 import theme from '../../themes/theme';
+import { MessageBubbleProps } from '../../types/conversationTypes';
 import { BouncingLoader } from '../BouncingDotsLoader';
-import { Message } from './Chatbot';
 
 const StyledLink = styled(Link)(() => ({
   color: `${theme.palette.primary.main}`,
@@ -42,7 +42,7 @@ export const ConversationLayout = ({
   conversation,
   loading
 }: {
-  conversation: Message[];
+  conversation: MessageBubbleProps[];
   loading: boolean;
 }) => {
   const messages = conversation.map((message) => {
@@ -70,37 +70,43 @@ export const ConversationLayout = ({
               : 'user-input-message'
           }
           originBot={message.originBot}
-          error={message.error ?? false}
+          error={message?.error ?? false}
         >
-          <p>{message.text}</p>
-          {message.sources && (
-            <Stack
-              direction={'row'}
-              spacing={'10px'}
-              sx={{ flexWrap: 'wrap', marginBottom: '10px' }}
-            >
-              <p>Sources: </p>
-              <Stack
-                direction={'column'}
-                spacing={'5px'}
-                sx={{
-                  flexWrap: 'wrap',
-                  justifyContent: 'flex-start',
-                  marginBottom: 'px'
-                }}
-              >
-                {message.sources.map((source) => (
-                  <StyledLink
-                    data-cy="source-link"
-                    href={source.link}
-                    target="_blank"
-                    rel="external"
+          {message.originBot ? (
+            <>
+              <p>{message.text}</p>
+              {message.sources.length > 0 && (
+                <Stack
+                  direction={'row'}
+                  spacing={'10px'}
+                  sx={{ flexWrap: 'wrap', marginBottom: '10px' }}
+                >
+                  <p>Sources: </p>
+                  <Stack
+                    direction={'column'}
+                    spacing={'5px'}
+                    sx={{
+                      flexWrap: 'wrap',
+                      justifyContent: 'flex-start',
+                      marginBottom: 'px'
+                    }}
                   >
-                    {source.isin} {source.shortname}
-                  </StyledLink>
-                ))}
-              </Stack>
-            </Stack>
+                    {message.sources.map((source) => (
+                      <StyledLink
+                        data-cy="source-link"
+                        href={source.link}
+                        target="_blank"
+                        rel="external"
+                      >
+                        {source.isin} {source.shortname}
+                      </StyledLink>
+                    ))}
+                  </Stack>
+                </Stack>
+              )}
+            </>
+          ) : (
+            <p>{message.text}</p>
           )}
         </MessageBubble>
       );
@@ -113,20 +119,22 @@ export const ConversationLayout = ({
   }, [conversation]);
 
   return (
-    <Stack
-      sx={{
-        padding: '20px',
-        width: '60vw',
-        height: '60vh',
-        gap: '10px',
-        borderRadius: '10px',
-        backgroundColor: 'white',
-        overflowY: 'scroll',
-        overflowX: 'hidden'
-      }}
-    >
-      {messages}
-      <div id="bottom" />
-    </Stack>
+    <>
+      <Stack
+        sx={{
+          padding: '20px',
+          width: '60vw',
+          height: '60vh',
+          gap: '10px',
+          borderRadius: '10px',
+          backgroundColor: 'white',
+          overflowY: 'scroll',
+          overflowX: 'hidden'
+        }}
+      >
+        {messages}
+        <div id="bottom" />{' '}
+      </Stack>
+    </>
   );
 };

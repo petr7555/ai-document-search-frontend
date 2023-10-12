@@ -6,7 +6,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
 import Paper from '@mui/material/Paper';
-import { Message } from './Chatbot';
+import { Message } from '../../types/conversationTypes';
 
 export const Inputfield = ({
   sendMessage

@@ -1,19 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import AddIcon from '@mui/icons-material/Add';
 import { Alert, AlertTitle, Stack, Typography } from '@mui/material';
-import { messageChatbot, Source } from '../../api/messageChatbot';
+import { loadConversation } from '../../api/loadConversation';
+import { messageChatbot } from '../../api/messageChatbot';
+import { newConversation } from '../../api/newConversation';
+import { MessageBubbleProps } from '../../types/conversationTypes';
 import { PrimaryButton } from '../Button/PrimaryButton';
 import { CenterPageContent } from '../CenterPageContent';
 import { ConversationLayout } from './ConversationLayout';
 import { Inputfield } from './InputField';
-
-export type Message = {
-  originBot: boolean;
-  text: string;
-  error?: boolean;
-  sources?: Source[];
-};
 
 const NewConversationButton = styled(PrimaryButton)(() => ({
   borderRadius: '20px',
@@ -23,37 +19,108 @@ const NewConversationButton = styled(PrimaryButton)(() => ({
 }));
 
 export const Chatbot = () => {
-  const [conversation, setConversation] = useState<Message[]>([]);
+  const [conversation, setConversation] = useState<MessageBubbleProps[]>([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [conversationCreated, setConversationCreated] = useState<string | null>(
+    null
+  );
 
-  const addMessageToConversation = async (message: Message) => {
+  const loadConversationFromBackend = async () => {
+    try {
+      await loadConversation().then((response) => {
+        if (response.ok) {
+          setConversation(response.conversation.messages);
+          setConversationCreated(response.conversation.created_at.slice(0, 10));
+        } else {
+          setConversation([]);
+        }
+      });
+    } catch (error) {
+      setError(true);
+    }
+  };
+
+  const addMessageToConversation = async (message: MessageBubbleProps) => {
     setConversation([...conversation, message]);
     try {
       setLoading(true);
-      setConversation([
-        ...conversation,
-        message,
-        { originBot: true, text: '...' }
-      ]);
-      await messageChatbot(message.text).then((response) => {
-        if (response.ok) {
+      {
+        !message.originBot &&
           setConversation([
             ...conversation,
-            message,
+            {
+              originBot: false,
+              text: message.text
+            },
             {
               originBot: true,
-              text: response.answer,
-              sources: response.sources
+
+              text: '...',
+              sources: []
             }
           ]);
+      }
+      !message.originBot &&
+        (await messageChatbot(message.text).then((response) => {
+          if (response.ok) {
+            setConversation([
+              ...conversation,
+              {
+                originBot: false,
+                text: message.text
+              },
+              {
+                originBot: true,
+
+                text: response.text,
+                sources: response.sources
+              }
+            ]);
+          } else {
+            setConversation([
+              ...conversation,
+              {
+                originBot: false,
+                text: message.text
+              },
+              {
+                originBot: true,
+
+                text: response.detail,
+                sources: [],
+
+                error: true
+              }
+            ]);
+          }
+        }));
+    } catch (error) {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadConversationFromBackend();
+  }, []);
+
+  const handleNewConversation = async () => {
+    setConversation([]);
+    try {
+      await newConversation().then((response) => {
+        if (response.ok) {
+          setConversationCreated(response.created_at.slice(0, 10));
         } else {
+          setConversationCreated(null);
           setConversation([
-            ...conversation,
-            message,
             {
               originBot: true,
+
               text: response.detail,
+              sources: [],
+
               error: true
             }
           ]);
@@ -61,8 +128,6 @@ export const Chatbot = () => {
       });
     } catch (error) {
       setError(true);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -71,12 +136,18 @@ export const Chatbot = () => {
       <Stack
         spacing={2}
         direction="row"
-        alignItems={'center'}
-        justifyContent={'flex-end'}
-        sx={{ marginBottom: '20px', width: '60vw' }}
+        alignItems={'flex-end'}
+        justifyContent={conversationCreated ? 'space-between' : 'flex-end'}
+        sx={{ marginBottom: '20px', width: '62vw' }}
       >
+        {conversationCreated && (
+          <Typography sx={{ color: '#5d5a5a', marginLeft: '0px' }}>
+            Conversation started at: {conversationCreated}
+          </Typography>
+        )}
+
         <NewConversationButton
-          onClick={() => setConversation([])}
+          onClick={() => handleNewConversation()}
           aria-label="new conversation"
         >
           <Typography sx={{ textTransform: 'initial' }}>
