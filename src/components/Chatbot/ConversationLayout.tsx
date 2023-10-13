@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
-import { Link, Paper, Stack } from '@mui/material';
+import { Link, Stack } from '@mui/material';
 import theme from '../../themes/theme';
 import { MessageBubbleProps } from '../../types/conversationTypes';
 import { BouncingLoader } from '../BouncingDotsLoader';
+import { BotMessageBubble, UserMessageBubble } from './Messagebubbles';
 
 const StyledLink = styled(Link)(() => ({
   color: `${theme.palette.primary.main}`,
@@ -15,29 +16,6 @@ const StyledLink = styled(Link)(() => ({
   }
 }));
 
-const MessageBubble = styled(Paper)(
-  ({ originBot, error }: { originBot: boolean; error: boolean }) => ({
-    maxWidth: '80%',
-    minHeight: 'fit-content',
-    borderRadius: originBot ? '10px 10px 10px 0px' : '10px 10px 0px 10px',
-    textAlign: originBot ? 'left' : 'right',
-    alignItems: 'flex-start',
-    gap: '5px',
-    margin: '2px',
-    padding: '0px 20px 0px 20px',
-    display: 'flex',
-    flexWrap: 'wrap',
-    flexDirection: 'column',
-    fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
-    fontSize: '16px',
-    fontWeight: 500,
-    backgroundColor: originBot ? '#e0e0e0' : '#b3d4fc',
-    alignSelf: originBot ? 'flex-start' : 'flex-end',
-    color: error ? 'red' : 'black',
-    textUnderlineOffset: '2px'
-  })
-);
-
 export const ConversationLayout = ({
   conversation,
   loading
@@ -46,11 +24,10 @@ export const ConversationLayout = ({
   loading: boolean;
 }) => {
   const messages = conversation.map((message) => {
-    if (loading && message.originBot && message.text === '...') {
+    if (loading && message.is_from_bot && message.text === '...') {
       return (
-        <MessageBubble
+        <BotMessageBubble
           data-cy="chatbot-response-message"
-          originBot={message.originBot}
           key={message.text}
           error={false}
         >
@@ -59,27 +36,23 @@ export const ConversationLayout = ({
             <div />
             <div />
           </BouncingLoader>
-        </MessageBubble>
+        </BotMessageBubble>
       );
     } else {
       return (
-        <MessageBubble
-          data-cy={
-            message.originBot
-              ? 'chatbot-response-message'
-              : 'user-input-message'
-          }
-          originBot={message.originBot}
-          error={message?.error ?? false}
-        >
-          {message.originBot ? (
-            <>
-              <p>{message.text}</p>
+        <>
+          {message.is_from_bot ? (
+            <BotMessageBubble
+              data-cy="chatbot-response-message"
+              key={message.text}
+              error={message?.error || false}
+            >
+              {message.text}
               {message.sources.length > 0 && (
                 <Stack
                   direction={'row'}
                   spacing={'10px'}
-                  sx={{ flexWrap: 'wrap', marginBottom: '10px' }}
+                  sx={{ flexWrap: 'wrap', marginBottom: '' }}
                 >
                   <p>Sources: </p>
                   <Stack
@@ -93,6 +66,7 @@ export const ConversationLayout = ({
                   >
                     {message.sources.map((source) => (
                       <StyledLink
+                        key={source.page}
                         data-cy="source-link"
                         href={source.link}
                         target="_blank"
@@ -104,11 +78,13 @@ export const ConversationLayout = ({
                   </Stack>
                 </Stack>
               )}
-            </>
+            </BotMessageBubble>
           ) : (
-            <p>{message.text}</p>
+            <UserMessageBubble data-cy="user-input-message" key={message.text}>
+              {message.text}
+            </UserMessageBubble>
           )}
-        </MessageBubble>
+        </>
       );
     }
   });

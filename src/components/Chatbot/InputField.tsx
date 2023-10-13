@@ -22,7 +22,7 @@ export const Inputfield = ({
     if (trimmedInput.length === 0) {
       setError(true);
     } else {
-      sendMessage({ originBot: false, text: input });
+      sendMessage({ is_from_bot: false, text: input });
       setInput('');
     }
   };

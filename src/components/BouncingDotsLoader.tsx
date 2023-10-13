@@ -7,7 +7,7 @@ export const BouncingLoader = styled.div`
   > div {
     width: 7px;
     height: 7px;
-    margin: 20px 4px 10px 4px;
+    margin: 10px 4px 5px 4px;
     border-radius: 50%;
     background-color: #a3a1a1;
     opacity: 1;

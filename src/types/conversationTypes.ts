@@ -1,10 +1,10 @@
 export type Message =
   | {
-      originBot: false;
+      is_from_bot: false;
       text: string;
     }
   | (AnswerFromChatbot & {
-      originBot: true;
+      is_from_bot: true;
     });
 
 export type Conversation = {

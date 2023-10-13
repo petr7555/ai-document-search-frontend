@@ -7,7 +7,7 @@ import { messageChatbot } from '../../api/messageChatbot';
 import { newConversation } from '../../api/newConversation';
 import { MessageBubbleProps } from '../../types/conversationTypes';
 import { PrimaryButton } from '../Button/PrimaryButton';
-import { CenterPageContent } from '../CenterPageContent';
+import { CenterPageContent } from '../Layout/CenterPageContent';
 import { ConversationLayout } from './ConversationLayout';
 import { Inputfield } from './InputField';
 
@@ -46,32 +46,32 @@ export const Chatbot = () => {
     try {
       setLoading(true);
       {
-        !message.originBot &&
+        !message.is_from_bot &&
           setConversation([
             ...conversation,
             {
-              originBot: false,
+              is_from_bot: false,
               text: message.text
             },
             {
-              originBot: true,
+              is_from_bot: true,
 
               text: '...',
               sources: []
             }
           ]);
       }
-      !message.originBot &&
+      !message.is_from_bot &&
         (await messageChatbot(message.text).then((response) => {
           if (response.ok) {
             setConversation([
               ...conversation,
               {
-                originBot: false,
+                is_from_bot: false,
                 text: message.text
               },
               {
-                originBot: true,
+                is_from_bot: true,
 
                 text: response.text,
                 sources: response.sources
@@ -81,11 +81,11 @@ export const Chatbot = () => {
             setConversation([
               ...conversation,
               {
-                originBot: false,
+                is_from_bot: false,
                 text: message.text
               },
               {
-                originBot: true,
+                is_from_bot: true,
 
                 text: response.detail,
                 sources: [],
@@ -116,7 +116,7 @@ export const Chatbot = () => {
           setConversationCreated(null);
           setConversation([
             {
-              originBot: true,
+              is_from_bot: true,
 
               text: response.detail,
               sources: [],
