@@ -16,7 +16,7 @@ describe('Chatbot page', () => {
     cy.get('[data-cy="chatbot"]').should('exist');
     cy.get('[data-cy="chatbot-input-field"]').type('Hello');
     cy.get('[data-cy="chatbot-send-button"]').click();
-    cy.get('[data-cy="user-input-message"]').should('exist');
+    cy.contains('Hello').should('exist');
     cy.get('[data-cy="chatbot-response-message"]').should('exist');
   });
   it('Try to send empty input to chatbot and get error', () => {
