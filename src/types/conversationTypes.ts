@@ -25,5 +25,5 @@ export type AnswerFromChatbot = {
 };
 
 export type MessageBubbleProps = Message & {
-  error?: boolean;
+  error?: string;
 };

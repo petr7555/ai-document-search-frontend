@@ -3,7 +3,7 @@ import { Paper } from '@mui/material';
 import { PaperProps } from '@mui/material/Paper';
 
 interface BotmessageProps extends PaperProps {
-  error?: boolean;
+  error?: string;
 }
 
 export const UserMessageBubble = styled(Paper)(() => ({
@@ -32,6 +32,6 @@ export const BotMessageBubble = styled(UserMessageBubble)<BotmessageProps>(
     textAlign: 'left',
     backgroundColor: '#e0e0e0',
     alignSelf: 'flex-start',
-    color: error ? 'red' : 'black'
+    color: error === 'true' ? 'red' : 'black'
   })
 );

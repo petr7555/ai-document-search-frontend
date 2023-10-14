@@ -28,8 +28,8 @@ export const ConversationLayout = ({
       return (
         <BotMessageBubble
           data-cy="chatbot-response-message"
-          key={message.text}
-          error={false}
+          key={crypto.randomUUID()}
+          error="false"
         >
           <BouncingLoader>
             <div />
@@ -44,20 +44,22 @@ export const ConversationLayout = ({
           {message.is_from_bot ? (
             <BotMessageBubble
               data-cy="chatbot-response-message"
-              key={message.text}
-              error={message?.error || false}
+              key={crypto.randomUUID()}
+              error={message?.error?.toString() ?? 'false'}
             >
               {message.text}
               {message.sources.length > 0 && (
                 <Stack
                   direction={'row'}
                   spacing={'10px'}
+                  key={crypto.randomUUID()}
                   sx={{ flexWrap: 'wrap', marginBottom: '' }}
                 >
                   <p>Sources: </p>
                   <Stack
                     direction={'column'}
                     spacing={'5px'}
+                    key={crypto.randomUUID()}
                     sx={{
                       flexWrap: 'wrap',
                       justifyContent: 'flex-start',
@@ -66,7 +68,7 @@ export const ConversationLayout = ({
                   >
                     {message.sources.map((source) => (
                       <StyledLink
-                        key={source.page}
+                        key={crypto.randomUUID()}
                         data-cy="source-link"
                         href={source.link}
                         target="_blank"
@@ -80,7 +82,10 @@ export const ConversationLayout = ({
               )}
             </BotMessageBubble>
           ) : (
-            <UserMessageBubble data-cy="user-input-message" key={message.text}>
+            <UserMessageBubble
+              data-cy="user-input-message"
+              key={crypto.randomUUID()}
+            >
               {message.text}
             </UserMessageBubble>
           )}

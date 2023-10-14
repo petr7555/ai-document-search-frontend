@@ -79,4 +79,17 @@ describe('Chatbot page', () => {
         'https://www.fe.training/free-resources/financial-markets/covenants/'
       );
   });
+  it('Start new conversation', () => {
+    cy.get('[data-cy="chatbot-input-field"]').type(
+      'Hi, what are some financial covenants?'
+    );
+    cy.get('[data-cy="chatbot-send-button"]').click();
+    cy.get('[data-cy="user-input-message"]').should(
+      'include.text',
+      'Hi, what are some financial covenants?'
+    );
+
+    cy.get('[data-cy="new-conversation-button"]').click();
+    cy.contains('Hi, what are some financial covenants?').should('not.exist');
+  });
 });

@@ -90,7 +90,7 @@ export const Chatbot = () => {
                 text: response.detail,
                 sources: [],
 
-                error: true
+                error: 'true'
               }
             ]);
           }
@@ -121,7 +121,7 @@ export const Chatbot = () => {
               text: response.detail,
               sources: [],
 
-              error: true
+              error: 'true'
             }
           ]);
         }
@@ -147,6 +147,7 @@ export const Chatbot = () => {
         )}
 
         <NewConversationButton
+          data-cy="new-conversation-button"
           onClick={() => handleNewConversation()}
           aria-label="new conversation"
         >
