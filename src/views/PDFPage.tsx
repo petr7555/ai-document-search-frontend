@@ -10,19 +10,21 @@ import ReactDOM from 'react-dom';
 
 
 export const PDFPage = () => {
+  const [showPDF, setShowPDF] = React.useState(false);
+
   return (
     <>
-      <Navbar />
-      
+      {/*<Navbar />*/}
+      <button onClick={() => setShowPDF(true)}> Show PDF </button>
       <Stack spacing={2}
         direction="row"
         alignItems={'center'}
         justifyContent={'center'}
         sx={{width: '100vw', height:'100%'}}>
-          <CenterPageContent>
-        {/* <Chatbot/> */}
+        <CenterPageContent>
+          <Chatbot showPDF={() => {setShowPDF(true)}} />
         </CenterPageContent>
-        {/* <PDFDisplay /> */}
+          { showPDF ? <PDFDisplay close={() => {setShowPDF(false)}} /> : null }
       </Stack>
     </>
   );
