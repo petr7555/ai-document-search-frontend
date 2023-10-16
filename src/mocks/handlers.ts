@@ -25,7 +25,7 @@ export const handlers = [
     );
   }),
 
-  rest.post('*/chatbot/', async (req, res, ctx) => {
+  rest.post('*/chatbot', async (req, res, ctx) => {
     const { question }: { question: string } = await req.json();
 
     if (req.headers.get('authorization') != 'Bearer 123') {

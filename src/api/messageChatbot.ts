@@ -32,7 +32,7 @@ export const messageChatbot = async (
   try {
     const token = localStorage.getItem('token');
     if (token) {
-      const response = await axios.post<AnswerFromChatbot>('/chatbot/', data, {
+      const response = await axios.post<AnswerFromChatbot>('/chatbot', data, {
         headers: {
           Authorization: 'Bearer ' + JSON.parse(token)
         }
