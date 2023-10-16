@@ -1,16 +1,41 @@
 import React, { MouseEventHandler, useState, } from 'react';
 import { pdfjs, Document, Page, } from 'react-pdf';
+import 'react-pdf/dist/esm/Page/TextLayer.css'
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css'
 
 import { Box, Button, Stack } from '@mui/material';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 
+import styled from '@emotion/styled';
+import { Button, ButtonProps } from '@mui/material';
+import theme from '../../themes/theme';
+
+import { CustomNumberInput } from './CustomNumberInput';
+
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.js',
   import.meta.url,
 ).toString();
+
+
+const NumberInputBasic = () => {
+  const [value, setValue] = React.useState<number | undefined>();
+  return (
+    <CustomNumberInput
+      placeholder="…"
+      value={value}
+      onChange={(event, val) => setValue(val)}
+    />
+  );
+}
+
+function highlightPattern(text: string, pattern: string) {
+  
+  return text.replace(new RegExp(pattern, "i"), (value) => `<mark>${value}</mark>`);
+}
   
 
 export function PDFDisplay(props: {close: () => void}) {
@@ -18,18 +43,30 @@ export function PDFDisplay(props: {close: () => void}) {
   const [pageNumber, setPageNumber] = useState(1);
   const [zoomLevel, setZoomLevel] = useState(1.0);
   const [fileURL, setFileURL] = useState('http://localhost:3000/reflection_report.pdf');
-
-
+  const [nativeWidth, setNativeWidth] = useState(0);
   const ZOOMRATE = 1.5
 
-  function onDocumentLoadSuccess({ numPages } : {numPages : number}) {
-    setNumPages(numPages);
+  async function onDocumentLoadSuccess(pdfObject: any) {
+    const firstPage = await pdfObject.getPage(1);
+    setNativeWidth(firstPage.width);
+    setNumPages(pdfObject.numPages);
     setPageNumber(1);
     setZoomLevel(1.0);
   }
 
   function changePage(offset : number) {
     setPageNumber(prevPageNumber => prevPageNumber + offset);
+  }
+
+  const [searchText, setSearchText] = useState('');
+
+  const textRenderer = React.useCallback(
+    (textItem : any) => highlightPattern(textItem.str, searchText),
+    [searchText]
+  );
+
+  function onChange(event : any) {
+    setSearchText(event.target.value);
   }
 
   function previousPage() {
@@ -81,7 +118,8 @@ export function PDFDisplay(props: {close: () => void}) {
               onClick={decreaseZoom}
             />
             <button
-              children={<AddIcon />}
+              color="#e4e4e4"
+              children={<AddIcon sx={{color: "white"}}/>}
               type="button"
               onClick={increaseZoom}
             />
@@ -93,6 +131,7 @@ export function PDFDisplay(props: {close: () => void}) {
           sx={{
             display: 'flex', justifyContent: 'center', alignItems: 'center', 
           }}>
+            <NumberInputBasic/>
             <Box sx={{
               backgroundColor: '#e4e4e4',
               padding: '6px',
@@ -131,7 +170,6 @@ export function PDFDisplay(props: {close: () => void}) {
           width: '60vw',
           height: '80vh',
           gap: '10px',
-          borderRadius: '10px',
           backgroundColor: '#3d3d3d',
           overflow: 'scroll',
           display: 'flex', justifyContent: 'center', 
@@ -141,20 +179,31 @@ export function PDFDisplay(props: {close: () => void}) {
           file={fileURL}
           onLoadSuccess={onDocumentLoadSuccess}
         >
-          <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false} scale={zoomLevel}/>
+          <Stack gap={3 * zoomLevel}>
+            {Array.from(
+              new Array(numPages),
+              (el, index) => (
+                <Page
+                  key={`page_${index + 1}`}
+                  pageNumber={index + 1}
+                  renderTextLayer={true}
+                  renderAnnotationLayer={true} 
+                  scale={zoomLevel}
+                  customTextRenderer={textRenderer}
+                  width={600}
+                />
+              ),
+            )}
+          </Stack>
         </Document>}
     </Box>
     </Stack>
+    <div>
+        <label htmlFor="search">Search:</label>
+        <input type="search" id="search" value={searchText} onChange={onChange} />
+      </div>
     </>
   );
 }
-
-/*
-  return (
-    <div>
-      <PageSelector/>
-    </div>
-  )
-}*/
 
   
