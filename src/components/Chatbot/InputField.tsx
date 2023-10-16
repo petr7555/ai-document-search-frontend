@@ -9,9 +9,13 @@ import Paper from '@mui/material/Paper';
 import { Message } from '../../types/conversationTypes';
 
 export const Inputfield = ({
-  sendMessage
+  sendMessage,
+  loading,
+  responding
 }: {
   sendMessage: (message: Message) => void;
+  loading: boolean;
+  responding: boolean;
 }) => {
   const [input, setInput] = useState('');
   const [error, setError] = useState(false);
@@ -72,6 +76,7 @@ export const Inputfield = ({
           placeholder="Ask a question"
           data-cy="chatbot-input-field"
           value={input}
+          disabled={loading || responding}
           onChange={(event) => {
             setInput(event.target.value);
           }}
@@ -83,6 +88,7 @@ export const Inputfield = ({
           sx={{ p: '10px' }}
           data-cy="chatbot-send-button"
           aria-label="send"
+          disabled={loading || responding}
         >
           <SendIcon color={input.length > 0 ? 'primary' : 'inherit'} />
         </IconButton>

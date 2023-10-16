@@ -22,10 +22,7 @@ export const loadConversation = async (): Promise<ConversationResponse> => {
       });
       return {
         ok: true,
-        conversation: {
-          created_at: response.data.created_at,
-          messages: response.data.messages
-        }
+        conversation: response.data
       };
     } else {
       return {

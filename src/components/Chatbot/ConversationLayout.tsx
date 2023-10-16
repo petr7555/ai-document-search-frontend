@@ -17,14 +17,15 @@ const StyledLink = styled(Link)(() => ({
 }));
 
 export const ConversationLayout = ({
-  conversation,
-  loading
+  messages,
+  responding
 }: {
-  conversation: MessageBubbleProps[];
-  loading: boolean;
+  messages: MessageBubbleProps[];
+
+  responding: boolean;
 }) => {
-  const messages = conversation.map((message) => {
-    if (loading && message.is_from_bot && message.text === '...') {
+  const conversation = messages.map((message) => {
+    if (responding && message.is_from_bot && message.text === '...') {
       return (
         <BotMessageBubble
           data-cy="chatbot-response-message"
@@ -113,7 +114,7 @@ export const ConversationLayout = ({
           overflowX: 'hidden'
         }}
       >
-        {messages}
+        {conversation}
         <div id="bottom" />{' '}
       </Stack>
     </>
