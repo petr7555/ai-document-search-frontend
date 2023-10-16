@@ -92,7 +92,7 @@ export const ConversationLayout = ({
                 {message.sources.map((source) => (
                   <StyledLink
                     data-cy="source-link"
-                    href={source.link}
+                    href={`${source.link}#page=${source.page}`}
                     target="_blank"
                     rel="external"
                   >
