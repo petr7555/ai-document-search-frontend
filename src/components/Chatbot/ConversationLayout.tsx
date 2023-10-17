@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
-import { Link, Stack } from '@mui/material';
+import { CircularProgress, Link, Stack } from '@mui/material';
 import theme from '../../themes/theme';
 import { MessageBubbleProps } from '../../types/conversationTypes';
 import { BouncingLoader } from '../BouncingDotsLoader';
@@ -18,11 +18,12 @@ const StyledLink = styled(Link)(() => ({
 
 export const ConversationLayout = ({
   messages,
-  responding
+  responding,
+  loading
 }: {
   messages: MessageBubbleProps[];
-
   responding: boolean;
+  loading: boolean;
 }) => {
   const conversation = messages.map((message) => {
     if (responding && message.is_from_bot && message.text === '...') {
@@ -114,7 +115,14 @@ export const ConversationLayout = ({
           overflowX: 'hidden'
         }}
       >
-        {conversation}
+        {loading ? (
+          <CircularProgress
+            color="primary"
+            sx={{ display: 'flex', margin: 'auto', alignSelf: 'center' }}
+          />
+        ) : (
+          conversation
+        )}
         <div id="bottom" />{' '}
       </Stack>
     </>

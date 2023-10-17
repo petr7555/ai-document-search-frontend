@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import AddIcon from '@mui/icons-material/Add';
-import {
-  Alert,
-  AlertTitle,
-  CircularProgress,
-  Stack,
-  Typography
-} from '@mui/material';
+import { Alert, AlertTitle, Stack, Typography } from '@mui/material';
 import { loadConversation } from '../../api/loadConversation';
 import { messageChatbot } from '../../api/messageChatbot';
 import { newConversation } from '../../api/newConversation';
@@ -37,19 +31,17 @@ export const Chatbot = () => {
   const loadConversationFromBackend = async () => {
     setLoading(true);
     try {
-      setLoading(true);
-      loadConversation().then((response) => {
-        if (response.ok) {
-          setMessages(response.conversation.messages);
-          setConversationCreated(response.conversation.created_at.slice(0, 10));
-        } else {
-          setMessages([]);
-          setError(true);
-          setErrorMessage(response.detail);
-        }
-      });
-    } catch (error) {
-      setError(true);
+      const response = await loadConversation();
+      if (response.ok) {
+        setMessages(response.conversation.messages);
+        setConversationCreated(
+          new Date(response.conversation.created_at).toLocaleDateString()
+        );
+      } else {
+        setMessages([]);
+        setError(true);
+        setErrorMessage(response.detail);
+      }
     } finally {
       setLoading(false);
     }
@@ -69,7 +61,6 @@ export const Chatbot = () => {
             },
             {
               is_from_bot: true,
-
               text: '...',
               sources: []
             }
@@ -86,7 +77,6 @@ export const Chatbot = () => {
             },
             {
               is_from_bot: true,
-
               text: response.text,
               sources: response.sources
             }
@@ -100,50 +90,41 @@ export const Chatbot = () => {
             },
             {
               is_from_bot: true,
-
               text: response.detail,
               sources: [],
-
               error: 'true'
             }
           ]);
         }
       }
-    } catch (error) {
-      setError(true);
     } finally {
       setResponding(false);
+    }
+  };
+
+  const handleNewConversation = async () => {
+    setMessages([]);
+    const response = await newConversation();
+    if (response.ok) {
+      setConversationCreated(
+        new Date(response.created_at).toLocaleDateString()
+      );
+    } else {
+      setConversationCreated(null);
+      setMessages([
+        {
+          is_from_bot: true,
+          text: response.detail,
+          sources: [],
+          error: 'true'
+        }
+      ]);
     }
   };
 
   useEffect(() => {
     loadConversationFromBackend();
   }, []);
-
-  const handleNewConversation = async () => {
-    setMessages([]);
-    try {
-      newConversation().then((response) => {
-        if (response.ok) {
-          setConversationCreated(
-            new Date(response.created_at).toLocaleDateString()
-          );
-        } else {
-          setConversationCreated(null);
-          setMessages([
-            {
-              is_from_bot: true,
-              text: response.detail,
-              sources: [],
-              error: 'true'
-            }
-          ]);
-        }
-      });
-    } catch (error) {
-      setError(true);
-    }
-  };
 
   return (
     <CenterPageContent data-cy="chatbot">
@@ -189,11 +170,11 @@ export const Chatbot = () => {
           <AddIcon />
         </NewConversationButton>
       </Stack>
-      {loading ? (
-        <CircularProgress color="primary" />
-      ) : (
-        <ConversationLayout responding={responding} messages={messages} />
-      )}
+      <ConversationLayout
+        loading={loading}
+        responding={responding}
+        messages={messages}
+      />
       <Inputfield
         loading={loading}
         responding={responding}
