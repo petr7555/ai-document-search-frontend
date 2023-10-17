@@ -26,7 +26,9 @@ export const Chatbot = () => {
   const [conversationCreated, setConversationCreated] = useState<string | null>(
     null
   );
-  const [errorMessage, setErrorMessage] = useState('Unknown error');
+  const [errorMessage, setErrorMessage] = useState(
+    'Unknown error retrieving conversation'
+  );
 
   const loadConversationFromBackend = async () => {
     setLoading(true);
@@ -38,9 +40,9 @@ export const Chatbot = () => {
           new Date(response.conversation.created_at).toLocaleDateString()
         );
       } else {
+        setErrorMessage(response.detail);
         setMessages([]);
         setError(true);
-        setErrorMessage(response.detail);
       }
     } finally {
       setLoading(false);

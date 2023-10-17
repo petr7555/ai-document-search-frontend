@@ -92,4 +92,17 @@ describe('Chatbot page', () => {
     cy.get('[data-cy="new-conversation-button"]').click();
     cy.contains('Hi, what are some financial covenants?').should('not.exist');
   });
+
+  it('Login and receive error message upon chatbot connection error', () => {
+    cy.intercept('GET', '/conversation', {
+      statusCode: 400,
+      body: {
+        error: 'Unknown error retrieving conversation'
+      }
+    });
+    cy.get('[data-cy="chatbot-response-error"]').should(
+      'include.text',
+      'Unknown error retrieving conversation'
+    );
+  });
 });

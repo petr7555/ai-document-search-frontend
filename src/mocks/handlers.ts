@@ -92,5 +92,23 @@ export const handlers = [
         error: 'Unknown error'
       })
     );
+  }),
+  rest.get('*/conversation', async (req, res, ctx) => {
+    if (req.headers.get('authorization') != 'Bearer 123') {
+      return res(
+        ctx.status(401),
+        ctx.json({
+          detail: 'Not authenticated'
+        })
+      );
+    }
+
+    return res(
+      ctx.status(200),
+      ctx.json({
+        created_at: '2021-09-10T10:00:00Z',
+        messages: []
+      })
+    );
   })
 ];
