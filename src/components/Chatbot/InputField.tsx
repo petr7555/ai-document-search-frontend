@@ -32,9 +32,11 @@ export const Inputfield = ({
       <Paper
         component="form"
         onKeyDown={(event) => {
-          if (event.key === 'Enter' && canSendMessage()) {
+          if (event.key === 'Enter') {
             event.preventDefault();
-            handleSendMessage();
+            if (canSendMessage()) {
+              handleSendMessage();
+            }
           }
         }}
         sx={{
