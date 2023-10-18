@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { PrimaryButton } from '../components/Button/PrimaryButton';
-import { CenterPageContent } from '../components/CenterPageContent';
+import { CenterPageContent } from '../components/Layout/CenterPageContent';
 import { Navbar } from '../components/Navbar/Navbar';
 import { useAuth } from '../hooks/useAuth';
 
