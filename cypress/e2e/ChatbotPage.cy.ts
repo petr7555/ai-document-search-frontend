@@ -45,7 +45,7 @@ describe('Chatbot page', () => {
     cy.get('[data-cy="source-link"]').should(
       'have.attr',
       'href',
-      'https://www.nber.org/system/files/working_papers/w6801/w6801.pdf'
+      'https://www.nber.org/system/files/working_papers/w6801/w6801.pdf#page=7'
     );
   });
   it('Get several sources', () => {
@@ -67,7 +67,7 @@ describe('Chatbot page', () => {
       .should(
         'have.attr',
         'href',
-        'https://www.investopedia.com/terms/c/covenant.asp'
+        'https://www.investopedia.com/terms/c/covenant.asp#page=1'
       );
 
     cy.contains('NO3333333333 Covenants - FinancialEdge')
@@ -75,7 +75,7 @@ describe('Chatbot page', () => {
       .should(
         'have.attr',
         'href',
-        'https://www.fe.training/free-resources/financial-markets/covenants/'
+        'https://www.fe.training/free-resources/financial-markets/covenants/#page=1'
       );
   });
   it('Start new conversation', () => {
