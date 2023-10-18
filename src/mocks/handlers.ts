@@ -56,7 +56,7 @@ export const handlers = [
               isin: 'NO1111111111',
               shortname: 'Who should buy long-term bonds? - Cambridge',
               link: 'https://www.nber.org/system/files/working_papers/w6801/w6801.pdf',
-              page: 7
+              page: 6
             }
           ]
         })
@@ -73,13 +73,13 @@ export const handlers = [
               isin: 'NO2222222222',
               shortname: 'What is a covenant? - Investopedia',
               link: 'https://www.investopedia.com/terms/c/covenant.asp',
-              page: 1
+              page: 0
             },
             {
               isin: 'NO3333333333',
               shortname: 'Covenants - FinancialEdge',
               link: 'https://www.fe.training/free-resources/financial-markets/covenants/',
-              page: 1
+              page: 0
             }
           ]
         })
