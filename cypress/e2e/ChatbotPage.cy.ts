@@ -11,7 +11,6 @@ describe('Chatbot page', () => {
     cy.url().should('include', '/');
     cy.get('[data-cy="chatbot"]').should('exist');
   });
-
   it('Send message to chatbot and get response', () => {
     cy.get('[data-cy="chatbot"]').should('exist');
     cy.get('[data-cy="chatbot-input-field"]').type('Hello');
@@ -99,7 +98,8 @@ describe('Chatbot page', () => {
       body: {
         error: 'Unknown error retrieving conversation'
       }
-    });
+    }).as('getConversation');
+
     cy.get('[data-cy="chatbot-response-error"]').should(
       'include.text',
       'Unknown error retrieving conversation'
