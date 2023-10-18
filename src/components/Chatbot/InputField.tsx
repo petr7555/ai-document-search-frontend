@@ -76,7 +76,6 @@ export const Inputfield = ({
           placeholder="Ask a question"
           data-cy="chatbot-input-field"
           value={input}
-          disabled={loading || responding}
           onChange={(event) => {
             setInput(event.target.value);
           }}
