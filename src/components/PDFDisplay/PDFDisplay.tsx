@@ -30,7 +30,7 @@ export function PDFDisplay(props: {close: () => void, pdfUrl : string, initialPa
   const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = React.useState<number | undefined>();
   const [zoomLevel, setZoomLevel] = useState(1.0);
-  const [fileURL, setFileURL] = useState(props.pdfUrl);
+  //const [fileURL, setFileURL] = useState(props.pdfUrl);
   const [nativeWidth, setNativeWidth] = useState(0);
   const ZOOMRATE = 1.5
   
@@ -82,10 +82,6 @@ export function PDFDisplay(props: {close: () => void, pdfUrl : string, initialPa
 
   function decreaseZoom() {
     setZoomLevel(zoomLevel / ZOOMRATE)
-  }
-
-  function loadFile(fileURL: string) {
-    setFileURL(fileURL)
   }
 
   function hidePDF() {
@@ -165,7 +161,7 @@ export function PDFDisplay(props: {close: () => void, pdfUrl : string, initialPa
         }}
       >
         {<Document
-          file={fileURL}
+          file={props.pdfUrl}
           onLoadSuccess={onDocumentLoadSuccess}
         >
           <Stack gap={3 * zoomLevel}>

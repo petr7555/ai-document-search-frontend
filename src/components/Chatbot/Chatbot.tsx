@@ -23,7 +23,7 @@ const NewConversationButton = styled(PrimaryButton)(() => ({
   padding: '10px 10px 10px 15px'
 }));
 
-export const Chatbot = (props: {showPDF: () => void}) => {
+export const Chatbot = (props: {showPDF: (pdfUrl: string) => void}) => {
   const [conversation, setConversation] = useState<Message[]>([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);

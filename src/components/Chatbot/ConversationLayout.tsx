@@ -42,12 +42,13 @@ export const ConversationLayout = ({
   conversation, showPDF, loading
 }: {
   conversation: Message[];
-  showPDF: () => void;
+  showPDF: (pdfUrl: string) => void;
   loading: boolean;
 }) => {
-function show() {
+
+/*  function show() {
   showPDF();
-}
+}*/
 
   const messages = conversation.map((message) => {
     if (loading && message.originBot && message.text === '...') {
@@ -99,6 +100,7 @@ function show() {
                     href={`${source.link}#page=${source.page}`}
                     target="_blank"
                     rel="external"
+                    onClick={() => showPDF(source.link)}
                   >
                     {source.isin} {source.shortname}
                   </StyledLink>
@@ -106,7 +108,7 @@ function show() {
               </Stack>
             </Stack>
           )}
-          {message.originBot && <button onClick={show}>Show source</button>}
+          {/*message.originBot && <button onClick={show}>Show source</button>*/}
         </MessageBubble>
       );
     }

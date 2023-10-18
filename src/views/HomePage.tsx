@@ -7,9 +7,11 @@ import { Button, Stack } from '@mui/material';
 
 export const HomePage = () => {
   const [showPDF, setShowPDF] = useState<boolean>(false);
+  const [pdfUrl, setPdfUrl] = useState('http://localhost:3000/reflection_report.pdf');
 
-  const handleDisplayPDF = () => {
+  const handleDisplayPDF = (pdfUrl: string) => {
     setShowPDF(true);
+    setPdfUrl(pdfUrl);
   }
 
   const handleHidePDF = () => {
@@ -24,13 +26,13 @@ export const HomePage = () => {
         alignItems={'center'}
         justifyContent={'center'}
         sx={{width: '100vw', height:'100%'}}>
-          <CenterPageContent>
-        <Chatbot showPDF={handleDisplayPDF}/>
+        <CenterPageContent>
+          <Chatbot showPDF={handleDisplayPDF}/>
         </CenterPageContent>
         {/* <PDFDisplay /> */}
-        { /*showPDF && (
-          <PDFDisplay close={handleHidePDF}/>
-        )*/}
+        { showPDF && (
+          <PDFDisplay close={handleHidePDF} pdfUrl={pdfUrl} initialPage={1}/>
+        )}
       </Stack>
     </>
   );
