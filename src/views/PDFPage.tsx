@@ -1,13 +1,9 @@
 import React from 'react';
-import { CenterPageContent } from '../components/CenterPageContent';
 import { Navbar } from '../components/Navbar/Navbar';
 import  { PDFDisplay } from '../components/PDFDisplay/PDFDisplay';
+import { CenterPageContent } from '../components/CenterPageContent';
 import { Chatbot } from '../components/Chatbot/Chatbot';
-import { Stack, Grid, Box } from '@mui/material';
-import { flexbox } from '@mui/system';
-
-import ReactDOM from 'react-dom';
-
+import { Stack,} from '@mui/material';
 
 export const PDFPage = () => {
   const [showPDF, setShowPDF] = React.useState(false);
