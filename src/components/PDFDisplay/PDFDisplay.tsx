@@ -20,6 +20,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url,
 ).toString();
 
+
 function highlightPattern(text: string, pattern: string) {
   return text.replace(new RegExp(pattern, "i"), (value) => `<mark>${value}</mark>`);
 }
@@ -32,7 +33,6 @@ export function PDFDisplay(props: {close: () => void, pdfUrl : string, initialPa
   const [fileURL, setFileURL] = useState(props.pdfUrl);
   const [nativeWidth, setNativeWidth] = useState(0);
   const ZOOMRATE = 1.5
-
   
   const NumberInputBasic = () => {
     return (
@@ -40,7 +40,18 @@ export function PDFDisplay(props: {close: () => void, pdfUrl : string, initialPa
         placeholder="…"
         value={pageNumber}
         onChange={(event, val) => {
-          setPageNumber(val)
+          if (val == null || val < 1) {
+            setPageNumber(props.initialPage)
+          }
+          else if (val > numPages) {
+            setPageNumber(numPages)
+          }
+          else if (val < 1) {
+            setPageNumber(1)
+          }
+          else {
+            setPageNumber(val)
+          }
         }}
       />
     );
@@ -54,11 +65,6 @@ export function PDFDisplay(props: {close: () => void, pdfUrl : string, initialPa
     setZoomLevel(1.0);
   }
 
-  /*
-  function changePage(offset : number) {
-    setPageNumber(prevPageNumber => prevPageNumber ? (prevPageNumber + offset) : offset);
-  }*/
-
   const [searchText, setSearchText] = useState('');
 
   const textRenderer = React.useCallback(
@@ -69,14 +75,6 @@ export function PDFDisplay(props: {close: () => void, pdfUrl : string, initialPa
   function onChange(event : any) {
     setSearchText(event.target.value);
   }
-
-  /*function previousPage() {
-    changePage(-1);
-  }
-
-  function nextPage() {
-    changePage(1);
-  }*/
 
   function increaseZoom() {
     setZoomLevel(zoomLevel * ZOOMRATE)
@@ -172,6 +170,11 @@ export function PDFDisplay(props: {close: () => void, pdfUrl : string, initialPa
               (el, index) => (
                 <Page
                   key={`page_${index + 1}`}
+                  inputRef={(ref) => {
+                    if (ref && pageNumber === index + 1) {
+                      ref.scrollIntoView();
+                    }
+                  }}
                   pageNumber={index + 1}
                   renderTextLayer={true}
                   renderAnnotationLayer={true} 
