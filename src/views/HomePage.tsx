@@ -8,10 +8,12 @@ import { Button, Stack } from '@mui/material';
 export const HomePage = () => {
   const [showPDF, setShowPDF] = useState<boolean>(false);
   const [pdfUrl, setPdfUrl] = useState('http://localhost:3000/reflection_report.pdf');
+  const [initialPage, setInitialPage] = useState(1);
 
-  const handleDisplayPDF = (pdfUrl: string) => {
+  const handleDisplayPDF = (pdfUrl: string, initialPage: number) => {
     setShowPDF(true);
     setPdfUrl(pdfUrl);
+    setInitialPage(initialPage);
   }
 
   const handleHidePDF = () => {
@@ -31,7 +33,7 @@ export const HomePage = () => {
         </CenterPageContent>
         {/* <PDFDisplay /> */}
         { showPDF && (
-          <PDFDisplay close={handleHidePDF} pdfUrl={pdfUrl} initialPage={1}/>
+          <PDFDisplay close={handleHidePDF} pdfUrl={pdfUrl} initialPage={initialPage}/>
         )}
       </Stack>
     </>

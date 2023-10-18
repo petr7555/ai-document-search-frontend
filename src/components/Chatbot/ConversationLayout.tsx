@@ -42,7 +42,7 @@ export const ConversationLayout = ({
   conversation, showPDF, loading
 }: {
   conversation: Message[];
-  showPDF: (pdfUrl: string) => void;
+  showPDF: (pdfUrl: string, initialPage: number) => void;
   loading: boolean;
 }) => {
 
@@ -100,7 +100,7 @@ export const ConversationLayout = ({
                     href={`${source.link}#page=${source.page}`}
                     target="_blank"
                     rel="external"
-                    onClick={() => showPDF(source.link)}
+                    onClick={() => showPDF(source.link, source.page)}
                   >
                     {source.isin} {source.shortname}
                   </StyledLink>
