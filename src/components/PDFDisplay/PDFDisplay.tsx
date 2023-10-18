@@ -118,7 +118,7 @@ export function PDFDisplay(props: {close: () => void, pdfUrl : string, initialPa
             />
             <button
               color="#e4e4e4"
-              children={<AddIcon sx={{color: "white"}}/>}
+              children={<AddIcon sx={{color: "black"}}/>}
               type="button"
               onClick={increaseZoom}
             />
@@ -138,7 +138,8 @@ export function PDFDisplay(props: {close: () => void, pdfUrl : string, initialPa
             }}>
               of {numPages || '--'}
             </Box>
-            <Button
+          </Stack>
+          <Button
               children={<CloseIcon/>}
               type="button"
               onClick={hidePDF}
@@ -147,8 +148,11 @@ export function PDFDisplay(props: {close: () => void, pdfUrl : string, initialPa
                 color: 'white',
                 marginLeft: 'auto'
               }}
-            />   
-          </Stack>  
+            />
+            <div>
+              <label htmlFor="search">Search:</label>
+              <input type="search" id="search" value={searchText} onChange={onChange} />
+            </div>   
       </Stack>
       <Box
         sx={{
@@ -156,8 +160,8 @@ export function PDFDisplay(props: {close: () => void, pdfUrl : string, initialPa
           height: '80vh',
           gap: '10px',
           backgroundColor: '#3d3d3d',
-          overflow: 'scroll',
-          display: 'flex', justifyContent: 'center', 
+          overflow: 'auto',
+          display: 'flex', justifyContent: 'center',
         }}
       >
         {<Document
@@ -188,10 +192,6 @@ export function PDFDisplay(props: {close: () => void, pdfUrl : string, initialPa
         </Document>}
     </Box>
     </Stack>
-    <div>
-        <label htmlFor="search">Search:</label>
-        <input type="search" id="search" value={searchText} onChange={onChange} />
-      </div>
     </>
   );
 }
