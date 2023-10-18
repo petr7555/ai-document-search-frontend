@@ -28,9 +28,9 @@ export const HomePage = () => {
         <Chatbot showPDF={handleDisplayPDF}/>
         </CenterPageContent>
         {/* <PDFDisplay /> */}
-        {showPDF && (
+        { /*showPDF && (
           <PDFDisplay close={handleHidePDF}/>
-        )}
+        )*/}
       </Stack>
     </>
   );

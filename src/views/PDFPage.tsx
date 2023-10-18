@@ -11,7 +11,8 @@ import ReactDOM from 'react-dom';
 
 export const PDFPage = () => {
   const [showPDF, setShowPDF] = React.useState(false);
-
+  const url = "PDF URL WEEWOO"
+  
   return (
     <>
       {/*<Navbar />*/}
@@ -24,7 +25,7 @@ export const PDFPage = () => {
         <CenterPageContent>
           <Chatbot showPDF={() => {setShowPDF(true)}} />
         </CenterPageContent>
-          { showPDF ? <PDFDisplay close={() => {setShowPDF(false)}} /> : null }
+          {showPDF ? <PDFDisplay close={() => {setShowPDF(false)}} pdfUrl='http://localhost:3000/reflection_report.pdf' initialPage={1} /> : null}
       </Stack>
     </>
   );

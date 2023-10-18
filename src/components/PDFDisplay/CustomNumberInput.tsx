@@ -63,7 +63,7 @@ const StyledInputRoot = styled('div')(
   border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
   box-shadow: 0px 2px 2px ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
   display: grid;
-  grid-template-columns: 1fr 1fr 19px;
+  grid-template-columns: 1fr 40px 1fr;
   grid-template-rows: 1fr;
   overflow: hidden;
 
@@ -90,7 +90,7 @@ const StyledInputElement = styled('input')(
   font-family: inherit;
   font-weight: 400;
   line-height: 1.5;
-  grid-column: 2/3;
+  grid-column: 2;
   color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
   background: inherit;
   border: none;
@@ -110,7 +110,7 @@ const StyledButton = styled('button')(
   appearance: none;
   padding: 0;
   width: 19px;
-  height: 50px;
+  height: 30px;
   font-family: system-ui, sans-serif;
   font-size: 0.875rem;
   box-sizing: border-box;
@@ -129,11 +129,13 @@ const StyledButton = styled('button')(
   }
 
   &.${numberInputClasses.incrementButton} {
-    grid-column: 3/3;
+    grid-column: 3;
+    grid-row: 1;
   }
 
   &.${numberInputClasses.decrementButton} {
-    grid-column: 1/3;
+    grid-column: 1;
+    grid-row: 1;
   }
 `,
 );

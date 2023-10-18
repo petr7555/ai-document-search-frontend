@@ -9,7 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 
 import styled from '@emotion/styled';
-import { Button, ButtonProps } from '@mui/material';
+import { ButtonProps } from '@mui/material';
 import theme from '../../themes/theme';
 
 import { CustomNumberInput } from './CustomNumberInput';
@@ -20,43 +20,44 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url,
 ).toString();
 
-
-const NumberInputBasic = () => {
-  const [value, setValue] = React.useState<number | undefined>();
-  return (
-    <CustomNumberInput
-      placeholder="…"
-      value={value}
-      onChange={(event, val) => setValue(val)}
-    />
-  );
-}
-
 function highlightPattern(text: string, pattern: string) {
-  
   return text.replace(new RegExp(pattern, "i"), (value) => `<mark>${value}</mark>`);
 }
   
 
-export function PDFDisplay(props: {close: () => void}) {
+export function PDFDisplay(props: {close: () => void, pdfUrl : string, initialPage: number}) {
   const [numPages, setNumPages] = useState(0);
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = React.useState<number | undefined>();
   const [zoomLevel, setZoomLevel] = useState(1.0);
-  const [fileURL, setFileURL] = useState('http://localhost:3000/reflection_report.pdf');
+  const [fileURL, setFileURL] = useState(props.pdfUrl);
   const [nativeWidth, setNativeWidth] = useState(0);
   const ZOOMRATE = 1.5
 
+  
+  const NumberInputBasic = () => {
+    return (
+      <CustomNumberInput
+        placeholder="…"
+        value={pageNumber}
+        onChange={(event, val) => {
+          setPageNumber(val)
+        }}
+      />
+    );
+  }
+
   async function onDocumentLoadSuccess(pdfObject: any) {
     const firstPage = await pdfObject.getPage(1);
-    setNativeWidth(firstPage.width);
+    setNativeWidth(firstPage.view[2]);
     setNumPages(pdfObject.numPages);
-    setPageNumber(1);
+    setPageNumber(props.initialPage);
     setZoomLevel(1.0);
   }
 
+  /*
   function changePage(offset : number) {
-    setPageNumber(prevPageNumber => prevPageNumber + offset);
-  }
+    setPageNumber(prevPageNumber => prevPageNumber ? (prevPageNumber + offset) : offset);
+  }*/
 
   const [searchText, setSearchText] = useState('');
 
@@ -69,13 +70,13 @@ export function PDFDisplay(props: {close: () => void}) {
     setSearchText(event.target.value);
   }
 
-  function previousPage() {
+  /*function previousPage() {
     changePage(-1);
   }
 
   function nextPage() {
     changePage(1);
-  }
+  }*/
 
   function increaseZoom() {
     setZoomLevel(zoomLevel * ZOOMRATE)
@@ -131,28 +132,14 @@ export function PDFDisplay(props: {close: () => void}) {
           sx={{
             display: 'flex', justifyContent: 'center', alignItems: 'center', 
           }}>
-            <NumberInputBasic/>
+            <NumberInputBasic />
             <Box sx={{
               backgroundColor: '#e4e4e4',
               padding: '6px',
               border: 1,
             }}>
-              Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
+              of {numPages || '--'}
             </Box>
-            <button
-              type="button"
-              disabled={pageNumber <= 1}
-              onClick={previousPage}
-            >
-              Previous
-            </button>
-            <button
-              type="button"
-              disabled={pageNumber >= numPages}
-              onClick={nextPage}
-            >
-              Next
-            </button>
             <Button
               children={<CloseIcon/>}
               type="button"
@@ -190,7 +177,7 @@ export function PDFDisplay(props: {close: () => void}) {
                   renderAnnotationLayer={true} 
                   scale={zoomLevel}
                   customTextRenderer={textRenderer}
-                  width={600}
+                  width={nativeWidth}
                 />
               ),
             )}
