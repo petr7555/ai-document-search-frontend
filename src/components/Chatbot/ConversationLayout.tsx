@@ -1,48 +1,115 @@
 import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
-import { Paper, Stack } from '@mui/material';
+import { Link, Paper, Stack } from '@mui/material';
+import theme from '../../themes/theme';
+import { BouncingLoader } from '../BouncingDotsLoader';
 import { Message } from './Chatbot';
 
-const MessageBubble = styled(Paper)(({ fromBot }: { fromBot: boolean }) => ({
-  maxWidth: '80%',
-  minHeight: 'fit-content',
-  borderRadius: fromBot ? '10px 10px 10px 0px' : '10px 10px 0px 10px',
-  textAlign: fromBot ? 'left' : 'right',
-  alignItems: 'center',
-  margin: '2px',
-  padding: '0px 20px 0px 20px',
-  display: 'flex',
-  flexWrap: 'wrap',
-  flexDirection: 'row',
-  fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
-  fontSize: '16px',
-  fontWeight: 500,
-  backgroundColor: fromBot ? '#e0e0e0' : '#b3d4fc',
-  alignSelf: fromBot ? 'flex-start' : 'flex-end'
+const StyledLink = styled(Link)(() => ({
+  color: `${theme.palette.primary.main}`,
+  textDecoration: 'underline',
+  textunderlineoffset: '2px',
+  marginBottom: '8px',
+  '&:hover': {
+    color: `${theme.palette.primary.dark}`
+  }
 }));
 
+const MessageBubble = styled(Paper)(
+  ({ originBot, error }: { originBot: boolean; error: boolean }) => ({
+    maxWidth: '80%',
+    minHeight: 'fit-content',
+    borderRadius: originBot ? '10px 10px 10px 0px' : '10px 10px 0px 10px',
+    textAlign: originBot ? 'left' : 'right',
+    alignItems: 'flex-start',
+    gap: '5px',
+    margin: '2px',
+    padding: '0px 20px 0px 20px',
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexDirection: 'column',
+    fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+    fontSize: '16px',
+    fontWeight: 500,
+    backgroundColor: originBot ? '#e0e0e0' : '#b3d4fc',
+    alignSelf: originBot ? 'flex-start' : 'flex-end',
+    color: error ? 'red' : 'black',
+    textUnderlineOffset: '2px'
+  })
+);
+
 export const ConversationLayout = ({
-  conversation, showPDF
+  conversation, showPDF, loading
 }: {
   conversation: Message[];
-  showPDF: () => void
+  showPDF: () => void;
+  loading: boolean;
 }) => {
 function show() {
   showPDF();
 }
 
   const messages = conversation.map((message) => {
-    return (
-      <MessageBubble
-        data-cy={
-          message.originBot ? 'chatbot-response-message' : 'user-input-message'
-        }
-        fromBot={message.originBot}
-      >
-        <p>{message.text}</p>
-        {message.originBot && <button onClick={show}>Show source</button>}
-      </MessageBubble>
-    );
+    if (loading && message.originBot && message.text === '...') {
+      return (
+        <MessageBubble
+          data-cy="chatbot-response-message"
+          originBot={message.originBot}
+          key={message.text}
+          error={false}
+        >
+          <BouncingLoader>
+            <div />
+            <div />
+            <div />
+          </BouncingLoader>
+        </MessageBubble>
+      );
+    } else {
+      return (
+        <MessageBubble
+          data-cy={
+            message.originBot
+              ? 'chatbot-response-message'
+              : 'user-input-message'
+          }
+          originBot={message.originBot}
+          error={message.error ?? false}
+        >
+          <p>{message.text}</p>
+          {message.sources && (
+            <Stack
+              direction={'row'}
+              spacing={'10px'}
+              sx={{ flexWrap: 'wrap', marginBottom: '10px' }}
+            >
+              <p>Sources: </p>
+              <Stack
+                direction={'column'}
+                spacing={'5px'}
+                sx={{
+                  flexWrap: 'wrap',
+                  justifyContent: 'flex-start',
+                  marginBottom: 'px'
+                }}
+              >
+                {message.sources.map((source) => (
+                  <StyledLink
+                    data-cy="source-link"
+                    href={`${source.link}#page=${source.page}`}
+                    target="_blank"
+                    rel="external"
+                  >
+                    {source.isin} {source.shortname}
+                  </StyledLink>
+                ))}
+              </Stack>
+            </Stack>
+          )}
+          {message.originBot && <button onClick={show}>Show source</button>}
+        </MessageBubble>
+      );
+    }
   });
 
   useEffect(() => {

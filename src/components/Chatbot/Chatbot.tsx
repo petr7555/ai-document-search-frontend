@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import AddIcon from '@mui/icons-material/Add';
 import { Alert, AlertTitle, Stack, Typography } from '@mui/material';
-import { messageChatbot } from '../../api/messageChatbot';
+import { messageChatbot, Source } from '../../api/messageChatbot';
 import { PrimaryButton } from '../Button/PrimaryButton';
 import { CenterPageContent } from '../CenterPageContent';
 import { ConversationLayout } from './ConversationLayout';
@@ -12,6 +12,8 @@ import { Box } from '@mui/system';
 export type Message = {
   originBot: boolean;
   text: string;
+  error?: boolean;
+  sources?: Source[];
 };
 
 const NewConversationButton = styled(PrimaryButton)(() => ({
@@ -24,23 +26,44 @@ const NewConversationButton = styled(PrimaryButton)(() => ({
 export const Chatbot = (props: {showPDF: () => void}) => {
   const [conversation, setConversation] = useState<Message[]>([]);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const addMessageToConversation = async (message: Message) => {
     setConversation([...conversation, message]);
     try {
+      setLoading(true);
+      setConversation([
+        ...conversation,
+        message,
+        { originBot: true, text: '...' }
+      ]);
       await messageChatbot(message.text).then((response) => {
         if (response.ok) {
           setConversation([
             ...conversation,
             message,
-            { originBot: true, text: response.answer }
+            {
+              originBot: true,
+              text: response.answer,
+              sources: response.sources
+            }
           ]);
         } else {
-          setError(true);
+          setConversation([
+            ...conversation,
+            message,
+            {
+              originBot: true,
+              text: response.detail,
+              error: true
+            }
+          ]);
         }
       });
     } catch (error) {
       setError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -63,7 +86,7 @@ export const Chatbot = (props: {showPDF: () => void}) => {
           <AddIcon />
         </NewConversationButton>
       </Stack>
-      <ConversationLayout conversation={conversation} showPDF={props.showPDF}/>
+      <ConversationLayout loading={loading} conversation={conversation} showPDF={props.showPDF}/>
       <Inputfield sendMessage={addMessageToConversation} />
       {error && (
         <Alert
