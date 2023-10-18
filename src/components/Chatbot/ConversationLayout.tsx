@@ -72,7 +72,7 @@ export const ConversationLayout = ({
                       <StyledLink
                         key={crypto.randomUUID()}
                         data-cy="source-link"
-                        href={source.link}
+                        href={`${source.link}#page=${source.page}`}
                         target="_blank"
                         rel="external"
                       >
