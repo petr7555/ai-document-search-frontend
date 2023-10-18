@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import TuneIcon from '@mui/icons-material/Tune';
-import { Alert, AlertTitle } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
@@ -18,43 +17,22 @@ export const Inputfield = ({
   responding: boolean;
 }) => {
   const [input, setInput] = useState('');
-  const [error, setError] = useState(false);
 
   const handleSendMessage = () => {
-    const trimmedInput = input.trim();
+    sendMessage({ is_from_bot: false, text: input });
+    setInput('');
+  };
 
-    if (trimmedInput.length === 0) {
-      setError(true);
-    } else {
-      sendMessage({ is_from_bot: false, text: input });
-      setInput('');
-    }
+  const canSendMessage = () => {
+    return input.trim().length > 0 && !loading && !responding;
   };
 
   return (
     <>
-      <Alert
-        severity="info"
-        color="info"
-        data-cy="chatbot-input-error"
-        onClose={() => setError(false)}
-        sx={{
-          visibility: error ? 'visible' : 'hidden',
-          position: 'fixed',
-          width: '20vw',
-          height: '4vh',
-          top: '10vh',
-          paddingTop: '10px',
-          alignContent: 'center',
-          textAlign: 'center'
-        }}
-      >
-        <AlertTitle>Please enter a message</AlertTitle>
-      </Alert>
       <Paper
         component="form"
         onKeyDown={(event) => {
-          if (event.key === 'Enter') {
+          if (event.key === 'Enter' && canSendMessage()) {
             event.preventDefault();
             handleSendMessage();
           }
@@ -87,9 +65,9 @@ export const Inputfield = ({
           sx={{ p: '10px' }}
           data-cy="chatbot-send-button"
           aria-label="send"
-          disabled={loading || responding}
+          disabled={!canSendMessage()}
         >
-          <SendIcon color={input.length > 0 ? 'primary' : 'inherit'} />
+          <SendIcon color={canSendMessage() ? 'primary' : 'inherit'} />
         </IconButton>
       </Paper>
     </>

@@ -20,9 +20,8 @@ describe('Chatbot page', () => {
   });
   it('Try to send empty input to chatbot and get error', () => {
     cy.get('[data-cy="chatbot"]').should('exist');
-    cy.get('[data-cy="chatbot-input-field"]').type(' ');
-    cy.get('[data-cy="chatbot-send-button"]').click();
-    cy.get("[data-cy='chatbot-input-error']").should('exist');
+    cy.get('[data-cy="chatbot-input-field"]').type('  ');
+    cy.get('[data-cy="chatbot-send-button"]').should('be.disabled');
   });
   it('Send message and go to link', () => {
     cy.get('[data-cy="chatbot"]').should('exist');

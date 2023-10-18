@@ -106,6 +106,7 @@ export const Chatbot = () => {
 
   const handleNewConversation = async () => {
     setMessages([]);
+    setLoading(true);
     const response = await newConversation();
     if (response.ok) {
       setConversationCreated(
@@ -122,6 +123,7 @@ export const Chatbot = () => {
         }
       ]);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
