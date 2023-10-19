@@ -20,9 +20,7 @@ export const theme = createTheme({
     },
     success: {
       main: '#fff'
-    },
-
-
+    }
   }
 });
 

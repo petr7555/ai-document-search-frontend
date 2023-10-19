@@ -19,15 +19,16 @@ import { CustomNumberInput } from './CustomNumberInput';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.js',
-  import.meta.url,
+  import.meta.url
 ).toString();
 
-
 function highlightPattern(text: string, pattern: string) {
-  return text.replace(new RegExp(pattern, "i"), (value) => `<mark>${value}</mark>`);
+  return text.replace(
+    new RegExp(pattern, 'i'),
+    (value) => `<mark>${value}</mark>`
+  );
 }
 interface PDFDisplayProps {
   source: Source;
@@ -82,25 +83,29 @@ export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
         }}
       />
     );
-  }
+  };
 
-  function onDocumentLoadSuccess({ numPages } : {numPages : number | undefined}) {
+  function onDocumentLoadSuccess({
+    numPages
+  }: {
+    numPages: number | undefined;
+  }) {
     if (numPages != null) {
       setNumPages(numPages);
     }
   }
 
   const textRenderer = useCallback(
-    (textItem : TextItem) => highlightPattern(textItem.str, searchText),
+    (textItem: TextItem) => highlightPattern(textItem.str, searchText),
     [searchText]
   );
-  
+
   function increaseZoom() {
-    setZoomLevel(zoomLevel * ZOOMRATE)
+    setZoomLevel(zoomLevel * ZOOMRATE);
   }
 
   function decreaseZoom() {
-    setZoomLevel(zoomLevel / ZOOMRATE)
+    setZoomLevel(zoomLevel / ZOOMRATE);
   }
 
   return (
@@ -217,5 +222,3 @@ export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
     </>
   );
 }
-
-  
