@@ -73,13 +73,13 @@ export const handlers = [
               isin: 'NO2222222222',
               shortname: 'What is a covenant? - Investopedia',
               link: 'https://www.investopedia.com/terms/c/covenant.asp',
-              page: 0
+              page: 1
             },
             {
               isin: 'NO3333333333',
               shortname: 'Covenants - FinancialEdge',
               link: 'https://www.fe.training/free-resources/financial-markets/covenants/',
-              page: 0
+              page: 1
             }
           ]
         })

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { CircularProgress, Link, Stack } from '@mui/material';
 import theme from '../../themes/theme';
-import { MessageBubbleProps } from '../../types/conversationTypes';
+import { MessageBubbleProps, Source } from '../../types/conversationTypes';
 import { BouncingLoader } from '../BouncingDotsLoader';
 import { BotMessageBubble, UserMessageBubble } from './Messagebubbles';
 
@@ -20,12 +20,12 @@ export const ConversationLayout = ({
   messages,
   responding,
   loading,
-  showPDF
+  handleShowPDF
 }: {
   messages: MessageBubbleProps[];
   responding: boolean;
   loading: boolean;
-  showPDF: (pdfUrl: string, initialPage: number) => void;
+  handleShowPDF: (source: Source) => void;
 }) => {
   const conversation = messages.map((message) => {
     if (responding && message.is_from_bot && message.text === '...') {
@@ -74,7 +74,7 @@ export const ConversationLayout = ({
                       <StyledLink
                         key={crypto.randomUUID()}
                         data-cy="source-link"
-                        href={`${source.link}#page=${source.page + 1}`}
+                        onClick={() => handleShowPDF(source)}
                         target="_blank"
                         rel="external"
                         onClick={() => showPDF(source.link, source.page + 1)}
@@ -109,13 +109,15 @@ export const ConversationLayout = ({
       <Stack
         sx={{
           padding: '20px',
-          width: '60vw',
+          minWidth: '100%',
           height: '60vh',
           gap: '10px',
           borderRadius: '10px',
           backgroundColor: 'white',
           overflowY: 'scroll',
-          overflowX: 'hidden'
+          overflowX: 'hidden',
+          display: 'flex',
+          flexWrap: 'wrap'
         }}
       >
         {loading ? (

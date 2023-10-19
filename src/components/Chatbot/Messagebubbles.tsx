@@ -7,7 +7,7 @@ interface BotmessageProps extends PaperProps {
 }
 
 export const UserMessageBubble = styled(Paper)(() => ({
-  maxWidth: '80%',
+  maxWidth: '60%',
   minHeight: 'fit-content',
   borderRadius: '10px 10px 0px 10px',
   textAlign: 'right',
