@@ -1,20 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import AddIcon from '@mui/icons-material/Add';
 import { Alert, AlertTitle, Stack, Typography } from '@mui/material';
-import { messageChatbot, Source } from '../../api/messageChatbot';
+import { loadConversation } from '../../api/loadConversation';
+import { messageChatbot } from '../../api/messageChatbot';
+import { newConversation } from '../../api/newConversation';
+import { MessageBubbleProps } from '../../types/conversationTypes';
 import { PrimaryButton } from '../Button/PrimaryButton';
-import { CenterPageContent } from '../CenterPageContent';
+import { CenterPageContent } from '../Layout/CenterPageContent';
 import { ConversationLayout } from './ConversationLayout';
 import { Inputfield } from './InputField';
 import { Box } from '@mui/system';
-
-export type Message = {
-  originBot: boolean;
-  text: string;
-  error?: boolean;
-  sources?: Source[];
-};
 
 const NewConversationButton = styled(PrimaryButton)(() => ({
   borderRadius: '20px',
@@ -24,60 +20,153 @@ const NewConversationButton = styled(PrimaryButton)(() => ({
 }));
 
 export const Chatbot = (props: {showPDF: (pdfUrl: string, initialPage: number) => void}) => {
-  const [conversation, setConversation] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<MessageBubbleProps[]>([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [responding, setResponding] = useState(false);
+  const [conversationCreated, setConversationCreated] = useState<string | null>(
+    null
+  );
+  const [errorMessage, setErrorMessage] = useState(
+    'Unknown error retrieving conversation'
+  );
 
-  const addMessageToConversation = async (message: Message) => {
-    setConversation([...conversation, message]);
+  const loadConversationFromBackend = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      setConversation([
-        ...conversation,
-        message,
-        { originBot: true, text: '...' }
-      ]);
-      await messageChatbot(message.text).then((response) => {
-        if (response.ok) {
-          setConversation([
-            ...conversation,
-            message,
-            {
-              originBot: true,
-              text: response.answer,
-              sources: response.sources
-            }
-          ]);
-        } else {
-          setConversation([
-            ...conversation,
-            message,
-            {
-              originBot: true,
-              text: response.detail,
-              error: true
-            }
-          ]);
-        }
-      });
-    } catch (error) {
-      setError(true);
+      const response = await loadConversation();
+      if (response.ok) {
+        setMessages(response.conversation.messages);
+        setConversationCreated(
+          new Date(response.conversation.created_at).toLocaleDateString()
+        );
+      } else {
+        setErrorMessage(response.detail);
+        setMessages([]);
+        setError(true);
+      }
     } finally {
       setLoading(false);
     }
   };
 
+  const addMessageToConversation = async (message: MessageBubbleProps) => {
+    setResponding(true);
+    setMessages([...messages, message]);
+    try {
+      {
+        !message.is_from_bot &&
+          setMessages([
+            ...messages,
+            {
+              is_from_bot: false,
+              text: message.text
+            },
+            {
+              is_from_bot: true,
+              text: '...',
+              sources: []
+            }
+          ]);
+      }
+      if (!message.is_from_bot) {
+        const response = await messageChatbot(message.text);
+        if (response.ok) {
+          setMessages([
+            ...messages,
+            {
+              is_from_bot: false,
+              text: message.text
+            },
+            {
+              is_from_bot: true,
+              text: response.text,
+              sources: response.sources
+            }
+          ]);
+        } else {
+          setMessages([
+            ...messages,
+            {
+              is_from_bot: false,
+              text: message.text
+            },
+            {
+              is_from_bot: true,
+              text: response.detail,
+              sources: [],
+              error: 'true'
+            }
+          ]);
+        }
+      }
+    } finally {
+      setResponding(false);
+    }
+  };
+
+  const handleNewConversation = async () => {
+    setMessages([]);
+    setLoading(true);
+    const response = await newConversation();
+    if (response.ok) {
+      setConversationCreated(
+        new Date(response.created_at).toLocaleDateString()
+      );
+    } else {
+      setConversationCreated(null);
+      setMessages([
+        {
+          is_from_bot: true,
+          text: response.detail,
+          sources: [],
+          error: 'true'
+        }
+      ]);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    loadConversationFromBackend();
+  }, []);
+
   return (
     <Box data-cy="chatbot" sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', height: '100%', paddingTop: '90px', paddingBottom: '40px'}}>
       <Stack
-        spacing={2}
         direction="row"
-        alignItems={'center'}
-        justifyContent={'flex-end'}
-        sx={{ marginBottom: '20px', width: '100%' }}
+        alignItems={'flex-end'}
+        justifyContent={'space-between'}
+        sx={{ margin: '15px', width: '62vw' }}
       >
+        <Typography
+          sx={{
+            color: '#5d5a5a',
+            marginLeft: '0px',
+            visibility: conversationCreated ? 'visible' : 'hidden'
+          }}
+        >
+          Conversation started at: {conversationCreated}
+        </Typography>
+
+        <Alert
+          severity="error"
+          color="error"
+          data-cy="chatbot-response-error"
+          onClose={() => setError(false)}
+          sx={{
+            minWidth: '20vw',
+            alignContent: 'center',
+            textAlign: 'center',
+            visibility: error ? 'visible' : 'hidden'
+          }}
+        >
+          <AlertTitle>{errorMessage}</AlertTitle>
+        </Alert>
+
         <NewConversationButton
-          onClick={() => setConversation([])}
+          data-cy="new-conversation-button"
+          onClick={() => handleNewConversation()}
           aria-label="new conversation"
         >
           <Typography sx={{ textTransform: 'initial' }}>
@@ -86,28 +175,17 @@ export const Chatbot = (props: {showPDF: (pdfUrl: string, initialPage: number) =
           <AddIcon />
         </NewConversationButton>
       </Stack>
-      <ConversationLayout loading={loading} conversation={conversation} showPDF={props.showPDF}/>
-      <Inputfield sendMessage={addMessageToConversation} />
-      {error && (
-        <Alert
-          severity="error"
-          color="error"
-          data-cy="chatbot-response-error"
-          onClose={() => setError(false)}
-          sx={{
-            visibility: error ? 'visible' : 'hidden',
-            position: 'fixed',
-            width: '20vw',
-            height: '4vh',
-            top: '10vh',
-            paddingTop: '10px',
-            alignContent: 'center',
-            textAlign: 'center'
-          }}
-        >
-          <AlertTitle>Unknown error</AlertTitle>
-        </Alert>
-      )}
+      <ConversationLayout
+        loading={loading}
+        responding={responding}
+        messages={messages}
+        showPDF={props.showPDF}
+      />
+      <Inputfield
+        loading={loading}
+        responding={responding}
+        sendMessage={addMessageToConversation}
+      />
     </Box>
   );
 };

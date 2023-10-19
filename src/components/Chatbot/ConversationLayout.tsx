@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
-import { Link, Paper, Stack } from '@mui/material';
+import { CircularProgress, Link, Stack } from '@mui/material';
 import theme from '../../themes/theme';
+import { MessageBubbleProps } from '../../types/conversationTypes';
 import { BouncingLoader } from '../BouncingDotsLoader';
-import { Message } from './Chatbot';
+import { BotMessageBubble, UserMessageBubble } from './Messagebubbles';
 
 const StyledLink = styled(Link)(() => ({
   color: `${theme.palette.primary.main}`,
@@ -15,101 +16,85 @@ const StyledLink = styled(Link)(() => ({
   }
 }));
 
-const MessageBubble = styled(Paper)(
-  ({ originBot, error }: { originBot: boolean; error: boolean }) => ({
-    maxWidth: '80%',
-    minHeight: 'fit-content',
-    borderRadius: originBot ? '10px 10px 10px 0px' : '10px 10px 0px 10px',
-    textAlign: originBot ? 'left' : 'right',
-    alignItems: 'flex-start',
-    gap: '5px',
-    margin: '2px',
-    padding: '0px 20px 0px 20px',
-    display: 'flex',
-    flexWrap: 'wrap',
-    flexDirection: 'column',
-    fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
-    fontSize: '16px',
-    fontWeight: 500,
-    backgroundColor: originBot ? '#e0e0e0' : '#b3d4fc',
-    alignSelf: originBot ? 'flex-start' : 'flex-end',
-    color: error ? 'red' : 'black',
-    textUnderlineOffset: '2px'
-  })
-);
-
 export const ConversationLayout = ({
-  conversation, showPDF, loading
+  messages,
+  responding,
+  loading,
+  showPDF
 }: {
-  conversation: Message[];
-  showPDF: (pdfUrl: string, initialPage: number) => void;
+  messages: MessageBubbleProps[];
+  responding: boolean;
   loading: boolean;
+  showPDF: (pdfUrl: string, initialPage: number) => void;
 }) => {
-
-/*  function show() {
-  showPDF();
-}*/
-
-  const messages = conversation.map((message) => {
-    if (loading && message.originBot && message.text === '...') {
+  const conversation = messages.map((message) => {
+    if (responding && message.is_from_bot && message.text === '...') {
       return (
-        <MessageBubble
+        <BotMessageBubble
           data-cy="chatbot-response-message"
-          originBot={message.originBot}
-          key={message.text}
-          error={false}
+          key={crypto.randomUUID()}
+          error="false"
         >
           <BouncingLoader>
             <div />
             <div />
             <div />
           </BouncingLoader>
-        </MessageBubble>
+        </BotMessageBubble>
       );
     } else {
       return (
-        <MessageBubble
-          data-cy={
-            message.originBot
-              ? 'chatbot-response-message'
-              : 'user-input-message'
-          }
-          originBot={message.originBot}
-          error={message.error ?? false}
-        >
-          <p>{message.text}</p>
-          {message.sources && (
-            <Stack
-              direction={'row'}
-              spacing={'10px'}
-              sx={{ flexWrap: 'wrap', marginBottom: '10px' }}
+        <>
+          {message.is_from_bot ? (
+            <BotMessageBubble
+              data-cy="chatbot-response-message"
+              key={crypto.randomUUID()}
+              error={message?.error?.toString() ?? 'false'}
             >
-              <p>Sources: </p>
-              <Stack
-                direction={'column'}
-                spacing={'5px'}
-                sx={{
-                  flexWrap: 'wrap',
-                  justifyContent: 'flex-start',
-                  marginBottom: 'px'
-                }}
-              >
-                {message.sources.map((source) => (
-                  <StyledLink
-                    data-cy="source-link"
-                    href={`${source.link}#page=${source.page}`}
-                    target="_blank"
-                    rel="external"
-                    onClick={() => showPDF(source.link, source.page)}
+              {message.text}
+              {message.sources.length > 0 && (
+                <Stack
+                  direction={'row'}
+                  spacing={'10px'}
+                  key={crypto.randomUUID()}
+                  sx={{ flexWrap: 'wrap', marginBottom: '' }}
+                >
+                  <p>Sources: </p>
+                  <Stack
+                    direction={'column'}
+                    spacing={'5px'}
+                    key={crypto.randomUUID()}
+                    sx={{
+                      flexWrap: 'wrap',
+                      justifyContent: 'flex-start',
+                      marginBottom: 'px'
+                    }}
                   >
-                    {source.isin} {source.shortname}
-                  </StyledLink>
-                ))}
-              </Stack>
-            </Stack>
+                    {message.sources.map((source) => (
+                      <StyledLink
+                        key={crypto.randomUUID()}
+                        data-cy="source-link"
+                        href={`${source.link}#page=${source.page + 1}`}
+                        target="_blank"
+                        rel="external"
+                        onClick={() => showPDF(source.link, source.page + 1)}
+                      >
+                        {source.isin} {source.shortname}
+                      </StyledLink>
+                    ))}
+                  </Stack>
+                </Stack>
+              )}
+            </BotMessageBubble>
+          ) : (
+            <UserMessageBubble
+              data-cy="user-input-message"
+              key={crypto.randomUUID()}
+            >
+              {message.text}
+            </UserMessageBubble>
           )}
-          {/*message.originBot && <button onClick={show}>Show source</button>*/}
-        </MessageBubble>
+        </>
       );
     }
   });
@@ -120,21 +105,29 @@ export const ConversationLayout = ({
   }, [conversation]);
 
   return (
-    <Stack
-      sx={{
-        padding: '20px',
-        width: '90%',
-        maxHeight:'60vh',
-        gap: '10px',
-        borderRadius: '10px',
-        backgroundColor: 'white',
-        overflowY: 'scroll',
-        overflowX: 'hidden',
-        flexGrow: 1
-      }}
-    >
-      {messages}
-      <div id="bottom" />
-    </Stack>
+    <>
+      <Stack
+        sx={{
+          padding: '20px',
+          width: '60vw',
+          height: '60vh',
+          gap: '10px',
+          borderRadius: '10px',
+          backgroundColor: 'white',
+          overflowY: 'scroll',
+          overflowX: 'hidden'
+        }}
+      >
+        {loading ? (
+          <CircularProgress
+            color="primary"
+            sx={{ display: 'flex', margin: 'auto', alignSelf: 'center' }}
+          />
+        ) : (
+          conversation
+        )}
+        <div id="bottom" />{' '}
+      </Stack>
+    </>
   );
 };

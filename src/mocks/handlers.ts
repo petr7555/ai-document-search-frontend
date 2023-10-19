@@ -40,7 +40,8 @@ export const handlers = [
       return res(
         ctx.status(200),
         ctx.json({
-          answer: { text: 'Hi, how are you?' }
+          text: 'Hi, how are you?',
+          sources: []
         })
       );
     }
@@ -49,17 +50,15 @@ export const handlers = [
       return res(
         ctx.status(200),
         ctx.json({
-          answer: {
-            text: 'Bonds are debt securities issued by governments, corporations, or other entities to raise capital. Investors who buy bonds effectively lend money to the issuer in exchange for periodic interest payments and the return of the bonds face value at maturity.',
-            sources: [
-              {
-                isin: 'NO1111111111',
-                shortname: 'Who should buy long-term bonds? - Cambridge',
-                link: 'https://www.nber.org/system/files/working_papers/w6801/w6801.pdf',
-                page: 7
-              }
-            ]
-          }
+          text: 'Bonds are debt securities issued by governments, corporations, or other entities to raise capital. Investors who buy bonds effectively lend money to the issuer in exchange for periodic interest payments and the return of the bonds face value at maturity.',
+          sources: [
+            {
+              isin: 'NO1111111111',
+              shortname: 'Who should buy long-term bonds? - Cambridge',
+              link: 'https://www.nber.org/system/files/working_papers/w6801/w6801.pdf',
+              page: 6
+            }
+          ]
         })
       );
     }
@@ -68,23 +67,21 @@ export const handlers = [
       return res(
         ctx.status(200),
         ctx.json({
-          answer: {
-            text: 'There are several types of financial covenants, and the specific ones used can vary depending on the type of loan and the lender.',
-            sources: [
-              {
-                isin: 'NO2222222222',
-                shortname: 'What is a covenant? - Investopedia',
-                link: 'https://www.investopedia.com/terms/c/covenant.asp',
-                page: 1
-              },
-              {
-                isin: 'NO3333333333',
-                shortname: 'Covenants - FinancialEdge',
-                link: 'https://www.fe.training/free-resources/financial-markets/covenants/',
-                page: 1
-              }
-            ]
-          }
+          text: 'There are several types of financial covenants, and the specific ones used can vary depending on the type of loan and the lender.',
+          sources: [
+            {
+              isin: 'NO2222222222',
+              shortname: 'What is a covenant? - Investopedia',
+              link: 'https://www.investopedia.com/terms/c/covenant.asp',
+              page: 0
+            },
+            {
+              isin: 'NO3333333333',
+              shortname: 'Covenants - FinancialEdge',
+              link: 'https://www.fe.training/free-resources/financial-markets/covenants/',
+              page: 0
+            }
+          ]
         })
       );
     }
@@ -93,6 +90,21 @@ export const handlers = [
       ctx.status(400),
       ctx.json({
         error: 'Unknown error'
+      })
+    );
+  }),
+  rest.get('*/conversation', async (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        created_at: '2021-09-10T10:00:00Z',
+        messages: [
+          {
+            is_from_bot: true,
+            text: 'Hi, how are you?',
+            sources: []
+          }
+        ]
       })
     );
   })

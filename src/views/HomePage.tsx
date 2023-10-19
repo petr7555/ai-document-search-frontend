@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { CenterPageContent } from '../components/CenterPageContent';
 import { Chatbot } from '../components/Chatbot/Chatbot';
+import { CenterPageContent } from '../components/Layout/CenterPageContent';
 import { Navbar } from '../components/Navbar/Navbar';
 import  { PDFDisplay } from '../components/PDFDisplay/PDFDisplay';
 import { Button, Stack } from '@mui/material';
@@ -31,7 +31,6 @@ export const HomePage = () => {
         <CenterPageContent>
           <Chatbot showPDF={handleDisplayPDF}/>
         </CenterPageContent>
-        {/* <PDFDisplay /> */}
         { showPDF && (
           <PDFDisplay close={handleHidePDF} pdfUrl={pdfUrl} initialPage={initialPage}/>
         )}
