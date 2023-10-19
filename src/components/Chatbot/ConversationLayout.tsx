@@ -77,7 +77,6 @@ export const ConversationLayout = ({
                         onClick={() => handleShowPDF(source)}
                         target="_blank"
                         rel="external"
-                        onClick={() => showPDF(source.link, source.page + 1)}
                       >
                         {source.isin} {source.shortname}
                       </StyledLink>

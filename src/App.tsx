@@ -4,7 +4,6 @@ import { AuthLayout } from './components/auth/AuthLayout';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { HomePage } from './views/HomePage';
 import { LoginPage } from './views/LoginPage';
-import { PDFPage } from './views/PDFPage';
 
 function App() {
   return (
@@ -18,12 +17,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/pdf-view"
-          element={
-              <PDFPage />
-          }
-        />
+
         <Route path="/login" element={<LoginPage />} />
       </Route>
     </Routes>
