@@ -15,6 +15,8 @@ import {
 import theme from '../../themes/theme';
 import { Source } from '../../types/conversationTypes';
 import { CustomNumberInput } from './CustomNumberInput';
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
 
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -53,9 +55,9 @@ const StyledIconButton = styled(IconButton)(() => ({
 }));
 
 export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
-  const [loading, setLoading] = useState(true);
-  const [numPages, setNumPages] = useState(5);
-  const [pageNumber, setPageNumber] = useState<number | undefined>(undefined);
+  //const [loading, setLoading] = useState(true);
+  const [numPages, setNumPages] = useState(0);
+  const [pageNumber, setPageNumber] = useState<number | undefined>(source.page);
   const [zoomLevel, setZoomLevel] = useState(1.0);
   const [searchText, setSearchText] = useState('');
 
@@ -67,7 +69,7 @@ export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
         placeholder="…"
         value={pageNumber}
         onChange={(event, val) => {
-          if (val == null || val < 1) {
+          if (val == null) {
             setPageNumber(source.page);
           } else if (val > numPages) {
             setPageNumber(numPages);
@@ -81,15 +83,17 @@ export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
     );
   }
 
-  const textRenderer = useCallback(
-    (textItem: string) => highlightPattern(textItem, searchText),
-    [searchText]
-  );
-
-  function onChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setSearchText(event.target.value);
+  function onDocumentLoadSuccess({ numPages } : {numPages : number | undefined}) {
+    if (numPages != null) {
+      setNumPages(numPages);
+    }
   }
 
+  const textRenderer = useCallback(
+    (textItem : any) => highlightPattern(textItem.str, searchText),
+    [searchText]
+  );
+  
   function increaseZoom() {
     setZoomLevel(zoomLevel * ZOOMRATE)
   }
@@ -125,7 +129,7 @@ export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
               <RemoveIcon />
             </StyledIconButton>
             <Typography sx={{ backgroundColor: '#2e2e2e' }}>
-              {zoomLevel * 100}%
+              {Math.ceil(zoomLevel * 100)}%
             </Typography>
             <StyledIconButton onClick={increaseZoom}>
               <AddIcon />
@@ -186,7 +190,7 @@ export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
           }}
         >
           {
-            <Document file={source.link}>
+            <Document file={source.link} onLoadSuccess={onDocumentLoadSuccess}>
               <Stack gap={3 * zoomLevel}>
                 {Array.from(new Array(numPages), (el, index) => (
                   <Page
@@ -200,10 +204,8 @@ export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
                     renderTextLayer={true}
                     renderAnnotationLayer={true}
                     scale={zoomLevel}
-                    /*
                     customTextRenderer={textRenderer}
-                  */
-                    width={window.innerWidth}
+                    width={window.innerWidth * 0.4}
                   />
                 ))}
               </Stack>
