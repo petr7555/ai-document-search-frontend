@@ -12,12 +12,12 @@ import {
   TextField,
   Typography
 } from '@mui/material';
+import { TextItem } from 'pdfjs-dist/types/src/display/api';
 import theme from '../../themes/theme';
 import { Source } from '../../types/conversationTypes';
 import { CustomNumberInput } from './CustomNumberInput';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
-import { TextItem } from 'pdfjs-dist/types/src/display/api';
 
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
