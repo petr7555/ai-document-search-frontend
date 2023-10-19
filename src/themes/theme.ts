@@ -17,7 +17,12 @@ export const theme = createTheme({
     info: {
       main: '#0288d1',
       dark: '#eaeaea'
-    }
+    },
+    success: {
+      main: '#fff'
+    },
+
+
   }
 });
 

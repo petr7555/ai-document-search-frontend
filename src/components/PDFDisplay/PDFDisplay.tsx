@@ -1,9 +1,18 @@
-import React, { useCallback, useState } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
+import styled from '@emotion/styled';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { Box, Button, Stack } from '@mui/material';
+import {
+  Box,
+  Button,
+  IconButton,
+  Stack,
+  TextField,
+  Typography
+} from '@mui/material';
+import theme from '../../themes/theme';
 import { Source } from '../../types/conversationTypes';
 import { CustomNumberInput } from './CustomNumberInput';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
@@ -25,11 +34,33 @@ interface PDFDisplayProps {
   setShowPDF: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+const StyledPDFDisplay = styled(Stack)(() => ({
+  width: '100%',
+  height: '100%',
+  margin: 'auto',
+  backgroundColor: '#3d3d3d',
+  display: 'flex',
+  flexDirection: 'column',
+  flexGrow: 1,
+  justifyContent: 'center'
+}));
+
+const StyledIconButton = styled(IconButton)(() => ({
+  color: `${theme.palette.secondary.light}`,
+  backgroundColor: 'white',
+  borderRadius: '100%',
+  padding: '5px',
+  '&:hover': {
+    backgroundColor: '#cecece'
+  }
+}));
+
 export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
   const [loading, setLoading] = useState(true);
-  const [numPages, setNumPages] = useState(0);
+  const [numPages, setNumPages] = useState(5);
   const [pageNumber, setPageNumber] = useState<number | undefined>(undefined);
   const [zoomLevel, setZoomLevel] = useState(1.0);
+  const [searchText, setSearchText] = useState('');
 
   const ZOOMRATE = 1.5;
 
@@ -53,8 +84,6 @@ export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
     );
   };
 
-  const [searchText, setSearchText] = useState('');
-
   const textRenderer = useCallback(
     (textItem: string) => highlightPattern(textItem, searchText),
     [searchText]
@@ -74,79 +103,79 @@ export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
 
   return (
     <>
-      <Stack>
+      <StyledPDFDisplay>
         <Stack
           direction="row"
           spacing={4}
           sx={{
-            width: '60vw',
-            height: '7vh',
+            heigth: 'fit-content',
+            padding: '12px',
             backgroundColor: '#2e2e2e',
             display: 'flex',
-            justifyContent: 'center',
+            justifyContent: 'space-around',
             alignItems: 'center'
           }}
         >
           <Stack
             direction="row"
-            spacing={0.5}
+            spacing={1}
             sx={{
-              display: 'flex',
               justifyContent: 'center',
               alignItems: 'center'
             }}
           >
-            <button
-              children={<RemoveIcon />}
-              type="button"
-              onClick={decreaseZoom}
-            />
-            <button
-              color="#e4e4e4"
-              children={<AddIcon sx={{ color: 'black' }} />}
-              type="button"
-              onClick={increaseZoom}
-            />
+            <StyledIconButton onClick={decreaseZoom}>
+              <RemoveIcon />
+            </StyledIconButton>
+            <Typography sx={{ backgroundColor: '#2e2e2e' }}>
+              {zoomLevel * 100}%
+            </Typography>
+            <StyledIconButton onClick={increaseZoom}>
+              <AddIcon />
+            </StyledIconButton>
           </Stack>
           <Stack
             direction="row"
-            spacing={0.5}
+            spacing={2}
             sx={{
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center'
             }}
           >
-            <NumberInputBasic />
-            <Box
-              sx={{
-                backgroundColor: '#e4e4e4',
-                padding: '6px',
-                border: 1
-              }}
-            >
-              of {numPages || '--'}
-            </Box>
+            {NumberInputBasic()}
+
+            <Typography> of {numPages || '--'} pages</Typography>
           </Stack>
+
+          <TextField
+            id="outlined-basic"
+            placeholder="Search"
+            variant="outlined"
+            value={searchText}
+            size="small"
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              setSearchText(event.target.value);
+            }}
+            color="secondary"
+            sx={{
+              backgroundColor: '#e4e4e4',
+              borderRadius: '4px'
+            }}
+          />
           <Button
             children={<CloseIcon />}
             type="button"
             onClick={() => setShowPDF(false)}
             sx={{
-              backgroundColor: 'red',
-              color: 'white',
-              marginLeft: 'auto'
+              backgroundColor: 'white',
+              color: theme.palette.secondary.light,
+              marginLeft: 'auto',
+              '&:hover': {
+                backgroundColor: '#cecece'
+              }
             }}
           />
-          <div>
-            <label htmlFor="search">Search:</label>
-            <input
-              type="search"
-              id="search"
-              value={searchText}
-              onChange={onChange}
-            />
-          </div>
         </Stack>
         <Box
           sx={{
@@ -176,15 +205,15 @@ export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
                     scale={zoomLevel}
                     /*
                     customTextRenderer={textRenderer}
-                    */
-                    width={0.4}
+                  */
+                    width={window.innerWidth}
                   />
                 ))}
               </Stack>
             </Document>
           }
         </Box>
-      </Stack>
+      </StyledPDFDisplay>
     </>
   );
 }

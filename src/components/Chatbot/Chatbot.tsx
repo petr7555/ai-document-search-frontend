@@ -15,8 +15,20 @@ import { Inputfield } from './InputField';
 const NewConversationButton = styled(PrimaryButton)(() => ({
   borderRadius: '20px',
   color: 'white',
+  marginBottom: '4px',
   gap: '5px',
-  padding: '10px 10px 10px 15px'
+  flexWrap: 'nowrap',
+  padding: '10px 10px 10px 15px',
+  minWidth: 'fit-content',
+  '@media (max-width: 600px)': {
+    fontSize: '0.75rem'
+  }
+}));
+
+const ChatbotContainer = styled(Stack)(() => ({
+  width: '100%',
+  margin: 'auto',
+  padding: '40px'
 }));
 
 export const Chatbot = () => {
@@ -140,50 +152,66 @@ export const Chatbot = () => {
 
   return (
     <CenterPageContent>
-      <Stack
-        direction="row"
-        alignItems={'flex-end'}
-        justifyContent={'space-between'}
-        sx={{ margin: '15px', width: '62vw' }}
-      >
-        <Typography
-          sx={{
-            color: '#5d5a5a',
-            marginLeft: '0px',
-            visibility: conversationCreated ? 'visible' : 'hidden'
-          }}
-        >
-          Conversation started at: {conversationCreated}
-        </Typography>
+      <Stack direction={'row'} sx={{ height: '100%' }}>
+        <ChatbotContainer direction={'column'} alignItems={'center'}>
+          <Stack
+            direction="row"
+            alignItems={'flex-end'}
+            justifyContent={'space-between'}
+            sx={{ marginBottom: '4px', width: '100%' }}
+          >
+            <Typography
+              sx={{
+                color: '#5d5a5a',
+                marginLeft: '0px',
+                visibility: conversationCreated ? 'visible' : 'hidden',
+                fontSize: {
+                  xs: '0.5rem',
+                  sm: '0.75rem',
+                  md: '1rem'
+                }
+              }}
+            >
+              Conversation started at: {conversationCreated}
+            </Typography>
 
-        <Alert
-          severity="error"
-          color="error"
-          data-cy="chatbot-response-error"
-          onClose={() => setError(false)}
-          sx={{
-            minWidth: '20vw',
-            alignContent: 'center',
-            textAlign: 'center',
-            visibility: error ? 'visible' : 'hidden'
-          }}
-        >
-          <AlertTitle>{errorMessage}</AlertTitle>
-        </Alert>
+            <Alert
+              severity="error"
+              color="error"
+              data-cy="chatbot-response-error"
+              onClose={() => setError(false)}
+              sx={{
+                minWidth: '20vw',
+                alignContent: 'center',
+                textAlign: 'center',
+                visibility: error ? 'visible' : 'hidden'
+              }}
+            >
+              <AlertTitle>{errorMessage}</AlertTitle>
+            </Alert>
 
-        <NewConversationButton
-          data-cy="new-conversation-button"
-          onClick={() => handleNewConversation()}
-          aria-label="new conversation"
-        >
-          <Typography sx={{ textTransform: 'initial' }}>
-            New conversation
-          </Typography>
-          <AddIcon />
-        </NewConversationButton>
-      </Stack>
-      <Stack direction={'row'} >
-        <Stack direction={'column'} alignItems={'center'}>
+            <NewConversationButton
+              data-cy="new-conversation-button"
+              onClick={() => handleNewConversation()}
+              aria-label="new conversation"
+            >
+              <Typography
+                sx={{
+                  textTransform: 'initial',
+                  whiteSpace: 'nowrap',
+                  fontSize: {
+                    xs: '0.5rem',
+                    sm: '0.75rem',
+                    md: '1rem'
+                  }
+                }}
+              >
+                New conversation
+              </Typography>
+              <AddIcon />
+            </NewConversationButton>
+          </Stack>
+
           <ConversationLayout
             loading={loading}
             responding={responding}
@@ -195,7 +223,7 @@ export const Chatbot = () => {
             responding={responding}
             sendMessage={addMessageToConversation}
           />
-        </Stack>
+        </ChatbotContainer>
         {showPdf && chosenSource && (
           <PDFDisplay source={chosenSource} setShowPDF={setShowPdf} />
         )}

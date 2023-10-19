@@ -108,13 +108,15 @@ export const ConversationLayout = ({
       <Stack
         sx={{
           padding: '20px',
-          width: '60vw',
+          minWidth: '100%',
           height: '60vh',
           gap: '10px',
           borderRadius: '10px',
           backgroundColor: 'white',
           overflowY: 'scroll',
-          overflowX: 'hidden'
+          overflowX: 'hidden',
+          display: 'flex',
+          flexWrap: 'wrap'
         }}
       >
         {loading ? (
