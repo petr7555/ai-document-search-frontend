@@ -11,19 +11,17 @@ describe('Chatbot page', () => {
     cy.url().should('include', '/');
     cy.get('[data-cy="chatbot"]').should('exist');
   });
-
   it('Send message to chatbot and get response', () => {
     cy.get('[data-cy="chatbot"]').should('exist');
     cy.get('[data-cy="chatbot-input-field"]').type('Hello');
     cy.get('[data-cy="chatbot-send-button"]').click();
-    cy.get('[data-cy="user-input-message"]').should('exist');
+    cy.contains('Hello').should('exist');
     cy.get('[data-cy="chatbot-response-message"]').should('exist');
   });
   it('Try to send empty input to chatbot and get error', () => {
     cy.get('[data-cy="chatbot"]').should('exist');
-    cy.get('[data-cy="chatbot-input-field"]').type(' ');
-    cy.get('[data-cy="chatbot-send-button"]').click();
-    cy.get("[data-cy='chatbot-input-error']").should('exist');
+    cy.get('[data-cy="chatbot-input-field"]').type('  ');
+    cy.get('[data-cy="chatbot-send-button"]').should('be.disabled');
   });
   it('Send message and go to link', () => {
     cy.get('[data-cy="chatbot"]').should('exist');
@@ -46,7 +44,7 @@ describe('Chatbot page', () => {
     cy.get('[data-cy="source-link"]').should(
       'have.attr',
       'href',
-      'https://www.nber.org/system/files/working_papers/w6801/w6801.pdf'
+      'https://www.nber.org/system/files/working_papers/w6801/w6801.pdf#page=7'
     );
   });
   it('Get several sources', () => {
@@ -68,7 +66,7 @@ describe('Chatbot page', () => {
       .should(
         'have.attr',
         'href',
-        'https://www.investopedia.com/terms/c/covenant.asp'
+        'https://www.investopedia.com/terms/c/covenant.asp#page=1'
       );
 
     cy.contains('NO3333333333 Covenants - FinancialEdge')
@@ -76,7 +74,34 @@ describe('Chatbot page', () => {
       .should(
         'have.attr',
         'href',
-        'https://www.fe.training/free-resources/financial-markets/covenants/'
+        'https://www.fe.training/free-resources/financial-markets/covenants/#page=1'
       );
+  });
+  it('Start new conversation', () => {
+    cy.get('[data-cy="chatbot-input-field"]').type(
+      'Hi, what are some financial covenants?'
+    );
+    cy.get('[data-cy="chatbot-send-button"]').click();
+    cy.get('[data-cy="user-input-message"]').should(
+      'include.text',
+      'Hi, what are some financial covenants?'
+    );
+
+    cy.get('[data-cy="new-conversation-button"]').click();
+    cy.contains('Hi, what are some financial covenants?').should('not.exist');
+  });
+
+  it('Login and receive error message upon chatbot connection error', () => {
+    cy.intercept('GET', '/conversation', {
+      statusCode: 400,
+      body: {
+        error: 'Unknown error retrieving conversation'
+      }
+    }).as('getConversation');
+
+    cy.get('[data-cy="chatbot-response-error"]').should(
+      'include.text',
+      'Unknown error retrieving conversation'
+    );
   });
 });

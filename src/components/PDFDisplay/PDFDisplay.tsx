@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Box, Button, Stack } from '@mui/material';
+import { Source } from '../../types/conversationTypes';
 import { CustomNumberInput } from './CustomNumberInput';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
@@ -19,17 +20,17 @@ function highlightPattern(text: string, pattern: string) {
     (value) => `<mark>${value}</mark>`
   );
 }
+interface PDFDisplayProps {
+  source: Source;
+  setShowPDF: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-export function PDFDisplay(props: {
-  close: () => void;
-  pdfUrl: string;
-  initialPage: number;
-}) {
+export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
+  const [loading, setLoading] = useState(true);
   const [numPages, setNumPages] = useState(0);
-  const [pageNumber, setPageNumber] = React.useState<number | undefined>();
+  const [pageNumber, setPageNumber] = useState<number | undefined>(undefined);
   const [zoomLevel, setZoomLevel] = useState(1.0);
-  //const [fileURL, setFileURL] = useState(props.pdfUrl);
-  const [nativeWidth, setNativeWidth] = useState(0);
+
   const ZOOMRATE = 1.5;
 
   const NumberInputBasic = () => {
@@ -39,7 +40,7 @@ export function PDFDisplay(props: {
         value={pageNumber}
         onChange={(event, val) => {
           if (val == null || val < 1) {
-            setPageNumber(props.initialPage);
+            setPageNumber(source.page);
           } else if (val > numPages) {
             setPageNumber(numPages);
           } else if (val < 1) {
@@ -52,22 +53,14 @@ export function PDFDisplay(props: {
     );
   };
 
-  async function onDocumentLoadSuccess(pdfObject: any) {
-    const firstPage = await pdfObject.getPage(1);
-    setNativeWidth(firstPage.view[2]);
-    setNumPages(pdfObject.numPages);
-    setPageNumber(props.initialPage);
-    setZoomLevel(1.0);
-  }
-
   const [searchText, setSearchText] = useState('');
 
-  const textRenderer = React.useCallback(
-    (textItem: any) => highlightPattern(textItem.str, searchText),
+  const textRenderer = useCallback(
+    (textItem: string) => highlightPattern(textItem, searchText),
     [searchText]
   );
 
-  function onChange(event: any) {
+  function onChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchText(event.target.value);
   }
 
@@ -77,10 +70,6 @@ export function PDFDisplay(props: {
 
   function decreaseZoom() {
     setZoomLevel(zoomLevel / ZOOMRATE);
-  }
-
-  function hidePDF() {
-    props.close();
   }
 
   return (
@@ -142,7 +131,7 @@ export function PDFDisplay(props: {
           <Button
             children={<CloseIcon />}
             type="button"
-            onClick={hidePDF}
+            onClick={() => setShowPDF(false)}
             sx={{
               backgroundColor: 'red',
               color: 'white',
@@ -171,7 +160,7 @@ export function PDFDisplay(props: {
           }}
         >
           {
-            <Document file={props.pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
+            <Document file={source.link}>
               <Stack gap={3 * zoomLevel}>
                 {Array.from(new Array(numPages), (el, index) => (
                   <Page
@@ -185,8 +174,10 @@ export function PDFDisplay(props: {
                     renderTextLayer={true}
                     renderAnnotationLayer={true}
                     scale={zoomLevel}
+                    /*
                     customTextRenderer={textRenderer}
-                    width={nativeWidth}
+                    */
+                    width={0.4}
                   />
                 ))}
               </Stack>
