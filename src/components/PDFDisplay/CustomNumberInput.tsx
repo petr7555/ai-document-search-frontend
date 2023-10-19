@@ -1,14 +1,14 @@
 import * as React from 'react';
 import {
-  Unstable_NumberInput as NumberInput,
-  NumberInputProps,
   numberInputClasses,
+  NumberInputProps,
+  Unstable_NumberInput as NumberInput
 } from '@mui/base/Unstable_NumberInput';
 import { styled } from '@mui/system';
 
 export const CustomNumberInput = React.forwardRef(function CustomNumberInput(
   props: NumberInputProps,
-  ref: React.ForwardedRef<HTMLDivElement>,
+  ref: React.ForwardedRef<HTMLDivElement>
 ) {
   return (
     <NumberInput
@@ -16,15 +16,15 @@ export const CustomNumberInput = React.forwardRef(function CustomNumberInput(
         root: StyledInputRoot,
         input: StyledInputElement,
         incrementButton: StyledButton,
-        decrementButton: StyledButton,
+        decrementButton: StyledButton
       }}
       slotProps={{
         incrementButton: {
-          children: '▸',
+          children: '▸'
         },
         decrementButton: {
-          children: '◂',
-        },
+          children: '◂'
+        }
       }}
       {...props}
       ref={ref}
@@ -37,7 +37,7 @@ const blue = {
   200: '#80BFFF',
   400: '#3399FF',
   500: '#007FFF',
-  600: '#0072E5',
+  600: '#0072E5'
 };
 
 const grey = {
@@ -50,7 +50,7 @@ const grey = {
   600: '#6F7E8C',
   700: '#3E5060',
   800: '#2D3843',
-  900: '#1A2027',
+  900: '#1A2027'
 };
 
 const StyledInputRoot = styled('div')(
@@ -61,7 +61,9 @@ const StyledInputRoot = styled('div')(
   color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
   background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
   border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-  box-shadow: 0px 2px 2px ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
+  box-shadow: 0px 2px 2px ${
+    theme.palette.mode === 'dark' ? grey[900] : grey[50]
+  };
   display: grid;
   grid-template-columns: 1fr 40px 1fr;
   grid-template-rows: 1fr;
@@ -70,7 +72,9 @@ const StyledInputRoot = styled('div')(
 
   &.${numberInputClasses.focused} {
     border-color: ${blue[400]};
-    box-shadow: 0 0 0 3px ${theme.palette.mode === 'dark' ? blue[500] : blue[200]};
+    box-shadow: 0 0 0 3px ${
+      theme.palette.mode === 'dark' ? blue[500] : blue[200]
+    };
   }
 
   &:hover {
@@ -81,7 +85,7 @@ const StyledInputRoot = styled('div')(
   &:focus-visible {
     outline: 0;
   }
-`,
+`
 );
 
 const StyledInputElement = styled('input')(
@@ -98,7 +102,7 @@ const StyledInputElement = styled('input')(
   padding: 8px 12px;
   outline: 0;
   width: 50%;
-`,
+`
 );
 
 const StyledButton = styled('button')(
@@ -137,5 +141,5 @@ const StyledButton = styled('button')(
     grid-column: 1;
     grid-row: 1;
   }
-`,
+`
 );
