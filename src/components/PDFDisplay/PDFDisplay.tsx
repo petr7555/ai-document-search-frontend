@@ -17,6 +17,7 @@ import { Source } from '../../types/conversationTypes';
 import { CustomNumberInput } from './CustomNumberInput';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
+import { TextItem } from 'pdfjs-dist/types/src/display/api';
 
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -90,7 +91,7 @@ export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
   }
 
   const textRenderer = useCallback(
-    (textItem : any) => highlightPattern(textItem.str, searchText),
+    (textItem : TextItem) => highlightPattern(textItem.str, searchText),
     [searchText]
   );
   
