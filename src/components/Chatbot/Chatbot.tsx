@@ -211,7 +211,6 @@ export const Chatbot = () => {
               <AddIcon />
             </NewConversationButton>
           </Stack>
-
           <ConversationLayout
             loading={loading}
             responding={responding}
