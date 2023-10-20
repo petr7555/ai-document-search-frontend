@@ -8,8 +8,8 @@
     "test": "react-scripts test",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run && cypress run --component",
-    "lint": "eslint . && prettier --check .",
-    "lint:fix": "eslint . --fix && prettier --write .",
+    "lint": "eslint . && prettier --check \".\"",
+    "lint:fix": "eslint . --fix && prettier --write \".\"",
     "eject": "react-scripts eject"
   },
   "dependencies": {
