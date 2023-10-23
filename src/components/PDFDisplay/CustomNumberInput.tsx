@@ -55,6 +55,7 @@ const grey = {
 
 const StyledInputRoot = styled('div')(
   ({ theme }) => `
+  data-cy: "number-input-component-root"
   font-family: IBM Plex Sans, sans-serif;
   font-weight: 400;
   border-radius: 8px;
@@ -65,7 +66,7 @@ const StyledInputRoot = styled('div')(
     theme.palette.mode === 'dark' ? grey[900] : grey[50]
   };
   display: grid;
-  grid-template-columns: 1fr 40px 1fr;
+  grid-template-columns: 19px 40px 19px;
   grid-template-rows: 1fr;
   overflow: hidden;
 
@@ -90,6 +91,7 @@ const StyledInputRoot = styled('div')(
 
 const StyledInputElement = styled('input')(
   ({ theme }) => `
+  data-cy: number-input-component-input
   font-size: 0.875rem;
   font-family: inherit;
   font-weight: 400;
