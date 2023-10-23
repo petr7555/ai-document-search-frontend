@@ -5,9 +5,9 @@
     "es6": true
   },
   "parserOptions": {
+    "ecmaVersion": 2020,
     "sourceType": "module"
   },
-
   "plugins": [
     "unused-imports",
     "simple-import-sort",
@@ -95,5 +95,6 @@
       }
     ],
     "react/no-unused-prop-types": "warn"
-  }
+  },
+  "ignorePatterns": ["node_modules/", "build/"]
 }
