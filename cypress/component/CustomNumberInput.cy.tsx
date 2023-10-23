@@ -1,6 +1,4 @@
-import { assertEmptyStatement } from '@babel/types';
 import { CustomNumberInput } from '../../src/components/PDFDisplay/CustomNumberInput';
-import React from 'react';
 
 describe('CustomNumberInput component', () => {
   it('CustomNumberInput component test', () => {

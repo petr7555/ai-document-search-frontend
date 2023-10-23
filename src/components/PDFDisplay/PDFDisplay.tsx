@@ -68,6 +68,7 @@ export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
   const NumberInputBasic = () => {
     return (
       <CustomNumberInput
+        data-cy= "number-input-component"
         placeholder="…"
         value={pageNumber}
         onChange={(event, val) => {
@@ -131,13 +132,13 @@ export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
               alignItems: 'center'
             }}
           >
-            <StyledIconButton onClick={decreaseZoom}>
+            <StyledIconButton data-cy="decrease-zoom-button" onClick={decreaseZoom}>
               <RemoveIcon />
             </StyledIconButton>
-            <Typography sx={{ backgroundColor: '#2e2e2e' }}>
+            <Typography data-cy="zoom-level-display" sx={{ backgroundColor: '#2e2e2e' }}>
               {Math.ceil(zoomLevel * 100)}%
             </Typography>
-            <StyledIconButton onClick={increaseZoom}>
+            <StyledIconButton data-cy="increase-zoom-button" onClick={increaseZoom}>
               <AddIcon />
             </StyledIconButton>
           </Stack>
@@ -156,7 +157,7 @@ export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
           </Stack>
 
           <TextField
-            id="outlined-basic"
+            data-cy="text-search-field"
             placeholder="Search"
             variant="outlined"
             value={searchText}
@@ -171,6 +172,7 @@ export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
             }}
           />
           <Button
+            data-cy="close-button"
             children={<CloseIcon />}
             type="button"
             onClick={() => setShowPDF(false)}
@@ -196,11 +198,12 @@ export function PDFDisplay({ source, setShowPDF }: PDFDisplayProps) {
           }}
         >
           {
-            <Document file={source.link} onLoadSuccess={onDocumentLoadSuccess}>
+            <Document data-cy="pdf-document" file={source.link} onLoadSuccess={onDocumentLoadSuccess}>
               <Stack gap={3 * zoomLevel}>
                 {Array.from(new Array(numPages), (el, index) => (
                   <Page
-                    key={`page_${index + 1}`}
+                  data-cy={`pdf-page_${index + 1}`}
+                  key={`page_${index + 1}`}
                     inputRef={(ref) => {
                       if (ref && pageNumber === index + 1) {
                         ref.scrollIntoView();
