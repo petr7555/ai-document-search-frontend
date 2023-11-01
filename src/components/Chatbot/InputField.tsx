@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import TuneIcon from '@mui/icons-material/Tune';
+import { Tooltip } from '@mui/material';
 import Divider from '@mui/material/Divider';
+import Fade from '@mui/material/Fade';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
 import Paper from '@mui/material/Paper';
@@ -10,11 +12,13 @@ import { Message } from '../../types/conversationTypes';
 export const Inputfield = ({
   sendMessage,
   loading,
-  responding
+  responding,
+  handleFiltering
 }: {
   sendMessage: (message: Message) => void;
   loading: boolean;
   responding: boolean;
+  handleFiltering: () => void;
 }) => {
   const [input, setInput] = useState('');
 
@@ -47,9 +51,22 @@ export const Inputfield = ({
           marginTop: '20px'
         }}
       >
-        <IconButton sx={{ p: '10px' }} aria-label="filter">
-          <TuneIcon />
-        </IconButton>
+        <Tooltip
+          placement="top"
+          TransitionComponent={Fade}
+          TransitionProps={{ timeout: 600 }}
+          title="Filter results"
+          sx={{ fontSize: '5rem' }}
+        >
+          <IconButton
+            color="primary"
+            onClick={handleFiltering}
+            sx={{ p: '10px' }}
+            aria-label="filter"
+          >
+            <TuneIcon />
+          </IconButton>
+        </Tooltip>
         <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
         <InputBase
           sx={{ ml: 1, flex: 1 }}

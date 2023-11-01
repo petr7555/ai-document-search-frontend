@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { AnswerFromChatbot, Source } from '../types/conversationTypes';
+import { Filters } from '../types/filterTypes';
 
 type ChatbotResponse =
   | {
@@ -13,9 +14,10 @@ type ChatbotResponse =
     };
 
 export const messageChatbot = async (
-  message: string
+  message: string,
+  filters: Filters[]
 ): Promise<ChatbotResponse> => {
-  const data = { question: message };
+  const data = { question: message, filters: filters };
   try {
     const token = localStorage.getItem('token');
     if (token) {

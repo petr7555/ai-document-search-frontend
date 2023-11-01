@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import AddIcon from '@mui/icons-material/Add';
 import { Alert, AlertTitle, Stack, Typography } from '@mui/material';
+import { getFilters } from '../../api/getFilters';
 import { loadConversation } from '../../api/loadConversation';
 import { messageChatbot } from '../../api/messageChatbot';
 import { newConversation } from '../../api/newConversation';
 import { MessageBubbleProps } from '../../types/conversationTypes';
+import { AvailableFilterOptions, Filters } from '../../types/filterTypes';
 import { PrimaryButton } from '../Button/PrimaryButton';
+import { FilteringModal } from '../Filtering/FilteringModal';
 import { CenterPageContent } from '../Layout/CenterPageContent';
 import { ConversationLayout } from './ConversationLayout';
 import { Inputfield } from './InputField';
@@ -29,6 +32,46 @@ export const Chatbot = () => {
   const [errorMessage, setErrorMessage] = useState(
     'Unknown error retrieving conversation'
   );
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<Filters[]>([
+    {
+      property_name: 'isin',
+      values: []
+    },
+    {
+      property_name: 'shortname',
+      values: []
+    }
+  ]);
+
+  const [filterOptions, setFilterOptions] = useState<AvailableFilterOptions>({
+    isin: [],
+    shortname: []
+  });
+
+  const loadFilters = async () => {
+    const response = await getFilters();
+    if (response.ok) {
+      setFilterOptions({
+        isin:
+          response.filters.isin && response.filters.isin.map((isin) => isin),
+        shortname:
+          response.filters.shortname &&
+          response.filters.shortname.map((shortname) => shortname)
+      });
+    } else {
+      setErrorMessage(response.detail);
+      setError(true);
+    }
+  };
+
+  const handleFilterButtonClick = () => {
+    if (filterModalOpen) {
+      setFilterModalOpen(false);
+    } else {
+      setFilterModalOpen(true);
+    }
+  };
 
   const loadConversationFromBackend = async () => {
     setLoading(true);
@@ -69,7 +112,7 @@ export const Chatbot = () => {
           ]);
       }
       if (!message.is_from_bot) {
-        const response = await messageChatbot(message.text);
+        const response = await messageChatbot(message.text, activeFilters);
         if (response.ok) {
           setMessages([
             ...messages,
@@ -128,6 +171,7 @@ export const Chatbot = () => {
 
   useEffect(() => {
     loadConversationFromBackend();
+    loadFilters();
   }, []);
 
   return (
@@ -179,7 +223,15 @@ export const Chatbot = () => {
         responding={responding}
         messages={messages}
       />
+      <FilteringModal
+        open={filterModalOpen}
+        handleClose={() => setFilterModalOpen(false)}
+        filterOptions={filterOptions}
+        setActiveFilters={setActiveFilters}
+        activeFilters={activeFilters}
+      />
       <Inputfield
+        handleFiltering={handleFilterButtonClick}
         loading={loading}
         responding={responding}
         sendMessage={addMessageToConversation}
