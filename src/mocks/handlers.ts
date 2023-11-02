@@ -1,4 +1,5 @@
 import { rest } from 'msw';
+import { Filters } from '../types/filterTypes';
 
 export const handlers = [
   rest.post('*/auth/token', (req, res, ctx) => {
@@ -26,7 +27,8 @@ export const handlers = [
   }),
 
   rest.post('*/chatbot', async (req, res, ctx) => {
-    const { question }: { question: string } = await req.json();
+    const { question, filters }: { question: string; filters: Filters } =
+      await req.json();
 
     if (req.headers.get('authorization') != 'Bearer 123') {
       return res(
@@ -85,6 +87,22 @@ export const handlers = [
         })
       );
     }
+    if (filters.values.includes('NO1111111111') || question === 'Hi') {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          text: 'Here are some bonds',
+          sources: [
+            {
+              isin: 'NO1111111111',
+              shortname: 'Bond 2021',
+              link: 'https://www.nber.org/system/files/working_papers/w6801/w6801.pdf',
+              page: 6
+            }
+          ]
+        })
+      );
+    }
 
     return res(
       ctx.status(400),
@@ -105,6 +123,15 @@ export const handlers = [
             sources: []
           }
         ]
+      })
+    );
+  }),
+  rest.get('*/filter', async (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        isin: ['NO1111111111', 'NO2222222222'],
+        shortname: ['Bond 2021', 'Bond 2022']
       })
     );
   })

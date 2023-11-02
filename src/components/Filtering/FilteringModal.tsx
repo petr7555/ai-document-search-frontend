@@ -40,6 +40,7 @@ export const FilteringModal = ({
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      data-cy="filtering-modal"
     >
       <Stack
         spacing={2}
@@ -64,7 +65,7 @@ export const FilteringModal = ({
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Filtering Options
             </Typography>
-            <IconButton onClick={handleClose}>
+            <IconButton data-cy="exit-modal-button" onClick={handleClose}>
               <CloseOutlinedIcon />
             </IconButton>
           </Stack>

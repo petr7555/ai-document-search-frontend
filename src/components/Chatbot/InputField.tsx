@@ -59,6 +59,7 @@ export const Inputfield = ({
           sx={{ fontSize: '5rem' }}
         >
           <IconButton
+            data-cy="chatbot-filter-button"
             color="primary"
             onClick={handleFiltering}
             sx={{ p: '10px' }}
