@@ -39,7 +39,12 @@ export default function SearchFilter({
       filterSelectedOptions
       data-cy="filtering-autocomplete"
       renderInput={(params) => (
-        <TextField data-cy="filtering-searchfield" {...params} label={label} placeholder={label} />
+        <TextField
+          data-cy="filtering-searchfield"
+          {...params}
+          label={label}
+          placeholder={label}
+        />
       )}
     />
   );
