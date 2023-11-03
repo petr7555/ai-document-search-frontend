@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { useAuth } from '../../hooks/useAuth';
 import theme from '../../themes/theme';
+import { APP_NAME } from '../../utils/constants';
 
 const StyledAppBar = styled(AppBar)(() => ({
   backgroundColor: theme.palette.secondary.main,
@@ -66,7 +67,7 @@ export const Navbar = () => {
         <Toolbar>
           <IconButton>
             <Typography color={'white'} variant="h5">
-              Stamdata
+              {APP_NAME}
             </Typography>
           </IconButton>
         </Toolbar>

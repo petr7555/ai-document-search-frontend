@@ -46,7 +46,7 @@ export default function SearchFilter({
           <Checkbox
             icon={icon}
             checkedIcon={checkedIcon}
-            style={{ marginRight: 8 }}
+            sx={{ marginRight: 8 }}
             checked={selected}
           />
           {option}

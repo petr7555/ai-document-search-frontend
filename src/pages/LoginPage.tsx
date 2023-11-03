@@ -13,8 +13,11 @@ import { PrimaryButton } from '../components/Button/PrimaryButton';
 import { CenterPageContent } from '../components/Layout/CenterPageContent';
 import { Navbar } from '../components/Navbar/Navbar';
 import { useAuth } from '../hooks/useAuth';
+import usePageTitle from '../hooks/usePageTitle';
 
 export const LoginPage = () => {
+  usePageTitle('Login');
+
   const auth = useAuth();
 
   const [username, setUsername] = useState('');
