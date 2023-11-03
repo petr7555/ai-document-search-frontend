@@ -1,9 +1,19 @@
-export type Filters = {
-  property_name: 'isin' | 'shortname';
+export type Filter = {
+  property_name:
+    | 'isin'
+    | 'issuer_name'
+    | 'filename'
+    | 'industry'
+    | 'risk_type'
+    | 'green';
   values: string[];
 };
 
-export type AvailableFilterOptions = {
+export type Filters = {
   isin: string[];
-  shortname: string[];
+  issuer_name: string[];
+  filename: string[];
+  industry: string[];
+  risk_type: string[];
+  green: string[];
 };

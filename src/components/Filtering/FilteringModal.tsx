@@ -1,14 +1,15 @@
+import React, { Dispatch, SetStateAction } from 'react';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { Divider, IconButton, Modal, Stack, Typography } from '@mui/material';
-import { AvailableFilterOptions, Filters } from '../../types/filterTypes';
+import { Filter, Filters } from '../../types/filterTypes';
 import SearchFilter from './SearchFilter';
 
 interface FilteringModalProps {
   open: boolean;
   handleClose: () => void;
-  setActiveFilters: React.Dispatch<React.SetStateAction<Filters[]>>;
-  activeFilters: Filters[];
-  filterOptions: AvailableFilterOptions;
+  setActiveFilters: Dispatch<SetStateAction<Filter[]>>;
+  activeFilters: Filter[];
+  filterOptions: Filters;
 }
 
 export const FilteringModal = ({
@@ -18,19 +19,18 @@ export const FilteringModal = ({
   activeFilters,
   filterOptions
 }: FilteringModalProps) => {
-  const handleSelect = (options: string[], label: string) => {
+  const handleSelect = (values: string[], label: string) => {
     setActiveFilters((prev) => {
-      const newFilters = prev.map((filter) => {
+      return prev.map((filter) => {
         if (filter.property_name === label) {
           return {
-            property_name: label,
-            values: options
+            ...filter,
+            values: values
           };
         } else {
           return filter;
         }
       });
-      return newFilters;
     });
   };
 
@@ -78,19 +78,17 @@ export const FilteringModal = ({
           sx={{ paddingTop: '10px' }}
           key={crypto.randomUUID()}
         >
-          <SearchFilter
-            options={filterOptions.isin}
-            label={'isin'}
-            handleSelect={handleSelect}
-            activeFilters={activeFilters}
-          />
-
-          <SearchFilter
-            options={filterOptions.shortname}
-            label={'shortname'}
-            handleSelect={handleSelect}
-            activeFilters={activeFilters}
-          />
+          {Object.keys(filterOptions).map((key) => {
+            return (
+              <SearchFilter
+                key={crypto.randomUUID()}
+                options={filterOptions[key as keyof Filters]}
+                label={key}
+                handleSelect={handleSelect}
+                activeFilters={activeFilters}
+              />
+            );
+          })}
         </Stack>
       </Stack>
     </Modal>

@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { Filters } from '../types/filterTypes';
+import { Filter } from '../types/filterTypes';
 
 export const handlers = [
   rest.post('*/auth/token', (req, res, ctx) => {
@@ -27,7 +27,7 @@ export const handlers = [
   }),
 
   rest.post('*/chatbot', async (req, res, ctx) => {
-    const { question, filters }: { question: string; filters: Filters } =
+    const { question, filters }: { question: string; filters: Filter } =
       await req.json();
 
     if (req.headers.get('authorization') != 'Bearer 123') {
@@ -126,12 +126,16 @@ export const handlers = [
       })
     );
   }),
-  rest.get('*/filter', async (req, res, ctx) => {
+  rest.get('*/chatbot/filter', async (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
         isin: ['NO1111111111', 'NO2222222222'],
-        shortname: ['Bond 2021', 'Bond 2022']
+        issuer_name: ['Vatle AS', 'Bakkegruppen AS'],
+        filename: ['NO1111111111.pdf', 'NO2222222222.pdf'],
+        industry: ['Real Estate - Commercial', 'Real Estate - Residential'],
+        risk_type: ['Non-Financial Company - Senior Secured'],
+        green: ['Yes', 'No']
       })
     );
   })

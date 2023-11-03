@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { AvailableFilterOptions } from '../types/filterTypes';
+import { Filters } from '../types/filterTypes';
 
 type FilterResponse =
   | {
       ok: true;
-      filters: AvailableFilterOptions;
+      filters: Filters;
     }
   | {
       ok: false;
@@ -15,14 +15,11 @@ export const getFilters = async (): Promise<FilterResponse> => {
   try {
     const token = localStorage.getItem('token');
     if (token) {
-      const response = await axios.get<AvailableFilterOptions>(
-        '/chatbot/filter',
-        {
-          headers: {
-            Authorization: 'Bearer ' + JSON.parse(token)
-          }
+      const response = await axios.get<Filters>('/chatbot/filter', {
+        headers: {
+          Authorization: 'Bearer ' + JSON.parse(token)
         }
-      );
+      });
       return {
         ok: true,
         filters: response.data

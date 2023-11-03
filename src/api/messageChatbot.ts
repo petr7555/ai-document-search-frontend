@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { AnswerFromChatbot, Source } from '../types/conversationTypes';
-import { Filters } from '../types/filterTypes';
+import { Filter } from '../types/filterTypes';
 
 type ChatbotResponse =
   | {
@@ -15,7 +15,7 @@ type ChatbotResponse =
 
 export const messageChatbot = async (
   message: string,
-  filters: Filters[]
+  filters: Filter[]
 ): Promise<ChatbotResponse> => {
   const data = { question: message, filters: filters };
   try {

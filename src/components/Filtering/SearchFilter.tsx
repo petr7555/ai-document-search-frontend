@@ -1,13 +1,19 @@
 import * as React from 'react';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import { Checkbox } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { Filters } from '../../types/filterTypes';
+import { Filter } from '../../types/filterTypes';
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 interface SearchFilterProps {
   options: string[];
   label: string;
-  handleSelect: (option: string[], filter: string) => void;
-  activeFilters: Filters[];
+  handleSelect: (values: string[], filter: string) => void;
+  activeFilters: Filter[];
 }
 
 export default function SearchFilter({
@@ -18,6 +24,7 @@ export default function SearchFilter({
 }: SearchFilterProps) {
   return (
     <Autocomplete
+      data-cy="filtering-autocomplete"
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -26,18 +33,25 @@ export default function SearchFilter({
       }}
       multiple
       id="tags-outlined"
-      options={options}
-      value={
-        activeFilters.filter((filter) => filter.property_name === label)[0]
-          .values
-      }
-      onChange={(event, newValue) => {
-        event?.preventDefault();
+      onChange={(_event, newValue) => {
         handleSelect(newValue, label);
       }}
+      value={
+        activeFilters.find((filter) => filter.property_name === label)?.values
+      }
+      options={options}
       getOptionLabel={(option) => option}
-      filterSelectedOptions
-      data-cy="filtering-autocomplete"
+      renderOption={(props, option, { selected }) => (
+        <li {...props}>
+          <Checkbox
+            icon={icon}
+            checkedIcon={checkedIcon}
+            style={{ marginRight: 8 }}
+            checked={selected}
+          />
+          {option}
+        </li>
+      )}
       renderInput={(params) => (
         <TextField
           data-cy="filtering-searchfield"
