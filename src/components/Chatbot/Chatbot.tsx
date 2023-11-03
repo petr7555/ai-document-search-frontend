@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import AddIcon from '@mui/icons-material/Add';
 import { Alert, AlertTitle, Stack, Typography } from '@mui/material';
+import { getFilters } from '../../api/getFilters';
 import { loadConversation } from '../../api/loadConversation';
 import { messageChatbot } from '../../api/messageChatbot';
 import { newConversation } from '../../api/newConversation';
 import { MessageBubbleProps } from '../../types/conversationTypes';
+import { Filter, Filters } from '../../types/filterTypes';
 import { PrimaryButton } from '../Button/PrimaryButton';
+import { FilteringModal } from '../Filtering/FilteringModal';
 import { CenterPageContent } from '../Layout/CenterPageContent';
 import { ConversationLayout } from './ConversationLayout';
 import { Inputfield } from './InputField';
@@ -29,6 +32,35 @@ export const Chatbot = () => {
   const [errorMessage, setErrorMessage] = useState(
     'Unknown error retrieving conversation'
   );
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<Filter[]>([]);
+
+  const [filterOptions, setFilterOptions] = useState<Filters>();
+
+  const loadFilters = async () => {
+    const response = await getFilters();
+    if (response.ok) {
+      const filters = response.filters;
+      setFilterOptions(filters);
+      setActiveFilters(
+        Object.keys(filters).map((key) => ({
+          property_name: key as keyof Filters,
+          values: []
+        }))
+      );
+    } else {
+      setErrorMessage(response.detail);
+      setError(true);
+    }
+  };
+
+  const handleFilterButtonClick = () => {
+    if (filterModalOpen) {
+      setFilterModalOpen(false);
+    } else {
+      setFilterModalOpen(true);
+    }
+  };
 
   const loadConversationFromBackend = async () => {
     setLoading(true);
@@ -69,7 +101,7 @@ export const Chatbot = () => {
           ]);
       }
       if (!message.is_from_bot) {
-        const response = await messageChatbot(message.text);
+        const response = await messageChatbot(message.text, activeFilters);
         if (response.ok) {
           setMessages([
             ...messages,
@@ -128,6 +160,7 @@ export const Chatbot = () => {
 
   useEffect(() => {
     loadConversationFromBackend();
+    loadFilters();
   }, []);
 
   return (
@@ -179,7 +212,17 @@ export const Chatbot = () => {
         responding={responding}
         messages={messages}
       />
+      {filterOptions && (
+        <FilteringModal
+          open={filterModalOpen}
+          handleClose={() => setFilterModalOpen(false)}
+          filterOptions={filterOptions}
+          setActiveFilters={setActiveFilters}
+          activeFilters={activeFilters}
+        />
+      )}
       <Inputfield
+        handleFiltering={handleFilterButtonClick}
         loading={loading}
         responding={responding}
         sendMessage={addMessageToConversation}
