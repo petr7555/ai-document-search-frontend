@@ -9,8 +9,15 @@ type Props = {
 
 const PdfPreview: FC<Props> = ({ src, onPdfPreviewClose }) => {
   return (
-    <Stack direction="column" gap={1} height="100%" alignItems="flex-end">
+    <Stack
+      data-cy="pdf-preview"
+      direction="column"
+      spacing={1}
+      height="100%"
+      alignItems="flex-end"
+    >
       <Button
+        data-cy="close-pdf-preview-button"
         startIcon={<CloseIcon />}
         onClick={onPdfPreviewClose}
         variant="outlined"

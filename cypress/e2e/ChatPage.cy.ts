@@ -29,94 +29,38 @@ describe('Chat page', () => {
     cy.getBySel('bot-message-bubble').should('have.length', 2);
   });
 
-  //
-  // it('Try to send empty input to chatbot and get error', () => {
-  //   cy.get('[data-cy="chatbot"]').should('exist');
-  //   cy.get('[data-cy="chatbot-input-field"]').type('  ');
-  //   cy.get('[data-cy="chatbot-send-button"]').should('be.disabled');
-  // });
-  //
-  // it('Send message and go to link', () => {
-  //   cy.get('[data-cy="chatbot"]').should('exist');
-  //   cy.get('[data-cy="chatbot-input-field"]').type(
-  //     'Hi, can you tell me about bonds?'
-  //   );
-  //   cy.get('[data-cy="chatbot-send-button"]').click();
-  //   cy.get('[data-cy="user-input-message"]').should(
-  //     'include.text',
-  //     'Hi, can you tell me about bonds?'
-  //   );
-  //   cy.get('[data-cy="chatbot-response-message"]').should(
-  //     'include.text',
-  //     'Bonds are debt securities issued by governments, corporations, or other entities to raise capital. Investors who buy bonds effectively lend money to the issuer in exchange for periodic interest payments and the return of the bonds face value at maturity.'
-  //   );
-  //   cy.get('[data-cy="source-link"]').should(
-  //     'include.text',
-  //     'Who should buy long-term bonds? - Cambridge'
-  //   );
-  //   cy.get('[data-cy="source-link"]').should(
-  //     'have.attr',
-  //     'href',
-  //     'https://www.nber.org/system/files/working_papers/w6801/w6801.pdf#page=7'
-  //   );
-  // });
-  //
-  // it('Get several sources', () => {
-  //   cy.get('[data-cy="chatbot-input-field"]').type(
-  //     'Hi, what are some financial covenants?'
-  //   );
-  //   cy.get('[data-cy="chatbot-send-button"]').click();
-  //   cy.get('[data-cy="user-input-message"]').should(
-  //     'include.text',
-  //     'Hi, what are some financial covenants?'
-  //   );
-  //   cy.get('[data-cy="chatbot-response-message"]').should(
-  //     'include.text',
-  //     'There are several types of financial covenants, and the specific ones used can vary depending on the type of loan and the lender.'
-  //   );
-  //
-  //   cy.contains('NO2222222222 What is a covenant? - Investopedia')
-  //     .should('exist')
-  //     .should(
-  //       'have.attr',
-  //       'href',
-  //       'https://www.investopedia.com/terms/c/covenant.asp#page=1'
-  //     );
-  //
-  //   cy.contains('NO3333333333 Covenants - FinancialEdge')
-  //     .should('exist')
-  //     .should(
-  //       'have.attr',
-  //       'href',
-  //       'https://www.fe.training/free-resources/financial-markets/covenants/#page=1'
-  //     );
-  // });
-  //
-  // it('Start new conversation', () => {
-  //   cy.get('[data-cy="chatbot-input-field"]').type(
-  //     'Hi, what are some financial covenants?'
-  //   );
-  //   cy.get('[data-cy="chatbot-send-button"]').click();
-  //   cy.get('[data-cy="user-input-message"]').should(
-  //     'include.text',
-  //     'Hi, what are some financial covenants?'
-  //   );
-  //
-  //   cy.get('[data-cy="new-conversation-button"]').click();
-  //   cy.contains('Hi, what are some financial covenants?').should('not.exist');
-  // });
-  //
-  // it('Login and receive error message upon chatbot connection error', () => {
-  //   cy.intercept('GET', '/conversation', {
-  //     statusCode: 400,
-  //     body: {
-  //       error: 'Unknown error retrieving conversation'
-  //     }
-  //   }).as('getConversation');
-  //
-  //   cy.get('[data-cy="chatbot-response-error"]').should(
-  //     'include.text',
-  //     'Unknown error retrieving conversation'
-  //   );
-  // });
+  it('Cannot send empty question', () => {
+    // Wait for conversation to load
+    cy.contains('Conversation started').should('exist');
+
+    cy.getBySel('send-button').should('be.disabled');
+  });
+
+  it('Opens source in a new tab', () => {
+    cy.getBySel('source-link-SE0007186085').should(
+      'have.attr',
+      'href',
+      'https://feed.stamdata.com/documents/SE0007186085_LA.pdf#page=25'
+    );
+    cy.getBySel('source-link-SE0007186085').should(
+      'have.attr',
+      'target',
+      '_blank'
+    );
+  });
+
+  it('Opens PDF preview', () => {
+    cy.getBySel('pdf-preview').should('not.exist');
+    cy.getBySel('preview-pdf-button-SE0007186085').click();
+
+    cy.getBySel('pdf-preview').should('exist');
+  });
+
+  it.only('Closes PDF preview', () => {
+    cy.getBySel('preview-pdf-button-SE0007186085').click();
+    cy.getBySel('pdf-preview').should('exist');
+
+    cy.getBySel('close-pdf-preview-button').click();
+    cy.getBySel('pdf-preview').should('not.exist');
+  });
 });

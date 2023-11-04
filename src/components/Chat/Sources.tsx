@@ -32,9 +32,10 @@ const Sources: FC<Props> = ({ sources, onPdfPreviewSrcChanged }) => {
             <ListItem
               key={crypto.randomUUID()}
               secondaryAction={
-                <Stack direction="row" spacing={2}>
+                <Stack direction="row" spacing={1}>
                   <Tooltip placement="top" title="Open PDF in new tab">
                     <IconButton
+                      data-cy={`source-link-${source.isin}`}
                       aria-label="Open PDF in new tab"
                       href={src}
                       target="_blank"
@@ -43,9 +44,9 @@ const Sources: FC<Props> = ({ sources, onPdfPreviewSrcChanged }) => {
                       <OpenInNewIcon />
                     </IconButton>
                   </Tooltip>
-
                   <Tooltip placement="top" title="Preview PDF">
                     <IconButton
+                      data-cy={`preview-pdf-button-${source.isin}`}
                       aria-label="Preview PDF"
                       onClick={() => {
                         onPdfPreviewSrcChanged(src);
