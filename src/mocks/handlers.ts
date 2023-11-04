@@ -1,5 +1,47 @@
 import { rest } from 'msw';
 import { Filter } from '../api/askQuestion';
+import { AccessToken } from '../api/getAccessToken';
+import { Filters } from '../api/getFilters';
+import { Conversation, Message } from '../api/getLatestConversation';
+
+const botMessage: Message = {
+  is_from_bot: true,
+  text: 'LTV stands for Loan-to-Value ratio. It is a financial metric used to assess the risk of a loan by comparing the loan amount to the appraised value of the asset being financed. In the context of the given information, LTV is a covenant that requires the Issuer to maintain a certain ratio between the outstanding amount of the Bonds and the market value of the properties.',
+  sources: [
+    {
+      isin: 'NO0010754484',
+      shortname: 'TRD Campus AS 15/25 4,26%',
+      link: 'https://feed.stamdata.com/documents/NO0010754484_LA_20151222.pdf',
+      page: 9,
+      certainty: 0.899,
+      distance: 0.201
+    },
+    {
+      isin: 'SE0007186085',
+      shortname: 'Jefast Holding AB  15/19 FRN FLOOR C',
+      link: 'https://feed.stamdata.com/documents/SE0007186085_LA.pdf',
+      page: 24,
+      certainty: 0.897,
+      distance: 0.205
+    },
+    {
+      isin: 'NO0012698390',
+      shortname: 'AKA AS 22/27 FRN C',
+      link: 'https://feed.stamdata.com/documents/NO0012698390_LA_01_20220916.pdf',
+      page: 8,
+      certainty: 0.896,
+      distance: 0.208
+    },
+    {
+      isin: 'NO0010908163',
+      shortname: 'KMC Properties ASA 20/23 FRN FLOOR C',
+      link: 'https://feed.stamdata.com/documents/NO0010908163_LA_20201210.pdf',
+      page: 44,
+      certainty: 0.895,
+      distance: 0.21
+    }
+  ]
+};
 
 export const handlers = [
   rest.post('*/auth/token', (req, res, ctx) => {
@@ -10,20 +52,66 @@ export const handlers = [
 
     if (username !== 'user' || password !== 'pass') {
       return res(
+        ctx.delay(1000),
         ctx.status(401),
         ctx.json({
-          error: 'Incorrect username or password'
+          detail: 'Incorrect username or password'
         })
       );
     }
 
-    return res(
-      ctx.status(200),
-      ctx.json({
-        access_token: '123',
-        token_type: 'bearer'
-      })
-    );
+    const accessToken: AccessToken = {
+      access_token: '123',
+      token_type: 'bearer'
+    };
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(accessToken));
+  }),
+
+  rest.get('*/conversation', async (req, res, ctx) => {
+    const conversation: Conversation = {
+      created_at: '2023-11-04T08:19:05.367569+00:00',
+      messages: [
+        {
+          is_from_bot: false,
+          text: 'What is LTV?',
+          sources: null
+        },
+        botMessage
+      ]
+    };
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(conversation));
+  }),
+
+  rest.post('*/conversation', async (req, res, ctx) => {
+    const conversation: Conversation = {
+      created_at: '2023-11-04T08:19:05.367569+00:00',
+      messages: []
+    };
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(conversation));
+  }),
+
+  rest.get('*/chatbot/filter', async (req, res, ctx) => {
+    const filters: Filters = {
+      isin: ['NO0010754484', 'SE0007186085', 'NO0012698390', 'NO0010908163'],
+      issuer_name: [
+        'Host Property AB (publ)',
+        'Ideco AS',
+        'SSM Holding AB (publ)'
+      ],
+      filename: [
+        'NO0010908163_LA_20201210.pdf',
+        'SE0010413989_SB_20190417.pdf',
+        'SE0010296632_SB_20200515.pdf'
+      ],
+      industry: [
+        'Real Estate - Commercial',
+        'Real Estate - Residential',
+        'Real Estate - Public buildings'
+      ],
+      risk_type: ['Non-Financial Company - Senior Secured'],
+      green: ['No', 'Yes']
+    };
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(filters));
   }),
 
   rest.post('*/chatbot', async (req, res, ctx) => {
@@ -38,110 +126,7 @@ export const handlers = [
         })
       );
     }
-    if (question === 'Hello') {
-      return res(
-        ctx.status(200),
-        ctx.json({
-          text: 'Hi, how are you?',
-          sources: []
-        })
-      );
-    }
 
-    if (question === 'Hi, can you tell me about bonds?') {
-      return res(
-        ctx.status(200),
-        ctx.json({
-          text: 'Bonds are debt securities issued by governments, corporations, or other entities to raise capital. Investors who buy bonds effectively lend money to the issuer in exchange for periodic interest payments and the return of the bonds face value at maturity.',
-          sources: [
-            {
-              isin: 'NO1111111111',
-              shortname: 'Who should buy long-term bonds? - Cambridge',
-              link: 'https://www.nber.org/system/files/working_papers/w6801/w6801.pdf',
-              page: 6
-            }
-          ]
-        })
-      );
-    }
-
-    if (question === 'Hi, what are some financial covenants?') {
-      return res(
-        ctx.status(200),
-        ctx.json({
-          text: 'There are several types of financial covenants, and the specific ones used can vary depending on the type of loan and the lender.',
-          sources: [
-            {
-              isin: 'NO2222222222',
-              shortname: 'What is a covenant? - Investopedia',
-              link: 'https://www.investopedia.com/terms/c/covenant.asp',
-              page: 0
-            },
-            {
-              isin: 'NO3333333333',
-              shortname: 'Covenants - FinancialEdge',
-              link: 'https://www.fe.training/free-resources/financial-markets/covenants/',
-              page: 0
-            }
-          ]
-        })
-      );
-    }
-    if (
-      filters
-        .find((f) => f.property_name === 'isin')
-        ?.values.includes('NO1111111111') ||
-      question === 'Hi'
-    ) {
-      return res(
-        ctx.status(200),
-        ctx.json({
-          text: 'Here are some bonds',
-          sources: [
-            {
-              isin: 'NO1111111111',
-              shortname: 'Bond 2021',
-              link: 'https://www.nber.org/system/files/working_papers/w6801/w6801.pdf',
-              page: 6
-            }
-          ]
-        })
-      );
-    }
-
-    return res(
-      ctx.status(400),
-      ctx.json({
-        error: 'Unknown error'
-      })
-    );
-  }),
-  rest.get('*/conversation', async (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        created_at: '2021-09-10T10:00:00Z',
-        messages: [
-          {
-            is_from_bot: true,
-            text: 'Hi, how are you?',
-            sources: []
-          }
-        ]
-      })
-    );
-  }),
-  rest.get('*/chatbot/filter', async (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        isin: ['NO1111111111', 'NO2222222222'],
-        issuer_name: ['Vatle AS', 'Bakkegruppen AS'],
-        filename: ['NO1111111111.pdf', 'NO2222222222.pdf'],
-        industry: ['Real Estate - Commercial', 'Real Estate - Residential'],
-        risk_type: ['Non-Financial Company - Senior Secured'],
-        green: ['Yes', 'No']
-      })
-    );
+    return res(ctx.delay(1000), ctx.status(200), ctx.json(botMessage));
   })
 ];

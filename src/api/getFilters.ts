@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { ApiResponse } from '../types/apiResponse';
+import { ApiResponse } from './utils/apiResponse';
+import handleApiError from './utils/handleApiError';
 
 export type Filters = {
   isin: string[];
@@ -18,9 +19,6 @@ export const getFilters = async (): Promise<ApiResponse<Filters>> => {
       data: response.data
     };
   } catch (error) {
-    return {
-      ok: false,
-      detail: 'Unknown error when retrieving filters'
-    };
+    return handleApiError(error, 'getting filters');
   }
 };

@@ -8,7 +8,7 @@ import InputBase from '@mui/material/InputBase';
 import { Filter } from '../../api/askQuestion';
 import { Filters, getFilters as getFiltersApi } from '../../api/getFilters';
 import useError from '../../hooks/useError';
-import FilterModal from './Filtering/FilterModal';
+import FilterDialog from './Filtering/FilterDialog';
 
 type Props = {
   onQuestionAsked: (text: string, filters: Filter[]) => void;
@@ -17,13 +17,30 @@ type Props = {
 const QuestionInput: FC<Props> = ({ onQuestionAsked, disabled }) => {
   const [, setError] = useError();
 
+  // Input
   const [input, setInput] = useState('');
 
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+  };
+
+  const canSendMessage = input.trim().length > 0 && !disabled;
+  const handleSubmit = () => {
+    if (canSendMessage) {
+      onQuestionAsked(input, filters);
+      setInput('');
+    }
+  };
+
+  // Filters
+  const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
   const [filterOptions, setFilterOptions] = useState<Filters>();
   const [filters, setFilters] = useState<Filter[]>([]);
 
-  const openFilterModal = () => setIsFilterModalOpen((open) => !open);
+  const openFilterDialog = () => setIsFilterDialogOpen((open) => !open);
+  const handleFiltersChanged = (newFilters: Filter[]) => {
+    setFilters(newFilters);
+  };
 
   useEffect(() => {
     const getFilters = async () => {
@@ -45,18 +62,6 @@ const QuestionInput: FC<Props> = ({ onQuestionAsked, disabled }) => {
     getFilters();
   }, [setError]);
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setInput(event.target.value);
-  };
-
-  const canSendMessage = input.trim().length > 0 && !disabled;
-  const handleSubmit = () => {
-    if (canSendMessage) {
-      onQuestionAsked(input, filters);
-      setInput('');
-    }
-  };
-
   return (
     <>
       <Box
@@ -67,24 +72,19 @@ const QuestionInput: FC<Props> = ({ onQuestionAsked, disabled }) => {
           boxShadow: '0px -10px 10px rgba(0, 0, 0, 0.1)'
         }}
       >
-        <Tooltip
-          placement="top"
-          title="Filter results"
-          sx={{ fontSize: '5rem' }}
-        >
+        <Tooltip placement="top" title="Filter results">
           <IconButton
-            data-cy="chatbot-filter-button"
-            onClick={openFilterModal}
+            onClick={openFilterDialog}
             sx={{ p: '10px' }}
             aria-label="Filter"
             color="primary"
+            disabled={!filterOptions}
           >
             <TuneIcon />
           </IconButton>
         </Tooltip>
         <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
         <InputBase
-          data-cy="chatbot-input-field"
           sx={{ ml: 1, flex: 1 }}
           value={input}
           onChange={handleInputChange}
@@ -100,8 +100,6 @@ const QuestionInput: FC<Props> = ({ onQuestionAsked, disabled }) => {
           }}
         />
         <IconButton
-          data-cy="chatbot-send-button"
-          // type="submit"
           sx={{ p: '10px' }}
           aria-label="Send"
           disabled={!canSendMessage}
@@ -112,12 +110,12 @@ const QuestionInput: FC<Props> = ({ onQuestionAsked, disabled }) => {
         </IconButton>
       </Box>
       {filterOptions && (
-        <FilterModal
-          open={isFilterModalOpen}
-          handleClose={() => setIsFilterModalOpen(false)}
+        <FilterDialog
+          open={isFilterDialogOpen}
+          handleClose={() => setIsFilterDialogOpen(false)}
           filterOptions={filterOptions}
-          setActiveFilters={setFilters}
-          activeFilters={filters}
+          filters={filters}
+          onFiltersChanged={handleFiltersChanged}
         />
       )}
     </>

@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { ApiResponse } from '../types/apiResponse';
+import { ApiResponse } from './utils/apiResponse';
+import handleApiError from './utils/handleApiError';
 
 export type AccessToken = {
   access_token: string;
@@ -21,17 +22,6 @@ export const getAccessToken = async (
       data: response.data
     };
   } catch (error) {
-    console.log(error);
-    if (axios.isAxiosError(error) && error.response?.status === 401) {
-      return {
-        ok: false,
-        detail: 'Invalid credentials'
-      };
-    } else {
-      return {
-        ok: false,
-        detail: 'Unknown error when logging in'
-      };
-    }
+    return handleApiError(error, 'logging in', 'Invalid credentials');
   }
 };

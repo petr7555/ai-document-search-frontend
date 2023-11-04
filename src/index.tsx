@@ -20,20 +20,29 @@ axios.interceptors.request.use(
   }
 );
 
-// Comment these lines to use real server even in development mode
-if (process.env.NODE_ENV === 'development') {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { worker } = require('./mocks/browser');
-  worker.start();
+// Change to false to use backend running on localhost:8000.
+const useMswInDev = true;
+
+async function deferRender() {
+  if (process.env.NODE_ENV !== 'development' || !useMswInDev) {
+    return;
+  }
+
+  const { worker } = await import('./mocks/browser');
+  // `worker.start()` returns a Promise that resolves
+  // once the Service Worker is up and ready to intercept requests.
+  return worker.start();
 }
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-root.render(
-  <StrictMode>
-    <App />
-  </StrictMode>
+deferRender().then(() =>
+  root.render(
+    <StrictMode>
+      <App />
+    </StrictMode>
+  )
 );
 
 // If you want your app to work offline and load faster, you can change

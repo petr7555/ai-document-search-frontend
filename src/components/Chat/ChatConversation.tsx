@@ -5,9 +5,10 @@ import MessageBubble from './MessageBubble';
 
 type Props = {
   conversation?: Conversation;
+  loading: boolean;
 };
 
-const Chat: FC<Props> = ({ conversation }) => {
+const ChatConversation: FC<Props> = ({ conversation, loading }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -22,14 +23,7 @@ const Chat: FC<Props> = ({ conversation }) => {
         flexGrow: 1
       }}
     >
-      {conversation ? (
-        <Stack direction="column" spacing={2}>
-          {conversation.messages.map((message) => (
-            <MessageBubble key={crypto.randomUUID()} message={message} />
-          ))}
-          <Box ref={bottomRef} />
-        </Stack>
-      ) : (
+      {loading ? (
         <Box
           sx={{
             display: 'flex',
@@ -40,9 +34,16 @@ const Chat: FC<Props> = ({ conversation }) => {
         >
           <CircularProgress />
         </Box>
-      )}
+      ) : conversation ? (
+        <Stack direction="column" spacing={2}>
+          {conversation.messages.map((message) => (
+            <MessageBubble key={crypto.randomUUID()} message={message} />
+          ))}
+          <Box ref={bottomRef} />
+        </Stack>
+      ) : null}
     </Box>
   );
 };
 
-export default Chat;
+export default ChatConversation;

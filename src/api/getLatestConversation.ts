@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { ApiResponse } from '../types/apiResponse';
+import { ApiResponse } from './utils/apiResponse';
+import handleApiError from './utils/handleApiError';
 
 export type Conversation = {
   created_at: string;
@@ -10,6 +11,7 @@ export type Message =
   | {
       is_from_bot: false;
       text: string;
+      sources: null;
     }
   | (ChatbotAnswer & {
       is_from_bot: true;
@@ -25,6 +27,8 @@ export type Source = {
   shortname: string;
   link: string;
   page: number;
+  certainty: number;
+  distance: number;
 };
 
 export const getLatestConversation = async (): Promise<
@@ -37,9 +41,6 @@ export const getLatestConversation = async (): Promise<
       data: response.data
     };
   } catch (error) {
-    return {
-      ok: false,
-      detail: 'Unknown error when retrieving conversation'
-    };
+    return handleApiError(error, 'getting latest conversation');
   }
 };

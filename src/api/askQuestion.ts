@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { ApiResponse } from '../types/apiResponse';
+import { ApiResponse } from './utils/apiResponse';
+import handleApiError from './utils/handleApiError';
 import { ChatbotAnswer } from './getLatestConversation';
 
 export type Filter = {
@@ -27,10 +28,6 @@ export const askQuestion = async (
       data: response.data
     };
   } catch (error) {
-    // TODO handle unauthorized
-    return {
-      ok: false,
-      detail: 'Unknown error when asking question'
-    };
+    return handleApiError(error, 'asking question');
   }
 };

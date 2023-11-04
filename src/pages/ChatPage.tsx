@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import AddIcon from '@mui/icons-material/Add';
-import LoadingButton from '@mui/lab/LoadingButton';
-import { Alert, Divider, Paper, Stack } from '@mui/material';
+import { Divider, Paper, Stack } from '@mui/material';
 import { askQuestion, Filter } from '../api/askQuestion';
 import { createNewConversation as createNewConversationApi } from '../api/createNewConversation';
 import {
@@ -9,8 +7,9 @@ import {
   getLatestConversation as getLatestConversationApi,
   Message
 } from '../api/getLatestConversation';
-import Chat from '../components/Chatbot/Chat';
-import QuestionInput from '../components/Chatbot/QuestionInput';
+import ChatConversation from '../components/Chat/ChatConversation';
+import ChatHeader from '../components/Chat/ChatHeader';
+import QuestionInput from '../components/Chat/QuestionInput';
 import useError from '../hooks/useError';
 import usePageTitle from '../hooks/usePageTitle';
 
@@ -25,11 +24,11 @@ export const ChatPage = () => {
 
   const [, setError] = useError();
 
-  const [conversationLoading, setConversationLoading] = useState(true);
-  const [creatingNewConversation, setCreatingNewConversation] = useState(false);
   const [conversation, setConversation] = useState<Conversation>();
-
-  const [responding, setResponding] = useState(false);
+  const [gettingLatestConversation, setGettingLatestConversation] =
+    useState(true);
+  const [creatingNewConversation, setCreatingNewConversation] = useState(false);
+  const [askingQuestion, setAskingQuestion] = useState(false);
 
   const createNewConversation = async () => {
     setCreatingNewConversation(true);
@@ -43,7 +42,7 @@ export const ChatPage = () => {
   };
 
   const handleQuestionAsked = async (text: string, filters: Filter[]) => {
-    setResponding(true);
+    setAskingQuestion(true);
     setConversation((conv) => {
       if (!conv) {
         return conv;
@@ -52,7 +51,7 @@ export const ChatPage = () => {
         ...conv,
         messages: [
           ...conv.messages,
-          { is_from_bot: false, text },
+          { is_from_bot: false, text, sources: null },
           pendingMessage
         ]
       };
@@ -60,11 +59,11 @@ export const ChatPage = () => {
     const response = await askQuestion(text, filters);
     const answer = response.ok
       ? {
-          is_from_bot: true,
+          is_from_bot: true as const,
           ...response.data
         }
       : {
-          is_from_bot: true,
+          is_from_bot: true as const,
           text: response.detail,
           sources: []
         };
@@ -77,7 +76,7 @@ export const ChatPage = () => {
         messages: [...conv.messages.slice(0, -1), answer]
       };
     });
-    setResponding(false);
+    setAskingQuestion(false);
   };
 
   useEffect(() => {
@@ -90,55 +89,29 @@ export const ChatPage = () => {
       }
     };
 
-    getLatestConversation().then(() => setConversationLoading(false));
+    getLatestConversation().then(() => setGettingLatestConversation(false));
   }, [setError]);
 
   return (
     <Paper elevation={3} sx={{ mt: 4 }}>
       <Stack direction="column" sx={{ width: '80vw', height: '80vh' }}>
-        {/* HEADER */}
-        <Stack
-          direction="row"
-          spacing={4}
-          alignItems="stretch"
-          justifyContent="space-between"
-          sx={{
-            p: 1,
-            boxShadow: '0px 10px 10px rgba(0, 0, 0, 0.1)',
-            zIndex: 1
-          }}
-        >
-          <Alert severity="info">
-            {conversation
-              ? `Conversation started on ${new Date(
-                  conversation.created_at
-                ).toLocaleDateString()} at ${new Date(
-                  conversation.created_at
-                ).toLocaleTimeString()}.`
-              : 'Conversation is loading...'}
-          </Alert>
-          <LoadingButton
-            data-cy="new-conversation-button"
-            aria-label="New conversation"
-            onClick={createNewConversation}
-            startIcon={<AddIcon />}
-            loading={creatingNewConversation}
-            loadingPosition="start"
-            variant="contained"
-            disabled={conversationLoading || responding}
-          >
-            New conversation
-          </LoadingButton>
-        </Stack>
+        <ChatHeader
+          gettingLatestConversation={gettingLatestConversation}
+          creatingNewConversation={creatingNewConversation}
+          askingQuestion={askingQuestion}
+          conversation={conversation}
+          createNewConversation={createNewConversation}
+        />
         <Divider sx={{ borderBottomWidth: 2 }} />
-        {/* CHAT */}
-        <Chat conversation={conversation} />
-        {/* INPUT */}
+        <ChatConversation
+          conversation={conversation}
+          loading={gettingLatestConversation || creatingNewConversation}
+        />
         <QuestionInput
           disabled={
             !conversation ||
-            responding ||
-            conversationLoading ||
+            askingQuestion ||
+            gettingLatestConversation ||
             creatingNewConversation
           }
           onQuestionAsked={handleQuestionAsked}

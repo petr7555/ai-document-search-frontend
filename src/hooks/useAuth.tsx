@@ -9,7 +9,7 @@ import React, {
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 import { AccessToken, getAccessToken } from '../api/getAccessToken';
-import { ApiResponse } from '../types/apiResponse';
+import { ApiResponse } from '../api/utils/apiResponse';
 import { CHAT_PATH, LOGIN_PATH } from '../utils/constants';
 
 type AuthContextType = {
@@ -40,7 +40,6 @@ export const AuthProvider: FC<Props> = ({ children }) => {
         navigate(CHAT_PATH);
       }
       return response;
-      //   TODO what if not ok?
     },
     [navigate, setToken]
   );

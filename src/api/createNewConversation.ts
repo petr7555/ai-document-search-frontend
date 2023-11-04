@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { ApiResponse } from '../types/apiResponse';
+import { ApiResponse } from './utils/apiResponse';
+import handleApiError from './utils/handleApiError';
 import { Conversation } from './getLatestConversation';
 
 export const createNewConversation = async (): Promise<
@@ -12,9 +13,6 @@ export const createNewConversation = async (): Promise<
       data: response.data
     };
   } catch (error) {
-    return {
-      ok: false,
-      detail: 'Unknown error when creating new conversation'
-    };
+    return handleApiError(error, 'creating new conversation');
   }
 };
