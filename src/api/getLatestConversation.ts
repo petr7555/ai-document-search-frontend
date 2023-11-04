@@ -9,13 +9,16 @@ export type Conversation = {
 
 export type Message =
   | {
-      is_from_bot: false;
+      role: 'user';
       text: string;
       sources: null;
     }
   | (ChatbotAnswer & {
-      is_from_bot: true;
-    });
+      role: 'bot';
+    })
+  | {
+      role: 'pending';
+    };
 
 export type ChatbotAnswer = {
   text: string;

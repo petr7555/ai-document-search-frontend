@@ -4,7 +4,7 @@ import { Filters } from '../api/getFilters';
 import { Conversation, Message } from '../api/getLatestConversation';
 
 const botMessage: Message = {
-  is_from_bot: true,
+  role: 'bot',
   text: 'LTV stands for Loan-to-Value ratio. It is a financial metric used to assess the risk of a loan by comparing the loan amount to the appraised value of the asset being financed. In the context of the given information, LTV is a covenant that requires the Issuer to maintain a certain ratio between the outstanding amount of the Bonds and the market value of the properties.',
   sources: [
     {
@@ -71,7 +71,7 @@ export const handlers = [
       created_at: '2023-11-04T08:19:05.367569+00:00',
       messages: [
         {
-          is_from_bot: false,
+          role: 'user',
           text: 'What is LTV?',
           sources: null
         },

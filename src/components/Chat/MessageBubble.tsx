@@ -15,20 +15,19 @@ type Props = {
 const MessageBubble: FC<Props> = ({ message, onPdfPreviewSrcChanged }) => {
   return (
     <Paper
-      data-cy={`${message.is_from_bot ? 'bot' : 'user'}-message-bubble`}
+      data-cy={`${message.role}-message-bubble`}
       elevation={3}
       sx={{
         padding: 2,
-        backgroundColor: message.is_from_bot
-          ? BOT_MESSAGE_COLOR
-          : USER_MESSAGE_COLOR,
+        backgroundColor:
+          message.role === 'user' ? USER_MESSAGE_COLOR : BOT_MESSAGE_COLOR,
         borderRadius,
-        borderBottomRightRadius: message.is_from_bot ? borderRadius : '0px',
-        borderBottomLeftRadius: message.is_from_bot ? '0px' : borderRadius,
-        alignSelf: message.is_from_bot ? 'flex-start' : 'flex-end'
+        borderBottomRightRadius: message.role === 'user' ? '0px' : borderRadius,
+        borderBottomLeftRadius: message.role === 'user' ? borderRadius : '0px',
+        alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start'
       }}
     >
-      {message.is_from_bot && message.text === '...' ? (
+      {message.role === 'pending' ? (
         <BouncingDots />
       ) : (
         <>

@@ -13,9 +13,7 @@ import ChatHeader from './ChatHeader';
 import QuestionInput from './QuestionInput';
 
 const pendingMessage: Message = {
-  is_from_bot: true,
-  text: '...',
-  sources: []
+  role: 'pending'
 };
 
 type Props = {
@@ -52,7 +50,7 @@ const Chatbot: FC<Props> = ({ onPdfPreviewSrcChanged }) => {
         ...conv,
         messages: [
           ...conv.messages,
-          { is_from_bot: false, text, sources: null },
+          { role: 'user', text, sources: null },
           pendingMessage
         ]
       };
@@ -68,7 +66,7 @@ const Chatbot: FC<Props> = ({ onPdfPreviewSrcChanged }) => {
           messages: [
             ...conv.messages.slice(0, -1),
             {
-              is_from_bot: true as const,
+              role: 'bot',
               ...response.data
             }
           ]
