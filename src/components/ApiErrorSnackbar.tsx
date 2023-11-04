@@ -11,7 +11,7 @@ const ApiErrorSnackbar: FC = () => {
 
   return (
     <Snackbar
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       sx={{ marginTop: 7 }}
       autoHideDuration={4000}
       open={Boolean(error)}

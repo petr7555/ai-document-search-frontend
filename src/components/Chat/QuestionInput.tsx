@@ -73,15 +73,17 @@ const QuestionInput: FC<Props> = ({ onQuestionAsked, disabled }) => {
         }}
       >
         <Tooltip placement="top" title="Filter results">
-          <IconButton
-            onClick={openFilterDialog}
-            sx={{ p: '10px' }}
-            aria-label="Filter"
-            color="primary"
-            disabled={!filterOptions}
-          >
-            <TuneIcon />
-          </IconButton>
+          <Box>
+            <IconButton
+              onClick={openFilterDialog}
+              sx={{ p: '10px' }}
+              aria-label="Filter"
+              color="primary"
+              disabled={!filterOptions}
+            >
+              <TuneIcon />
+            </IconButton>
+          </Box>
         </Tooltip>
         <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
         <InputBase

@@ -41,6 +41,6 @@ export const getLatestConversation = async (): Promise<
       data: response.data
     };
   } catch (error) {
-    return handleApiError(error, 'getting latest conversation');
+    return handleApiError(error, 'getting the latest conversation');
   }
 };

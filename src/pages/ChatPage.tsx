@@ -57,25 +57,34 @@ export const ChatPage = () => {
       };
     });
     const response = await askQuestion(text, filters);
-    const answer = response.ok
-      ? {
-          is_from_bot: true as const,
-          ...response.data
+    if (response.ok) {
+      setConversation((conv) => {
+        if (!conv) {
+          return conv;
         }
-      : {
-          is_from_bot: true as const,
-          text: response.detail,
-          sources: []
+        return {
+          ...conv,
+          messages: [
+            ...conv.messages.slice(0, -1),
+            {
+              is_from_bot: true as const,
+              ...response.data
+            }
+          ]
         };
-    setConversation((conv) => {
-      if (!conv) {
-        return conv;
-      }
-      return {
-        ...conv,
-        messages: [...conv.messages.slice(0, -1), answer]
-      };
-    });
+      });
+    } else {
+      setConversation((conv) => {
+        if (!conv) {
+          return conv;
+        }
+        return {
+          ...conv,
+          messages: conv.messages.slice(0, -1)
+        };
+      });
+      setError(response.detail);
+    }
     setAskingQuestion(false);
   };
 
