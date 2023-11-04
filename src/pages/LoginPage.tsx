@@ -46,41 +46,44 @@ export const LoginPage = () => {
 
   return (
     <Paper elevation={3} sx={{ padding: 6, width: '90vw', maxWidth: 440 }}>
-      <form onSubmit={handleFormSubmit}>
-        <Stack direction="column" spacing={3}>
-          <LoginField
-            label="Username"
-            type="text"
-            autoComplete="username"
-            value={username}
-            onChange={handleUsernameChange}
-            touched={usernameTouched}
-            onTouched={setUsernameTouched}
-          />
-          <LoginField
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={handlePasswordChange}
-            touched={passwordTouched}
-            onTouched={setPasswordTouched}
-          />
-          <LoadingButton
-            data-cy="login-button"
-            variant="contained"
-            type="submit"
-            loading={loading}
-            sx={{
-              '&&': {
-                mt: 6
-              }
-            }}
-          >
-            Log in
-          </LoadingButton>
-        </Stack>
-      </form>
+      <Stack
+        component="form"
+        onSubmit={handleFormSubmit}
+        direction="column"
+        spacing={3}
+      >
+        <LoginField
+          label="Username"
+          type="text"
+          autoComplete="username"
+          value={username}
+          onChange={handleUsernameChange}
+          touched={usernameTouched}
+          onTouched={setUsernameTouched}
+        />
+        <LoginField
+          label="Password"
+          type="password"
+          autoComplete="current-password"
+          value={password}
+          onChange={handlePasswordChange}
+          touched={passwordTouched}
+          onTouched={setPasswordTouched}
+        />
+        <LoadingButton
+          data-cy="login-button"
+          variant="contained"
+          type="submit"
+          loading={loading}
+          sx={{
+            '&&': {
+              mt: 6
+            }
+          }}
+        >
+          Log in
+        </LoadingButton>
+      </Stack>
     </Paper>
   );
 };

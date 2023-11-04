@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FC, SyntheticEvent } from 'react';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import { Checkbox } from '@mui/material';
+import { Box, Checkbox } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
@@ -30,7 +30,7 @@ const FilterAutocomplete: FC<Props> = ({
       value={values}
       onChange={handleOnChange}
       renderOption={(props, option, { selected }) => (
-        <li {...props}>
+        <Box component="li" {...props}>
           <Checkbox
             icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
             checkedIcon={<CheckBoxIcon fontSize="small" />}
@@ -38,7 +38,7 @@ const FilterAutocomplete: FC<Props> = ({
             checked={selected}
           />
           {option}
-        </li>
+        </Box>
       )}
       renderInput={(params) => (
         <TextField {...params} label={label} placeholder={label} />
