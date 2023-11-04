@@ -5,13 +5,14 @@ import { BOT_MESSAGE_COLOR, USER_MESSAGE_COLOR } from '../../utils/constants';
 import BouncingDots from './BouncingDots';
 import Sources from './Sources';
 
-type Props = {
-  message: Message;
-};
-
 const borderRadius = '10px';
 
-const MessageBubble: FC<Props> = ({ message }) => {
+type Props = {
+  message: Message;
+  onPdfPreviewSrcChanged: (src: string) => void;
+};
+
+const MessageBubble: FC<Props> = ({ message, onPdfPreviewSrcChanged }) => {
   return (
     <Paper
       elevation={3}
@@ -31,7 +32,10 @@ const MessageBubble: FC<Props> = ({ message }) => {
       ) : (
         <>
           <Typography>{message.text}</Typography>
-          <Sources sources={message.sources}></Sources>
+          <Sources
+            sources={message.sources}
+            onPdfPreviewSrcChanged={onPdfPreviewSrcChanged}
+          ></Sources>
         </>
       )}
     </Paper>

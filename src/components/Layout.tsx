@@ -13,8 +13,8 @@ const Layout: FC<Props> = ({ children }) => {
       <NavigationBar />
       <ApiErrorSnackbar />
       <Container
-        maxWidth="lg"
         component="main"
+        maxWidth={false}
         sx={{
           height: '100vh',
           display: 'flex',

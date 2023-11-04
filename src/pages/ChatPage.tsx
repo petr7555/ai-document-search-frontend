@@ -1,131 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { Divider, Paper, Stack } from '@mui/material';
-import { askQuestion, Filter } from '../api/askQuestion';
-import { createNewConversation as createNewConversationApi } from '../api/createNewConversation';
-import {
-  Conversation,
-  getLatestConversation as getLatestConversationApi,
-  Message
-} from '../api/getLatestConversation';
-import ChatConversation from '../components/Chat/ChatConversation';
-import ChatHeader from '../components/Chat/ChatHeader';
-import QuestionInput from '../components/Chat/QuestionInput';
-import useError from '../hooks/useError';
+import React, { useState } from 'react';
+import { Box, Stack } from '@mui/material';
+import Chatbot from '../components/Chatbot';
+import PdfPreview from '../components/PdfPreview';
 import usePageTitle from '../hooks/usePageTitle';
-
-const pendingMessage: Message = {
-  is_from_bot: true,
-  text: '...',
-  sources: []
-};
 
 export const ChatPage = () => {
   usePageTitle('Chat');
 
-  const [, setError] = useError();
+  const [pdfPreviewSrc, setPdfPreviewSrc] = useState('');
 
-  const [conversation, setConversation] = useState<Conversation>();
-  const [gettingLatestConversation, setGettingLatestConversation] =
-    useState(true);
-  const [creatingNewConversation, setCreatingNewConversation] = useState(false);
-  const [askingQuestion, setAskingQuestion] = useState(false);
-
-  const createNewConversation = async () => {
-    setCreatingNewConversation(true);
-    const response = await createNewConversationApi();
-    if (response.ok) {
-      setConversation(response.data);
-    } else {
-      setError(response.detail);
-    }
-    setCreatingNewConversation(false);
+  const handlePdfPreviewSrcChanged = (src: string) => {
+    setPdfPreviewSrc(src);
   };
 
-  const handleQuestionAsked = async (text: string, filters: Filter[]) => {
-    setAskingQuestion(true);
-    setConversation((conv) => {
-      if (!conv) {
-        return conv;
-      }
-      return {
-        ...conv,
-        messages: [
-          ...conv.messages,
-          { is_from_bot: false, text, sources: null },
-          pendingMessage
-        ]
-      };
-    });
-    const response = await askQuestion(text, filters);
-    if (response.ok) {
-      setConversation((conv) => {
-        if (!conv) {
-          return conv;
-        }
-        return {
-          ...conv,
-          messages: [
-            ...conv.messages.slice(0, -1),
-            {
-              is_from_bot: true as const,
-              ...response.data
-            }
-          ]
-        };
-      });
-    } else {
-      setConversation((conv) => {
-        if (!conv) {
-          return conv;
-        }
-        return {
-          ...conv,
-          messages: conv.messages.slice(0, -1)
-        };
-      });
-      setError(response.detail);
-    }
-    setAskingQuestion(false);
+  const handlePdfPreviewClosed = () => {
+    setPdfPreviewSrc('');
   };
-
-  useEffect(() => {
-    const getLatestConversation = async () => {
-      const response = await getLatestConversationApi();
-      if (response.ok) {
-        setConversation(response.data);
-      } else {
-        setError(response.detail);
-      }
-    };
-
-    getLatestConversation().then(() => setGettingLatestConversation(false));
-  }, [setError]);
 
   return (
-    <Paper elevation={3} sx={{ mt: 4 }}>
-      <Stack direction="column" sx={{ width: '80vw', height: '80vh' }}>
-        <ChatHeader
-          gettingLatestConversation={gettingLatestConversation}
-          creatingNewConversation={creatingNewConversation}
-          askingQuestion={askingQuestion}
-          conversation={conversation}
-          createNewConversation={createNewConversation}
-        />
-        <Divider sx={{ borderBottomWidth: 2 }} />
-        <ChatConversation
-          conversation={conversation}
-          loading={gettingLatestConversation || creatingNewConversation}
-        />
-        <QuestionInput
-          disabled={
-            !conversation ||
-            askingQuestion ||
-            gettingLatestConversation ||
-            creatingNewConversation
-          }
-          onQuestionAsked={handleQuestionAsked}
-        />
-      </Stack>
-    </Paper>
+    <Stack
+      direction="row"
+      spacing={2}
+      sx={{ width: '100%', height: '80vh', justifyContent: 'center' }}
+    >
+      <Box sx={{ flex: 1, maxWidth: '60vw' }}>
+        <Chatbot onPdfPreviewSrcChanged={handlePdfPreviewSrcChanged} />
+      </Box>
+      {pdfPreviewSrc && (
+        <Box sx={{ flex: 1 }}>
+          <PdfPreview
+            src={pdfPreviewSrc}
+            onPdfPreviewClose={handlePdfPreviewClosed}
+          />
+        </Box>
+      )}
+    </Stack>
   );
 };

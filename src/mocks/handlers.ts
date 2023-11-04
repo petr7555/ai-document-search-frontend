@@ -1,5 +1,4 @@
 import { rest } from 'msw';
-import { Filter } from '../api/askQuestion';
 import { AccessToken } from '../api/getAccessToken';
 import { Filters } from '../api/getFilters';
 import { Conversation, Message } from '../api/getLatestConversation';
@@ -115,9 +114,6 @@ export const handlers = [
   }),
 
   rest.post('*/chatbot', async (req, res, ctx) => {
-    const { question, filters }: { question: string; filters: Filter[] } =
-      await req.json();
-
     if (req.headers.get('authorization') != 'Bearer 123') {
       return res(
         ctx.status(401),

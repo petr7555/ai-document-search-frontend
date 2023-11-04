@@ -6,9 +6,14 @@ import MessageBubble from './MessageBubble';
 type Props = {
   conversation?: Conversation;
   loading: boolean;
+  onPdfPreviewSrcChanged: (src: string) => void;
 };
 
-const ChatConversation: FC<Props> = ({ conversation, loading }) => {
+const ChatConversation: FC<Props> = ({
+  conversation,
+  loading,
+  onPdfPreviewSrcChanged
+}) => {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -37,7 +42,11 @@ const ChatConversation: FC<Props> = ({ conversation, loading }) => {
       ) : conversation ? (
         <Stack direction="column" spacing={2}>
           {conversation.messages.map((message) => (
-            <MessageBubble key={crypto.randomUUID()} message={message} />
+            <MessageBubble
+              key={crypto.randomUUID()}
+              message={message}
+              onPdfPreviewSrcChanged={onPdfPreviewSrcChanged}
+            />
           ))}
           <Box ref={bottomRef} />
         </Stack>
