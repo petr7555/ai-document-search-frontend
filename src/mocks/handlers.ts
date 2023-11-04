@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { Filter } from '../types/filterTypes';
+import { Filter } from '../api/askQuestion';
 
 export const handlers = [
   rest.post('*/auth/token', (req, res, ctx) => {
@@ -27,7 +27,7 @@ export const handlers = [
   }),
 
   rest.post('*/chatbot', async (req, res, ctx) => {
-    const { question, filters }: { question: string; filters: Filter } =
+    const { question, filters }: { question: string; filters: Filter[] } =
       await req.json();
 
     if (req.headers.get('authorization') != 'Bearer 123') {
@@ -87,7 +87,12 @@ export const handlers = [
         })
       );
     }
-    if (filters.values.includes('NO1111111111') || question === 'Hi') {
+    if (
+      filters
+        .find((f) => f.property_name === 'isin')
+        ?.values.includes('NO1111111111') ||
+      question === 'Hi'
+    ) {
       return res(
         ctx.status(200),
         ctx.json({

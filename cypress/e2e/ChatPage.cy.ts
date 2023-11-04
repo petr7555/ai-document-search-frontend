@@ -1,16 +1,19 @@
-describe('Chatbot page', () => {
+describe('Chat page', () => {
   const username = 'user';
   const password = 'pass';
+
   beforeEach(() => {
     cy.visit('/login');
-    cy.get('[data-cy="username-text-field"]').type(username);
-    cy.get('[data-cy="password-text-field"]').type(password);
-    cy.get('[data-cy="sign-in-button"]').click();
+    cy.get('[data-cy="username-input"]').type(username);
+    cy.get('[data-cy="password-input"]').type(password);
+    cy.get('[data-cy="log-in-button"]').click();
   });
+
   it('Shows chatbot page when logged in', () => {
     cy.url().should('include', '/');
     cy.get('[data-cy="chatbot"]').should('exist');
   });
+
   it('Send message to chatbot and get response', () => {
     cy.get('[data-cy="chatbot"]').should('exist');
     cy.get('[data-cy="chatbot-input-field"]').type('Hello');
@@ -18,11 +21,13 @@ describe('Chatbot page', () => {
     cy.contains('Hello').should('exist');
     cy.get('[data-cy="chatbot-response-message"]').should('exist');
   });
+
   it('Try to send empty input to chatbot and get error', () => {
     cy.get('[data-cy="chatbot"]').should('exist');
     cy.get('[data-cy="chatbot-input-field"]').type('  ');
     cy.get('[data-cy="chatbot-send-button"]').should('be.disabled');
   });
+
   it('Send message and go to link', () => {
     cy.get('[data-cy="chatbot"]').should('exist');
     cy.get('[data-cy="chatbot-input-field"]').type(
@@ -47,6 +52,7 @@ describe('Chatbot page', () => {
       'https://www.nber.org/system/files/working_papers/w6801/w6801.pdf#page=7'
     );
   });
+
   it('Get several sources', () => {
     cy.get('[data-cy="chatbot-input-field"]').type(
       'Hi, what are some financial covenants?'
@@ -77,6 +83,7 @@ describe('Chatbot page', () => {
         'https://www.fe.training/free-resources/financial-markets/covenants/#page=1'
       );
   });
+
   it('Start new conversation', () => {
     cy.get('[data-cy="chatbot-input-field"]').type(
       'Hi, what are some financial covenants?'

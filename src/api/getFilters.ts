@@ -1,39 +1,26 @@
 import axios from 'axios';
-import { Filters } from '../types/filterTypes';
+import { ApiResponse } from '../types/apiResponse';
 
-type FilterResponse =
-  | {
-      ok: true;
-      filters: Filters;
-    }
-  | {
-      ok: false;
-      detail: string;
-    };
+export type Filters = {
+  isin: string[];
+  issuer_name: string[];
+  filename: string[];
+  industry: string[];
+  risk_type: string[];
+  green: string[];
+};
 
-export const getFilters = async (): Promise<FilterResponse> => {
+export const getFilters = async (): Promise<ApiResponse<Filters>> => {
   try {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const response = await axios.get<Filters>('/chatbot/filter', {
-        headers: {
-          Authorization: 'Bearer ' + JSON.parse(token)
-        }
-      });
-      return {
-        ok: true,
-        filters: response.data
-      };
-    } else {
-      return {
-        ok: false,
-        detail: 'Authentication error when retrieving filters'
-      };
-    }
+    const response = await axios.get<Filters>('/chatbot/filter');
+    return {
+      ok: true,
+      data: response.data
+    };
   } catch (error) {
     return {
       ok: false,
-      detail: 'Unknown error retrieving filters'
+      detail: 'Unknown error when retrieving filters'
     };
   }
 };

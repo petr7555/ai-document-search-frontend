@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from '@emotion/react';
 import axios from 'axios';
-import { theme } from './themes/theme';
 import getApiUrl from './utils/getApiUrl';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import './App.css';
 
 axios.defaults.baseURL = getApiUrl();
+axios.interceptors.request.use(
+  (config) => {
+    const token = JSON.parse(localStorage.getItem('token') || 'null');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // Comment these lines to use real server even in development mode
 if (process.env.NODE_ENV === 'development') {
@@ -23,13 +31,9 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+  <StrictMode>
+    <App />
+  </StrictMode>
 );
 
 // If you want your app to work offline and load faster, you can change

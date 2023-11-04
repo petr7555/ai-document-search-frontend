@@ -1,27 +1,28 @@
 import * as React from 'react';
+import { FC } from 'react';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { Checkbox } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { Filter } from '../../types/filterTypes';
+import { Filter } from '../../../api/askQuestion';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-interface SearchFilterProps {
+interface Props {
   options: string[];
   label: string;
   handleSelect: (values: string[], filter: string) => void;
   activeFilters: Filter[];
 }
 
-export default function SearchFilter({
+const SearchFilter: FC<Props> = ({
   options,
   label,
   handleSelect,
   activeFilters
-}: SearchFilterProps) {
+}) => {
   return (
     <Autocomplete
       data-cy="filtering-autocomplete"
@@ -62,4 +63,6 @@ export default function SearchFilter({
       )}
     />
   );
-}
+};
+
+export default SearchFilter;

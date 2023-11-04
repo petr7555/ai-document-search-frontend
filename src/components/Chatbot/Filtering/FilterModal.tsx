@@ -1,10 +1,11 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, FC, SetStateAction } from 'react';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { Divider, IconButton, Modal, Stack, Typography } from '@mui/material';
-import { Filter, Filters } from '../../types/filterTypes';
+import { Filter } from '../../../api/askQuestion';
+import { Filters } from '../../../api/getFilters';
 import SearchFilter from './SearchFilter';
 
-interface FilteringModalProps {
+interface Props {
   open: boolean;
   handleClose: () => void;
   setActiveFilters: Dispatch<SetStateAction<Filter[]>>;
@@ -12,13 +13,13 @@ interface FilteringModalProps {
   filterOptions: Filters;
 }
 
-export const FilteringModal = ({
+const FilterModal: FC<Props> = ({
   open,
   handleClose,
   setActiveFilters,
   activeFilters,
   filterOptions
-}: FilteringModalProps) => {
+}) => {
   const handleSelect = (values: string[], label: string) => {
     setActiveFilters((prev) => {
       return prev.map((filter) => {
@@ -44,7 +45,7 @@ export const FilteringModal = ({
     >
       <Stack
         spacing={2}
-        direction={'column'}
+        direction="column"
         sx={{
           position: 'absolute',
           top: '50%',
@@ -57,9 +58,9 @@ export const FilteringModal = ({
           borderRadius: '10px'
         }}
       >
-        <Stack direction={'column'} spacing={1}>
+        <Stack direction="column" spacing={1}>
           <Stack
-            direction={'row'}
+            direction="row"
             sx={{ display: 'flex', justifyContent: 'space-between' }}
           >
             <Typography id="modal-modal-title" variant="h6" component="h2">
@@ -72,12 +73,7 @@ export const FilteringModal = ({
 
           <Divider />
         </Stack>
-        <Stack
-          direction={'column'}
-          spacing={4}
-          sx={{ paddingTop: '10px' }}
-          key={crypto.randomUUID()}
-        >
+        <Stack direction="column" spacing={4} sx={{ paddingTop: '10px' }}>
           {Object.keys(filterOptions).map((key) => {
             return (
               <SearchFilter
@@ -94,3 +90,5 @@ export const FilteringModal = ({
     </Modal>
   );
 };
+
+export default FilterModal;

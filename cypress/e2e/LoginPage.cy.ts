@@ -10,17 +10,17 @@ describe('Login page', () => {
   it('Shows username and password inputs', () => {
     cy.visit('/login');
 
-    cy.get('[data-cy="username-text-field"]').should('have.text', 'Username');
-    cy.get('[data-cy="password-text-field"]').should('have.text', 'Password');
+    cy.get('[data-cy="username-input"]').should('have.text', 'Username');
+    cy.get('[data-cy="password-input"]').should('have.text', 'Password');
   });
 
-  it('Signs in when valid credentials are entered', () => {
+  it('Logs in when valid credentials are entered', () => {
     cy.visit('/login');
 
-    cy.get('[data-cy="username-text-field"]').type(validUsername);
-    cy.get('[data-cy="password-text-field"]').type(validPassword);
+    cy.get('[data-cy="username-input"]').type(validUsername);
+    cy.get('[data-cy="password-input"]').type(validPassword);
 
-    cy.get('[data-cy="sign-in-button"]').click();
+    cy.get('[data-cy="log-in-button"]').click();
 
     cy.get('[data-cy="account-button"]').should('have.text', 'Account');
   });
@@ -28,10 +28,10 @@ describe('Login page', () => {
   it('Shows error when invalid credentials are entered', () => {
     cy.visit('/login');
 
-    cy.get('[data-cy="username-text-field"]').type('invalid_username');
-    cy.get('[data-cy="password-text-field"]').type('invalid_password');
+    cy.get('[data-cy="username-input"]').type('invalid_username');
+    cy.get('[data-cy="password-input"]').type('invalid_password');
 
-    cy.get('[data-cy="sign-in-button"]').click();
+    cy.get('[data-cy="log-in-button"]').click();
 
     cy.get('[data-cy="error-alert-message"]').should(
       'have.text',
@@ -42,7 +42,7 @@ describe('Login page', () => {
   it('Shows error when inputs are empty', () => {
     cy.visit('/login');
 
-    cy.get('[data-cy="sign-in-button"]').click();
+    cy.get('[data-cy="log-in-button"]').click();
 
     cy.get('[data-cy="error-alert-message"]').should(
       'have.text',
@@ -58,10 +58,10 @@ describe('Login page', () => {
   it('Does not redirect to login page when already logged in', () => {
     cy.visit('/login');
 
-    cy.get('[data-cy="username-text-field"]').type(validUsername);
-    cy.get('[data-cy="password-text-field"]').type(validPassword);
+    cy.get('[data-cy="username-input"]').type(validUsername);
+    cy.get('[data-cy="password-input"]').type(validPassword);
 
-    cy.get('[data-cy="sign-in-button"]').click();
+    cy.get('[data-cy="log-in-button"]').click();
 
     cy.visit('/');
     cy.url().should('not.include', '/login');
@@ -70,10 +70,10 @@ describe('Login page', () => {
   it('Logs out', () => {
     cy.visit('/login');
 
-    cy.get('[data-cy="username-text-field"]').type(validUsername);
-    cy.get('[data-cy="password-text-field"]').type(validPassword);
+    cy.get('[data-cy="username-input"]').type(validUsername);
+    cy.get('[data-cy="password-input"]').type(validPassword);
 
-    cy.get('[data-cy="sign-in-button"]').click();
+    cy.get('[data-cy="log-in-button"]').click();
 
     cy.get('[data-cy="account-button"]').click();
 
