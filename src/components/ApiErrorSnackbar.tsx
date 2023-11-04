@@ -18,6 +18,7 @@ const ApiErrorSnackbar: FC = () => {
       onClose={closeErrorSnackbar}
     >
       <Alert
+        data-cy="api-error-snackbar"
         severity="error"
         sx={{ backgroundColor: 'grey.800', color: 'white' }}
       >

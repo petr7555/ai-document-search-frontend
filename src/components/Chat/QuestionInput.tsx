@@ -87,6 +87,7 @@ const QuestionInput: FC<Props> = ({ onQuestionAsked, disabled }) => {
         </Tooltip>
         <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
         <InputBase
+          data-cy="question-input"
           sx={{ ml: 1, flex: 1 }}
           value={input}
           onChange={handleInputChange}
@@ -102,6 +103,7 @@ const QuestionInput: FC<Props> = ({ onQuestionAsked, disabled }) => {
           }}
         />
         <IconButton
+          data-cy="send-button"
           sx={{ p: '10px' }}
           aria-label="Send"
           disabled={!canSendMessage}

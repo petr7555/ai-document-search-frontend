@@ -14,7 +14,12 @@ const NavigationBar: FC = () => {
             {APP_NAME}
           </Typography>
           {auth.token && (
-            <Button color="inherit" variant="outlined" onClick={auth.logOut}>
+            <Button
+              data-cy="logout-button"
+              color="inherit"
+              variant="outlined"
+              onClick={auth.logOut}
+            >
               Log out
             </Button>
           )}

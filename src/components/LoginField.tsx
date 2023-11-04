@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent } from 'react';
 import TextField from '@mui/material/TextField';
 
 type Props = {
@@ -7,23 +7,30 @@ type Props = {
   autoComplete: string;
   value: string;
   onChange: (value: string) => void;
+  touched: boolean;
+  onTouched: (touched: boolean) => void;
 };
 
-const LoginField = ({ label, type, autoComplete, value, onChange }: Props) => {
-  const [error, setError] = useState('');
-
+const LoginField = ({
+  label,
+  type,
+  autoComplete,
+  value,
+  onChange,
+  touched,
+  onTouched
+}: Props) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
-    onChange(newValue);
-    if (newValue.length === 0) {
-      setError(`${label} is required`);
-    } else {
-      setError('');
-    }
+    onTouched(true);
+    onChange(event.target.value);
   };
+
+  const error = touched && value.length === 0 ? `${label} is required` : '';
 
   return (
     <TextField
+      data-cy={`${label.toLowerCase()}-field`}
+      inputProps={{ 'data-cy': `${label.toLowerCase()}-input` }}
       variant="standard"
       label={label}
       type={type}

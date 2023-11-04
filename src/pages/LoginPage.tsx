@@ -16,7 +16,9 @@ export const LoginPage = () => {
   const [loading, setLoading] = useState(false);
 
   const [username, setUsername] = useState('');
+  const [usernameTouched, setUsernameTouched] = useState(false);
   const [password, setPassword] = useState('');
+  const [passwordTouched, setPasswordTouched] = useState(false);
 
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,6 +31,9 @@ export const LoginPage = () => {
         setError(response.detail);
       }
       setLoading(false);
+    } else {
+      setUsernameTouched(true);
+      setPasswordTouched(true);
     }
   };
 
@@ -49,6 +54,8 @@ export const LoginPage = () => {
             autoComplete="username"
             value={username}
             onChange={handleUsernameChange}
+            touched={usernameTouched}
+            onTouched={setUsernameTouched}
           />
           <LoginField
             label="Password"
@@ -56,8 +63,11 @@ export const LoginPage = () => {
             autoComplete="current-password"
             value={password}
             onChange={handlePasswordChange}
+            touched={passwordTouched}
+            onTouched={setPasswordTouched}
           />
           <LoadingButton
+            data-cy="login-button"
             variant="contained"
             type="submit"
             loading={loading}

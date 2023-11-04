@@ -15,6 +15,7 @@ type Props = {
 const MessageBubble: FC<Props> = ({ message, onPdfPreviewSrcChanged }) => {
   return (
     <Paper
+      data-cy={`${message.is_from_bot ? 'bot' : 'user'}-message-bubble`}
       elevation={3}
       sx={{
         padding: 2,

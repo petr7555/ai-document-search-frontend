@@ -1,16 +1,16 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Divider, Paper, Stack } from '@mui/material';
-import { askQuestion, Filter } from '../api/askQuestion';
-import { createNewConversation as createNewConversationApi } from '../api/createNewConversation';
+import { askQuestion, Filter } from '../../api/askQuestion';
+import { createNewConversation as createNewConversationApi } from '../../api/createNewConversation';
 import {
   Conversation,
   getLatestConversation as getLatestConversationApi,
   Message
-} from '../api/getLatestConversation';
-import useError from '../hooks/useError';
-import ChatConversation from './Chat/ChatConversation';
-import ChatHeader from './Chat/ChatHeader';
-import QuestionInput from './Chat/QuestionInput';
+} from '../../api/getLatestConversation';
+import useError from '../../hooks/useError';
+import ChatConversation from './ChatConversation';
+import ChatHeader from './ChatHeader';
+import QuestionInput from './QuestionInput';
 
 const pendingMessage: Message = {
   is_from_bot: true,
@@ -103,7 +103,7 @@ const Chatbot: FC<Props> = ({ onPdfPreviewSrcChanged }) => {
   }, [setError]);
 
   return (
-    <Paper elevation={3}>
+    <Paper data-cy="chatbot" elevation={3}>
       <Stack direction="column" sx={{ height: '80vh' }}>
         <ChatHeader
           gettingLatestConversation={gettingLatestConversation}

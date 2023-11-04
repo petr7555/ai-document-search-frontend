@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Stack } from '@mui/material';
-import Chatbot from '../components/Chatbot';
+import Chatbot from '../components/Chat/Chatbot';
 import PdfPreview from '../components/PdfPreview';
 import usePageTitle from '../hooks/usePageTitle';
 

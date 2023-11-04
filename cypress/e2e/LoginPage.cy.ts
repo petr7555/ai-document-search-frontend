@@ -4,81 +4,84 @@ describe('Login page', () => {
 
   it('Redirects to login page when not logged in', () => {
     cy.visit('/');
+
     cy.url().should('include', '/login');
   });
 
   it('Shows username and password inputs', () => {
     cy.visit('/login');
 
-    cy.get('[data-cy="username-input"]').should('have.text', 'Username');
-    cy.get('[data-cy="password-input"]').should('have.text', 'Password');
+    cy.getBySel('username-field').should('have.text', 'Username');
+    cy.getBySel('password-field').should('have.text', 'Password');
   });
 
   it('Logs in when valid credentials are entered', () => {
     cy.visit('/login');
 
-    cy.get('[data-cy="username-input"]').type(validUsername);
-    cy.get('[data-cy="password-input"]').type(validPassword);
+    cy.getBySel('username-input').type(validUsername);
+    cy.getBySel('password-input').type(validPassword);
+    cy.getBySel('login-button').click();
 
-    cy.get('[data-cy="log-in-button"]').click();
-
-    cy.get('[data-cy="account-button"]').should('have.text', 'Account');
+    cy.url().should('not.include', '/login');
+    cy.getBySel('chatbot').should('exist');
   });
 
   it('Shows error when invalid credentials are entered', () => {
     cy.visit('/login');
 
-    cy.get('[data-cy="username-input"]').type('invalid_username');
-    cy.get('[data-cy="password-input"]').type('invalid_password');
+    cy.getBySel('username-input').type('invalid_username');
+    cy.getBySel('password-input').type('invalid_password');
+    cy.getBySel('login-button').click();
 
-    cy.get('[data-cy="log-in-button"]').click();
-
-    cy.get('[data-cy="error-alert-message"]').should(
+    cy.getBySel('api-error-snackbar').should(
       'have.text',
       'Invalid credentials'
     );
   });
 
-  it('Shows error when inputs are empty', () => {
+  it('Shows validation errors when inputs are empty', () => {
     cy.visit('/login');
 
-    cy.get('[data-cy="log-in-button"]').click();
+    cy.getBySel('login-button').click();
 
-    cy.get('[data-cy="error-alert-message"]').should(
-      'have.text',
-      'Please provide username and password'
-    );
+    cy.contains('Username is required').should('exist');
+    cy.contains('Password is required').should('exist');
   });
 
-  it('Redirects to login page when not logged in', () => {
-    cy.visit('/');
-    cy.url().should('include', '/login');
+  it('Shows validation error when username is empty', () => {
+    cy.visit('/login');
+
+    cy.getBySel('username-input').type('user').clear();
+
+    cy.contains('Username is required').should('exist');
+  });
+
+  it('Shows validation error when password is empty', () => {
+    cy.visit('/login');
+
+    cy.getBySel('password-input').type('pass').clear();
+
+    cy.contains('Password is required').should('exist');
   });
 
   it('Does not redirect to login page when already logged in', () => {
     cy.visit('/login');
-
-    cy.get('[data-cy="username-input"]').type(validUsername);
-    cy.get('[data-cy="password-input"]').type(validPassword);
-
-    cy.get('[data-cy="log-in-button"]').click();
-
+    cy.getBySel('username-input').type(validUsername);
+    cy.getBySel('password-input').type(validPassword);
+    cy.getBySel('login-button').click();
     cy.visit('/');
+
     cy.url().should('not.include', '/login');
   });
 
-  it('Logs out', () => {
+  it('Logs out when log out button is clicked', () => {
     cy.visit('/login');
+    cy.getBySel('username-input').type(validUsername);
+    cy.getBySel('password-input').type(validPassword);
+    cy.getBySel('login-button').click();
 
-    cy.get('[data-cy="username-input"]').type(validUsername);
-    cy.get('[data-cy="password-input"]').type(validPassword);
+    cy.getBySel('logout-button').click();
 
-    cy.get('[data-cy="log-in-button"]').click();
-
-    cy.get('[data-cy="account-button"]').click();
-
-    cy.get('[data-cy="log-out-button"]').click();
-
-    cy.get('[data-cy="account-button"]').should('not.exist');
+    cy.url().should('include', '/login');
   });
 });

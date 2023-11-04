@@ -51,6 +51,7 @@ const ChatHeader: FC<Props> = ({
           : 'No conversation.'}
       </Alert>
       <LoadingButton
+        data-cy="new-conversation-button"
         aria-label="New conversation"
         onClick={createNewConversation}
         startIcon={<AddIcon />}
