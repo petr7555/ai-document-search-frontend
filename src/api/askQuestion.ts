@@ -28,6 +28,12 @@ export const askQuestion = async (
       data: response.data
     };
   } catch (error) {
-    return handleApiError(error, 'asking question');
+    if (axios.isAxiosError(error) && error.response?.status === 400) {
+      return {
+        ok: false,
+        detail: error.response.data.detail
+      };
+    }
+    return handleApiError(error, 'answering question');
   }
 };
