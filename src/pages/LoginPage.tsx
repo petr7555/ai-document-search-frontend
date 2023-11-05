@@ -45,7 +45,15 @@ export const LoginPage = () => {
   };
 
   return (
-    <Paper elevation={3} sx={{ padding: 6, width: '90vw', maxWidth: 440 }}>
+    <Paper
+      elevation={3}
+      sx={{
+        padding: 6,
+        width: '90vw',
+        maxWidth: 440,
+        margin: 'auto'
+      }}
+    >
       <Stack
         component="form"
         onSubmit={handleFormSubmit}

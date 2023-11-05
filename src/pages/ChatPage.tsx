@@ -19,15 +19,15 @@ export const ChatPage = () => {
 
   return (
     <Stack
-      direction="row"
+      direction={{ xs: 'column', lg: 'row' }}
       spacing={2}
-      sx={{ width: '100%', height: '80vh', justifyContent: 'center' }}
+      sx={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}
     >
-      <Box sx={{ flex: 1, maxWidth: '60vw' }}>
+      <Box sx={{ flex: 1, width: '100%', maxWidth: 900 }}>
         <Chatbot onPdfPreviewSrcChanged={handlePdfPreviewSrcChanged} />
       </Box>
       {pdfPreviewSrc && (
-        <Box sx={{ flex: 1 }}>
+        <Box sx={{ flex: 1, width: '100%' }}>
           <PdfPreview
             src={pdfPreviewSrc}
             onPdfPreviewClose={handlePdfPreviewClosed}

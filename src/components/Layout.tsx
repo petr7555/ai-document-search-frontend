@@ -16,11 +16,13 @@ const Layout: FC<Props> = ({ children }) => {
         component="main"
         maxWidth={false}
         sx={{
-          height: '100vh',
+          pt: 12,
+          pb: 2,
+          minHeight: '100vh',
+          height: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
           backgroundColor: 'background.default'
         }}
       >

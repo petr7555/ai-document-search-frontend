@@ -96,10 +96,6 @@ On every pull request, GitHub Actions deploy the frontend to a temporary URL to 
 The temporary URL is displayed as a pull request comment.
 See [`.github/workflows/azure-static-web-apps-polite-meadow-040edd103.yml`](.github/workflows/azure-static-web-apps-polite-meadow-040edd103.yml).
 
-[//]: # (TODO)
-
 ### PWA
 
-The frontend was generated using `npx create-react-app ai-document-search-frontend --template cra-template-pwa-typescript` command, which creates a PWA-ready React app.
-However, the PWA functionality (service worker) is not enabled and the UI is not optimized for mobile devices.
-The manifest and related
+The application can be installed as a progressive web application. The layout is responsive and works well on mobile devices.
