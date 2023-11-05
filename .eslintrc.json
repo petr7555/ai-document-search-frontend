@@ -47,7 +47,8 @@
     ],
     "@typescript-eslint/no-redeclare": "off",
     "import/no-anonymous-default-export": "off",
-    "jsx-quotes": ["warn", "prefer-double"],
+    "jsx-quotes": ["error", "prefer-double"],
+    "react/jsx-curly-brace-presence": ["error"],
     "simple-import-sort/imports": [
       "warn",
       {

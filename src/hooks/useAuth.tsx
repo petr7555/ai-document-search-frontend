@@ -8,60 +8,54 @@ import React, {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
-import { authenticateUser, AuthResponse } from '../api/authenticateUser';
+import { AccessToken, getAccessToken } from '../api/getAccessToken';
+import { ApiResponse } from '../api/utils/apiResponse';
+import { CHAT_PATH, LOGIN_PATH } from '../utils/constants';
 
 type AuthContextType = {
-  user?: string;
-  login: (username: string, password: string) => Promise<AuthResponse>;
-  logout: () => void;
+  token: string | null;
+  logIn: (
+    username: string,
+    password: string
+  ) => Promise<ApiResponse<AccessToken>>;
+  logOut: () => void;
 };
 
-const AuthContext = createContext(null as unknown as AuthContextType);
+const AuthContext = createContext<AuthContextType>(undefined as never);
 
 type Props = {
   children: ReactNode;
 };
 
 export const AuthProvider: FC<Props> = ({ children }) => {
-  const [user, setUser] = useLocalStorage<string | undefined>(
-    'user',
-    undefined
-  );
-  const [token, setToken] = useLocalStorage<string | undefined>(
-    'token',
-    undefined
-  );
   const navigate = useNavigate();
 
-  // call this function when you want to authenticate the user
-  const login = useCallback(
+  const [token, setToken] = useLocalStorage<string | null>('token', null);
+
+  const logIn = useCallback(
     async (username: string, password: string) => {
-      const response = await authenticateUser(username, password);
+      const response = await getAccessToken(username, password);
       if (response.ok) {
-        setUser(username);
-        setToken(response.access_token);
-        navigate('/', { replace: true });
+        setToken(response.data.access_token);
+        navigate(CHAT_PATH);
       }
       return response;
     },
-    [setUser, setToken, navigate]
+    [navigate, setToken]
   );
 
-  // call this function to sign out logged-in user
-  const logout = useCallback(() => {
-    setUser(undefined);
-    setToken(undefined);
-    navigate('/', { replace: true });
-  }, [setUser, setToken, navigate]);
+  const logOut = useCallback(() => {
+    setToken(null);
+    navigate(LOGIN_PATH);
+  }, [setToken, navigate]);
 
   const value = useMemo(
     () => ({
-      user,
-      login,
-      logout,
-      token
+      token,
+      logIn,
+      logOut
     }),
-    [user, login, logout, token]
+    [token, logIn, logOut]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
