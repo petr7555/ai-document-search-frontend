@@ -65,6 +65,8 @@ All API calls are defined in the [`src/api`](src/api) directory.
 They all return generic [`ApiResponse<T>`](src/api/utils/apiResponse.ts).
 This makes it easy to handle responses and errors in the components.
 
+For OpenAPI specification of the backend API, see https://ai-document-search-backend.azurewebsites.net/docs.
+
 ### Error handling
 
 The frontend uses [`src/hooks/useError.tsx`](src/hooks/useError.tsx) hook to handle errors.
