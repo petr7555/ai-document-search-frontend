@@ -1,17 +1,5 @@
 import { createTheme } from '@mui/material';
 
-declare module '@mui/material/styles' {
-  interface PaletteColor {
-    userMessage: string;
-    botMessage: string;
-  }
-
-  interface SimplePaletteColorOptions {
-    userMessage?: string;
-    botMessage?: string;
-  }
-}
-
 export const theme = createTheme({
   palette: {
     primary: {
