@@ -89,12 +89,18 @@ See [`cypress/support/commands.ts`](cypress/support/commands.ts) for more detail
 MSW is in use even when running the E2E tests. This is useful because we can reuse the same mocks during development and testing.
 The limitation is that the `cy.intercept` does not work properly, and it is not possible, for example, to intercept a `GET` request to `/conversation` and wait for it to complete.
 
+### Linting
+
+The frontend uses [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) for linting and formatting.
+The configuration is located in the [`.eslintrc.json`](.eslintrc.json) and [`.prettierrc`](.prettierrc) files.
+Files and directories to be ignored by Prettier are listed in the [`.prettierignore`](.prettierignore) file.
+
 ### CI/CD
 
 On every push, GitHub Actions run linting, unit tests, and E2E tests (see [`.github/workflows/lint-and-test.yml`](.github/workflows/lint-and-test.yml)).
 
-On every push to the `master` branch, GitHub Actions deploy the frontend to Azure Static Web Apps.
-On every pull request, GitHub Actions deploy the frontend to a temporary URL to Azure Static Web Apps.
+On every push to the `master` branch, GitHub Actions deploy the frontend as an Azure Static Web App.
+On every pull request, GitHub Actions deploy the frontend to a temporary URL as an Azure Static Web App.
 The temporary URL is displayed as a pull request comment.
 See [`.github/workflows/azure-static-web-apps-polite-meadow-040edd103.yml`](.github/workflows/azure-static-web-apps-polite-meadow-040edd103.yml).
 
