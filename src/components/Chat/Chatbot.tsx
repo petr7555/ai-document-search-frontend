@@ -41,6 +41,7 @@ const Chatbot: FC<Props> = ({ onPdfPreviewSrcChanged }) => {
   };
 
   const handleQuestionAsked = async (text: string, filters: Filter[]) => {
+    const trimmedText = text.trim();
     setAskingQuestion(true);
     setConversation((conv) => {
       if (!conv) {
@@ -50,12 +51,12 @@ const Chatbot: FC<Props> = ({ onPdfPreviewSrcChanged }) => {
         ...conv,
         messages: [
           ...conv.messages,
-          { role: 'user', text, sources: null },
+          { role: 'user', text: trimmedText, sources: null },
           pendingMessage
         ]
       };
     });
-    const response = await askQuestion(text, filters);
+    const response = await askQuestion(trimmedText, filters);
     if (response.ok) {
       setConversation((conv) => {
         if (!conv) {
