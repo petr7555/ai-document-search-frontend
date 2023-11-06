@@ -45,9 +45,7 @@ const ChatHeader: FC<Props> = ({
           : conversation
           ? `Conversation started on ${new Date(
               conversation.created_at
-            ).toLocaleDateString()} at ${new Date(
-              conversation.created_at
-            ).toLocaleTimeString()}.`
+            ).toLocaleString()}.`
           : 'No conversation.'}
       </Alert>
       <LoadingButton
