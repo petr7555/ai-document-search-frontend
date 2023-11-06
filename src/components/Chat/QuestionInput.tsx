@@ -96,9 +96,13 @@ const QuestionInput: FC<Props> = ({ onQuestionAsked, disabled }) => {
           multiline
           maxRows={5}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
+            if (e.key === 'Enter') {
               e.preventDefault();
-              handleSubmit();
+              if (!e.shiftKey) {
+                handleSubmit();
+              } else {
+                setInput((input) => input + '\n');
+              }
             }
           }}
         />
