@@ -71,7 +71,9 @@ For OpenAPI specification of the backend API, see https://ai-document-search-bac
 
 The frontend uses [`src/hooks/useError.tsx`](src/hooks/useError.tsx) hook to handle errors.
 On details on how to use it, see e.g. [`src/pages/LoginPage.tsx`](src/pages/LoginPage.tsx).
-Setting the error will display a unified alert modal at the top of the page that will be automatically closed after 4 seconds (see [`src/components/ApiErrorSnackbar.tsx`](src/components/ApiErrorSnackbar.tsx)).
+Setting the error will display a unified alert modal at the top of the page (see [`src/components/ApiErrorSnackbar.tsx`](src/components/ApiErrorSnackbar.tsx)).
+By default, the alert is automatically closed after 4 seconds.
+Setting `autoHide` to `false`, e.g. `setError(response.detail, false);`, will disable the auto hide and show a close icon instead.
 
 ### Testing
 

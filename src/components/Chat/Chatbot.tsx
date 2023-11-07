@@ -83,7 +83,7 @@ const Chatbot: FC<Props> = ({ onPdfPreviewSrcChanged }) => {
           messages: conv.messages.slice(0, -1)
         };
       });
-      setError(response.detail);
+      setError(response.detail, false);
     }
     setAskingQuestion(false);
   };

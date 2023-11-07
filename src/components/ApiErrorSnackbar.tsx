@@ -13,16 +13,18 @@ const ApiErrorSnackbar: FC = () => {
     <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       sx={{ marginTop: 7 }}
-      autoHideDuration={4000}
-      open={Boolean(error)}
+      open={Boolean(error.error)}
+      autoHideDuration={error.autoHide ? 4000 : null}
       onClose={closeErrorSnackbar}
+      ClickAwayListenerProps={{ onClickAway: () => null }}
     >
       <Alert
         data-cy="api-error-snackbar"
         severity="error"
         sx={{ backgroundColor: 'grey.800', color: 'white' }}
+        onClose={error.autoHide ? undefined : closeErrorSnackbar}
       >
-        {error}
+        {error.error}
       </Alert>
     </Snackbar>
   );
