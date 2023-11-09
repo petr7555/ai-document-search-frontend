@@ -17,7 +17,7 @@ const ChatConversation: FC<Props> = ({
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }, [conversation]);
 
   return (
@@ -48,7 +48,7 @@ const ChatConversation: FC<Props> = ({
               onPdfPreviewSrcChanged={onPdfPreviewSrcChanged}
             />
           ))}
-          <Box ref={bottomRef} />
+          <Box id="bottomid" ref={bottomRef} />
         </Stack>
       ) : null}
     </Box>
