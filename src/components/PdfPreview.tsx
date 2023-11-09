@@ -23,6 +23,7 @@ const PdfPreview: FC<Props> = ({ src, onPdfPreviewClose }) => {
           </Button>
         </Stack>
         <iframe
+          key={src}
           src={src}
           title="PDF preview"
           frameBorder="0"
