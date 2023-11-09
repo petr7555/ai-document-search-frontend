@@ -26,7 +26,7 @@ const Sources: FC<Props> = ({ sources, onPdfPreviewSrcChanged }) => {
       <DividerWithText>Sources:</DividerWithText>
       <List sx={{ p: 0 }} dense>
         {sources.map((source) => {
-          const pageNumber = source.page + 1;
+          const pageNumber = source.page;
           const src = `${source.link}#page=${pageNumber}`;
           return (
             <ListItem

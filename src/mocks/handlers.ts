@@ -11,7 +11,7 @@ const botMessage: Message = {
       isin: 'NO0010754484',
       shortname: 'TRD Campus AS 15/25 4,26%',
       link: 'https://feed.stamdata.com/documents/NO0010754484_LA_20151222.pdf',
-      page: 9,
+      page: 10,
       certainty: 0.899,
       distance: 0.201
     },
@@ -19,7 +19,7 @@ const botMessage: Message = {
       isin: 'SE0007186085',
       shortname: 'Jefast Holding AB  15/19 FRN FLOOR C',
       link: 'https://feed.stamdata.com/documents/SE0007186085_LA.pdf',
-      page: 24,
+      page: 25,
       certainty: 0.897,
       distance: 0.205
     },
@@ -27,7 +27,7 @@ const botMessage: Message = {
       isin: 'NO0012698390',
       shortname: 'AKA AS 22/27 FRN C',
       link: 'https://feed.stamdata.com/documents/NO0012698390_LA_01_20220916.pdf',
-      page: 8,
+      page: 9,
       certainty: 0.896,
       distance: 0.208
     },
@@ -35,7 +35,7 @@ const botMessage: Message = {
       isin: 'NO0010908163',
       shortname: 'KMC Properties ASA 20/23 FRN FLOOR C',
       link: 'https://feed.stamdata.com/documents/NO0010908163_LA_20201210.pdf',
-      page: 44,
+      page: 45,
       certainty: 0.895,
       distance: 0.21
     }
