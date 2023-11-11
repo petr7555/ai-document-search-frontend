@@ -23,14 +23,14 @@ The frontend will be running on http://localhost:3000/.
 ### Cypress E2E tests
 
 - start the frontend locally (see above)
-- `npm run cypress:open`
-    - opens the Cypress application for manual running of E2E tests in the browser
-    - if you want to run the tests in the headless mode, use `npm run cypress:run` instead
+- make sure MSW is enabled (`const useMswInDev = true;`)
+- open the Cypress application for manual running of E2E tests in the browser: `npm run cypress:open`
+- run all tests in the headless mode: `npm run cypress:run`
 
 ## Linting
 
-- `npm run lint` - checks code using ESLint and Prettier
-- `npm run lint:fix` - runs ESLint and Prettier and fixes all fixable errors
+- `npm run lint` - check code using ESLint and Prettier
+- `npm run lint:fix` - fix all fixable errors
 
 ## Project structure and design
 
@@ -41,11 +41,11 @@ The components are located in the [`src/pages`](src/pages) and [`src/components`
 All styling is done using the `sx` prop. The usage of basic HTML elements is replaced by MUI `Box` component which has the `sx` prop.
 
 The theme is defined in the [`src/utils/theme.ts`](src/utils/theme.ts) file.
-The message bubbles colors are defined in the [`src/utils/constants.ts`](src/utils/constants.ts) file.
+The colors of the message bubbles are defined in the [`src/utils/constants.ts`](src/utils/constants.ts) file.
 
 ### Mocking
 
-The frontend is using [MSW](https://mswjs.io/) for mocking API calls. The mocks are configured in the [`src/mocks/handlers.ts`](src/mocks/handlers.ts) file.
+The frontend uses [MSW](https://mswjs.io/) for mocking API calls. The mocks are configured in the [`src/mocks/handlers.ts`](src/mocks/handlers.ts) file.
 The mock service worker is enabled only in the development mode and if the `useMswInDev` variable is set to `true` (see [`src/index.tsx`](src/index.tsx)).
 
 ### Authentication
@@ -70,7 +70,7 @@ For OpenAPI specification of the backend API, see https://ai-document-search-bac
 ### Error handling
 
 The frontend uses [`src/hooks/useError.tsx`](src/hooks/useError.tsx) hook to handle errors.
-On details on how to use it, see e.g. [`src/pages/LoginPage.tsx`](src/pages/LoginPage.tsx).
+For details on how to use it, see e.g. [`src/pages/LoginPage.tsx`](src/pages/LoginPage.tsx).
 Setting the error will display a unified alert modal at the top of the page (see [`src/components/ApiErrorSnackbar.tsx`](src/components/ApiErrorSnackbar.tsx)).
 By default, the alert is automatically closed after 4 seconds.
 Setting `autoHide` to `false`, e.g. `setError(response.detail, false);`, will disable the auto hide and show a close icon instead.
@@ -84,7 +84,7 @@ Currently, there is only one unit test ([`src/utils/getApiUrl.test.ts`](src/util
 Currently, there is only one component test ([`src/App.test.tsx`](src/App.test.tsx)).
 
 The main focus is on **E2E tests** which leverage [Cypress](https://www.cypress.io/).
-They are located in the [`cypress/e2e`](cypress/e2e) directory.
+These are located in the [`cypress/e2e`](cypress/e2e) directory.
 According to the Cypress best practices, the tests use `cy.getBySel` to locate page elements by their `data-cy` attribute.
 See [`cypress/support/commands.ts`](cypress/support/commands.ts) for more details.
 
@@ -99,13 +99,21 @@ Files and directories to be ignored by Prettier are listed in the [`.prettierign
 
 ### CI/CD
 
+#### Linting and testing
+
 On every push, GitHub Actions run linting, unit tests, and E2E tests (see [`.github/workflows/lint-and-test.yml`](.github/workflows/lint-and-test.yml)).
 
+#### Deployment
+
 On every push to the `master` branch, GitHub Actions deploy the frontend as an Azure Static Web App.
+
 On every pull request, GitHub Actions deploy the frontend to a temporary URL as an Azure Static Web App.
 The temporary URL is displayed as a pull request comment.
-See [`.github/workflows/azure-static-web-apps-polite-meadow-040edd103.yml`](.github/workflows/azure-static-web-apps-polite-meadow-040edd103.yml).
+
+See [`.github/workflows/azure-static-web-apps-polite-meadow-040edd103.yml`](.github/workflows/azure-static-web-apps-polite-meadow-040edd103.yml) for more details.
+
+The deployment has been set up using [this tutorial](https://learn.microsoft.com/en-gb/azure/static-web-apps/get-started-portal?tabs=react&pivots=github).
 
 ### PWA
 
-The application can be installed as a progressive web application. The layout is responsive and works well on mobile devices.
+This application can be installed as a progressive web application. The layout is responsive and works well on mobile devices.
