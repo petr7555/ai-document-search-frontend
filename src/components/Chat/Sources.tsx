@@ -31,6 +31,7 @@ const Sources: FC<Props> = ({ sources, onPdfPreviewSrcChanged }) => {
           return (
             <ListItem
               key={crypto.randomUUID()}
+              sx={{ pr: 14 }}
               secondaryAction={
                 <Stack direction="row" spacing={1}>
                   <Tooltip placement="top" title="Open PDF in new tab">
