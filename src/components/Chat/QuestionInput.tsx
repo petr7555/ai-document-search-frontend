@@ -73,12 +73,14 @@ const QuestionInput: FC<Props> = ({ onQuestionAsked, disabled }) => {
         }}
       >
         <Tooltip placement="top" title="Filter results">
-          <Box>
+          {/* Workaround to make both MUI and a11y work at the same time. See https://github.com/mui/material-ui/issues/33182 */}
+          <Box aria-label="">
             <IconButton
               onClick={openFilterDialog}
               sx={{ p: '10px' }}
               color="primary"
               disabled={!filterOptions}
+              aria-label="Filter results"
             >
               <TuneIcon />
             </IconButton>
