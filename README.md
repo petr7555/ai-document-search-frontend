@@ -117,3 +117,23 @@ The deployment has been set up using [this tutorial](https://learn.microsoft.com
 ### PWA
 
 This application can be installed as a progressive web application. The layout is responsive and works well on mobile devices.
+
+### Accessibility
+
+#### cypress-axe
+[This Cypress plugin](https://github.com/component-driven/cypress-axe) is used to check the accessibility of the login and chatbot pages.
+It is run as part of the E2E tests (see `cy.checkA11y`).
+
+If there are any violations, the test fails and the details are logged to the console where Cypress is running.
+
+You will also see entries in the command log for each type of violation found (they will be above the failed assertion). Clicking on those will reveal more specifics about the error in the DevTools console.
+
+#### ESLint rules
+
+Strict rules from the [`eslint-plugin-jsx-a11y`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y) are used to check adherence to accessibility best practices in the code.
+
+#### Manual testing
+
+The application was tested manually to ensure, that:
+- all elements are reachable by keyboard,
+- all elements are readable by screen readers.
