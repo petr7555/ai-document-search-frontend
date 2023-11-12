@@ -7,6 +7,8 @@ describe('Login page', () => {
 
   it('Has no detectable a11y violations on load', () => {
     cy.visit('/login');
+    // Wait for login page to load
+    cy.getBySel('login-button').should('exist');
 
     cy.injectAxe();
     cy.checkA11y(undefined, a11yOptions, terminalLog);
