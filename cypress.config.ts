@@ -1,8 +1,10 @@
+/* eslint-disable no-console */
+
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
   e2e: {
-    setupNodeEvents(on, config) {
+    setupNodeEvents(on) {
       // implement node event listeners here
       on('task', {
         log(message) {

@@ -95,7 +95,7 @@ const FilterDialog: FC<Props> = ({
       <DialogActions>
         <Button onClick={handleResetAllFilters}>Reset all filters</Button>
         <Button onClick={handleCancel}>Cancel</Button>
-        <Button autoFocus onClick={handleSave} variant="contained">
+        <Button onClick={handleSave} variant="contained">
           Save filters
         </Button>
       </DialogActions>

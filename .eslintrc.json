@@ -16,6 +16,7 @@
     "import",
     "@typescript-eslint"
   ],
+  "extends": ["plugin:jsx-a11y/strict"],
   "settings": {
     "react": {
       "version": "detect"
