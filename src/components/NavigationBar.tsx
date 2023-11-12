@@ -10,7 +10,7 @@ const NavigationBar: FC = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed" color="secondary">
         <Toolbar>
-          <Typography variant="h5" sx={{ flexGrow: 1 }}>
+          <Typography component="h1" variant="h5" sx={{ flexGrow: 1 }}>
             {APP_NAME}
           </Typography>
           {auth.token && (

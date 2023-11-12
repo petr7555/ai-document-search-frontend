@@ -11,6 +11,9 @@ export const theme = createTheme({
     background: {
       default: '#eaeaea'
     },
+    text: {
+      secondary: 'rgba(0, 0, 0, 0.71)'
+    },
     mode: 'light'
   }
 });
