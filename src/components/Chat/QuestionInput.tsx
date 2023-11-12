@@ -77,7 +77,6 @@ const QuestionInput: FC<Props> = ({ onQuestionAsked, disabled }) => {
             <IconButton
               onClick={openFilterDialog}
               sx={{ p: '10px' }}
-              aria-label="Filter"
               color="primary"
               disabled={!filterOptions}
             >
@@ -92,7 +91,6 @@ const QuestionInput: FC<Props> = ({ onQuestionAsked, disabled }) => {
           value={input}
           onChange={handleInputChange}
           placeholder="Ask a question"
-          inputProps={{ 'aria-label': 'Ask a question' }}
           multiline
           maxRows={5}
           onKeyDown={(e) => {

@@ -37,7 +37,6 @@ const Sources: FC<Props> = ({ sources, onPdfPreviewSrcChanged }) => {
                   <Tooltip placement="top" title="Open PDF in new tab">
                     <IconButton
                       data-cy={`source-link-${source.isin}`}
-                      aria-label="Open PDF in new tab"
                       href={src}
                       target="_blank"
                       edge="end"
@@ -48,7 +47,6 @@ const Sources: FC<Props> = ({ sources, onPdfPreviewSrcChanged }) => {
                   <Tooltip placement="top" title="Preview PDF">
                     <IconButton
                       data-cy={`preview-pdf-button-${source.isin}`}
-                      aria-label="Preview PDF"
                       onClick={() => {
                         onPdfPreviewSrcChanged(src);
                       }}
