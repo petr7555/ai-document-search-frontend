@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
-import { useAuth } from '../hooks/useAuth';
+import useAuth from '../hooks/useAuth';
 import { APP_NAME } from '../utils/constants';
 
 const NavigationBar: FC = () => {

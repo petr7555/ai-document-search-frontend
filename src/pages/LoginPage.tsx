@@ -2,11 +2,11 @@ import React, { FormEvent, useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { Paper, Stack } from '@mui/material';
 import LoginField from '../components/LoginField';
-import { useAuth } from '../hooks/useAuth';
+import useAuth from '../hooks/useAuth';
 import useError from '../hooks/useError';
 import usePageTitle from '../hooks/usePageTitle';
 
-export const LoginPage = () => {
+const LoginPage = () => {
   usePageTitle('Login');
 
   const auth = useAuth();
@@ -95,3 +95,5 @@ export const LoginPage = () => {
     </Paper>
   );
 };
+
+export default LoginPage;

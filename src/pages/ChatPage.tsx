@@ -4,7 +4,7 @@ import Chatbot from '../components/Chat/Chatbot';
 import PdfPreview from '../components/PdfPreview';
 import usePageTitle from '../hooks/usePageTitle';
 
-export const ChatPage = () => {
+const ChatPage = () => {
   usePageTitle('Chat');
 
   const [pdfPreviewSrc, setPdfPreviewSrc] = useState('');
@@ -37,3 +37,5 @@ export const ChatPage = () => {
     </Stack>
   );
 };
+
+export default ChatPage;

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { ChatPage } from '../pages/ChatPage';
-import { LoginPage } from '../pages/LoginPage';
+import ChatPage from '../pages/ChatPage';
+import LoginPage from '../pages/LoginPage';
 import { CHAT_PATH, LOGIN_PATH } from '../utils/constants';
 import ProtectedRoute from './ProtectedRoute';
 
