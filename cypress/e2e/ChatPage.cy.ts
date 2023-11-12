@@ -1,3 +1,4 @@
+import a11yOptions from '../support/a11yOptions';
 import terminalLog from '../support/terminalLog';
 
 describe('Chat page', () => {
@@ -16,7 +17,7 @@ describe('Chat page', () => {
     cy.contains('Conversation started').should('exist');
 
     cy.injectAxe();
-    cy.checkA11y(undefined, undefined, terminalLog);
+    cy.checkA11y(undefined, a11yOptions, terminalLog);
   });
 
   it('Loads previous conversation', () => {
@@ -66,7 +67,7 @@ describe('Chat page', () => {
     cy.getBySel('pdf-preview').should('exist');
   });
 
-  it.only('Closes PDF preview', () => {
+  it('Closes PDF preview', () => {
     cy.getBySel('preview-pdf-button-SE0007186085').click();
     cy.getBySel('pdf-preview').should('exist');
 

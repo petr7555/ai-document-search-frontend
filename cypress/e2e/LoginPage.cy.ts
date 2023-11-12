@@ -1,3 +1,4 @@
+import a11yOptions from '../support/a11yOptions';
 import terminalLog from '../support/terminalLog';
 
 describe('Login page', () => {
@@ -8,7 +9,7 @@ describe('Login page', () => {
     cy.visit('/login');
 
     cy.injectAxe();
-    cy.checkA11y(undefined, undefined, terminalLog);
+    cy.checkA11y(undefined, a11yOptions, terminalLog);
   });
 
   it('Redirects to login page when not logged in', () => {
