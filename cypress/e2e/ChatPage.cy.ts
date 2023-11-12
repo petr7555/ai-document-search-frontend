@@ -1,3 +1,5 @@
+import terminalLog from '../support/terminalLog';
+
 describe('Chat page', () => {
   const validUsername = 'user';
   const validPassword = 'pass';
@@ -7,6 +9,14 @@ describe('Chat page', () => {
     cy.getBySel('username-input').type(validUsername);
     cy.getBySel('password-input').type(validPassword);
     cy.getBySel('login-button').click();
+  });
+
+  it('Has no detectable a11y violations on load', () => {
+    // Wait for conversation to load
+    cy.contains('Conversation started').should('exist');
+
+    cy.injectAxe();
+    cy.checkA11y(undefined, undefined, terminalLog);
   });
 
   it('Loads previous conversation', () => {

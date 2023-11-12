@@ -1,6 +1,15 @@
+import terminalLog from '../support/terminalLog';
+
 describe('Login page', () => {
   const validUsername = 'user';
   const validPassword = 'pass';
+
+  it('Has no detectable a11y violations on load', () => {
+    cy.visit('/login');
+
+    cy.injectAxe();
+    cy.checkA11y(undefined, undefined, terminalLog);
+  });
 
   it('Redirects to login page when not logged in', () => {
     cy.visit('/');
