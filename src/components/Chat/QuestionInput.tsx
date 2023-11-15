@@ -72,7 +72,7 @@ const QuestionInput: FC<Props> = ({ onQuestionAsked, disabled }) => {
           boxShadow: '0px -10px 10px rgba(0, 0, 0, 0.1)'
         }}
       >
-        <Tooltip placement="top" title="Filter results">
+        <Tooltip placement="top" title="Open filters">
           {/* Workaround to make both MUI and a11y work at the same time. See https://github.com/mui/material-ui/issues/33182 */}
           <Box aria-label="">
             <IconButton
@@ -80,7 +80,7 @@ const QuestionInput: FC<Props> = ({ onQuestionAsked, disabled }) => {
               sx={{ p: '10px' }}
               color="primary"
               disabled={!filterOptions}
-              aria-label="Filter results"
+              aria-label="Open filters"
             >
               <TuneIcon />
             </IconButton>
